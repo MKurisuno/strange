@@ -1,1 +1,1 @@
-# strange strange
+# strange
