@@ -1,7 +1,7 @@
 ;;; package --- Summary
 ;;; Commentary:
 ;; ---
-;; ---
+;; --- Nuc6i5 20241116 
 
 (setq inhibit-startup-message t)	   ;Spulash off
 (setq inhibit-startup-echo-area-message t) ;Erase strings on initial *scratch* buffer 

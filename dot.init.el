@@ -1,7 +1,10 @@
 ;;; package --- Summary
 ;;; Commentary:
 ;;; Code:
+;;
+;; Nuc6i5 20241116 
 
+;;For debug   
 ;;(require 'profiler)
 ;;(profiler-start 'cpu)
 
@@ -293,6 +296,8 @@
  '(default ((t (:family "NasuM" :foundry "Mig " :slant normal :weight regular :height 113 :width normal)))))
 
 
+
+;; For debug 
 ;;(profiler-report)
 ;;(profiler-stop)
 
