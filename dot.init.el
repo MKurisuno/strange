@@ -11,7 +11,7 @@
 
 
 ;;; For Warnig  cl deprecated .....
-(setq byte-compile-warnings '(not cl-functions obsolete))
+;;(setq byte-compile-warnings '(not cl-functions obsolete))
 
 
 ;;; mozc 
