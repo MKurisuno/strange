@@ -7,7 +7,7 @@
 #
 #2024.11.28 
 
-  dot.early-init.el  // Nuc6i5
-  dot.init.el        // Nuc6i5
-  dot.zshrc          // Nuc6i5  
+  dot.early-init.el  
+  dot.init.el        
+  dot.zshrc          
  
