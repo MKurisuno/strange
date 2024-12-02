@@ -38,14 +38,33 @@
 
 
 
-
+;;
+;; display and set global line number
+;;
 (setq column-number-mode t)
 (global-display-line-numbers-mode t)
 
-(defalias 'yes-or-no-p 'u-or-n-p) 
+;; asking (yes or no) exchange to (y or n)
+(defalias 'yes-or-no-p 'y-or-n-p)
+;; Set initial frame size and position
 (setq initial-frame-alist
       (append   '((top . 5) (left . 1550) (width . 140) (height . 140)) initial-frame-alist)
       )
 
+;; 
+;; Dracula theme  
+;;               github dracula/emacs
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (load-theme 'dracula t)
+;; Don't change the font size for some headings and titles (default t)
+;;(setq dracula-enlarge-headings nil)
+;; Adjust font size of titles level 1 (default 1.3)
+;;(setq dracula-height-title-1 1.25)
+;; Adjust font size of titles level 2 (default 1.1)
+;;(setq dracula-height-title-2 1.15)
+;; Adjust font size of titles level 3 (default 1.0)
+;;(setq dracula-height-title-3 1.05)
+;; Adjust font size of document titles (default 1.44)
+(setq dracula-height-doc-title 1.4)
+;; Use less pink and bold on the mode-line and minibuffer (default nil)
+(setq dracula-alternate-mode-line-and-minibuffer t)
