@@ -2,7 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 ;;
-;; Nuc6i5 20241116 
+;; Emacs  init.el  written by MKurisuno
+;;  Ubuntu ver. 24.10
+;;  Emacs ver. 29.04 
+;;    setup for c/c++ mode refer to C++Langage (http://cpp-lang.net)
+;;   
+;;  
 
 ;;For debug   
 ;;(require 'profiler)
