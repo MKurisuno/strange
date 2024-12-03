@@ -8,8 +8,11 @@
 #2024.12.02
 
   dot.early-init.el
+  
   dot.init.el
+  
   dot.zshrc
+  
   dot.gitconfig
   
   
