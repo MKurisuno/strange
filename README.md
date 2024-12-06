@@ -1,18 +1,63 @@
-# strange
+#
+# Ubuntu 24.10 
 #
 #
+#                  for kurisuno
+#                  2024.12.02 
 #
-#Ubuntu 24.10 6.11.0-8-generic 
 #
-#
-#2024.12.02
-
   dot.early-init.el
-  
   dot.init.el
-  
   dot.zshrc
-  
   dot.gitconfig
-  
-  
+
+# for firewall
+  ufw
+
+# for Virus
+   sudo apt install clamav  clamav-daemon
+   mkdir .clamav
+   mkdir .clamav/history
+   chmod 755 scan.sh
+   ---.clamav/scan.sh --- 
+   	#!/bin/bash
+       	    /usr/bin/clamscan \
+            -i \
+            -r $HOME \
+            --log="$HOME/.clamav/history/$(date +\%Y\%m\%d\.%H\%M\%S).log" \
+            2>/dev/null
+    --- end of scan.sh ---
+
+# crontab 
+  crontab -e
+  # m h dom mon dow command 
+  0 10 * * * /home/kurisuno/.clamav/scan.sh
+
+
+# bash switch to zsh
+  MKurisuno/strange.git  dot.zshrc
+      zinit
+	zsh-syntax-hightlight
+	zsh-autosuggestions
+	zsh-completion
+   	dracula/zsh
+
+#emacs
+   MKurisuno/strange.git
+	dot.early-init.el (require dracula-theme)
+	dot.init.el
+   only  dracula-theme(github:dracula/emacs) needs manual install
+   another packages would be installed at start-up emacs with Leaf.
+
+#git
+   MKurisuno/strange.git  dot.gitconfig
+
+#gnome-terminal
+   https://draculatheme.com/gnome-terminal
+
+
+
+        
+
+
+
