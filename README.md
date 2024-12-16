@@ -1,15 +1,16 @@
-#
+# 
 # Ubuntu 24.10 
-#
-#
+# 
+# 
 #                  for kurisuno
 #                  2024.12.02 
-#
-#
+# 
+# 
   dot.early-init.el
   dot.init.el
   dot.zshrc
   dot.gitconfig
+
 
 # for firewall
   ufw
@@ -42,17 +43,20 @@
 	zsh-completion
    	dracula/zsh
 
-#emacs
+
+# emacs 
+   Set up for c,c++mode using lsp-mode.
    MKurisuno/strange.git
 	dot.early-init.el (require dracula-theme)
 	dot.init.el
    only  dracula-theme(github:dracula/emacs) needs manual install
    another packages would be installed at start-up emacs with Leaf.
 
-#git
+
+# git 
    MKurisuno/strange.git  dot.gitconfig
 
-#gnome-terminal
+# gnome-terminal
    https://draculatheme.com/gnome-terminal
 
 
