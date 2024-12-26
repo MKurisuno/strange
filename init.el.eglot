@@ -1,0 +1,272 @@
+;; 
+;;
+;;
+;;
+;; 2024.12.16
+;;
+;;
+
+(eval-and-compile
+  (customize-set-variable
+   'package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                       ("melpa" . "https://melpa.org/packages/")))
+  (package-initialize)
+  (use-package leaf :ensure t)
+
+  (leaf leaf-keywords
+    :ensure t
+    :init
+    (leaf blackout :ensure t)
+    :config
+    (leaf-keywords-init)))
+
+(leaf leaf-convert
+  :doc "Convert many format to leaf format"
+  :ensure t)
+
+(leaf cus-edit
+  :doc "tools for customizing Emacs and Lisp packages"
+  :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
+
+(leaf mozc
+  :ensure t
+  :config
+;;  (setq default-input-method "japanese-mozc")
+  (setq default-input-method "japanese-mozc"
+	mozc-helper-program-name "mozc_emacs_helper"
+	mozc-leim-title "♡かな")
+  )
+
+
+
+
+(leaf autorevert
+  :doc "revert buffers when files on disk change"
+  :global-minor-mode global-auto-revert-mode)
+
+(leaf delsel
+  :doc "delete selection if you insert"
+  :global-minor-mode delete-selection-mode)
+
+(leaf cc-mode
+  :doc "major mode for editing C and similar languages"
+  :tag "builtin"
+  :defvar (c-basic-offset)
+  :bind (c-mode-base-map
+         ("C-c c" . compile))
+  :preface
+  (defun my-c-c++-mode-init ()
+    (c-set-style "bsd")
+    (setq c-basic-offset 4)
+    (setq indent-tabs-mode nil)
+    (c-set-offset 'innamespace 0)
+    (c-set-offset 'arglist-close 0))
+  :hook
+  (add-hook 'c-mode-hook 'my-c-c++-mode-init)
+  (add-hook 'c++-mode-hook 'my-c-c++-mode-init)
+  )
+
+(leaf paren
+  :doc "highlight matching paren"
+  :global-minor-mode show-paren-mode)
+(leaf rainbow-delimiters
+  :ensure t
+  :hook
+  (prog-mode-hook . rainbow-delimiters-mode)
+  )
+
+
+(leaf  highlight-indent-guides
+  :ensure t
+  :custom
+  (highlight-indent-guides-method  . 'character)
+  ;;(highlight-indent-guides-method  . 'fill)
+  (highlight-indent-guides-auto-enabled . t)
+  (highlight-indent-guides-responsive . t)
+  (highlight-indent-guides-character . ?\|)
+  :hook
+  (prog-mode-hook . highlight-indent-guides-mode)
+  :config
+;;  (set-face-background 'highlight-indent-guides-odd-face "gray")
+;;  (set-face-background 'highlight-indent-guides-even-face "white")
+;;  (set-face-foreground 'highlight-indent-guides-character-face "dimgray")
+)
+
+
+
+(leaf simple
+  :doc "basic editing commands for Emacs"
+  :custom ((kill-read-only-ok . t)
+           (kill-whole-line . t)
+           (eval-expression-print-length . nil)
+           (eval-expression-print-level . nil)))
+
+(leaf flymake
+  :doc "A universal on-the-fly syntax checker"
+  :bind ((prog-mode-map
+          ("M-n" . flymake-goto-next-error)
+          ("M-p" . flymake-goto-prev-error))))
+
+
+(leaf exec-path-from-shell
+  :doc "Get environment variables such as $PATH from the shell"
+  :ensure t
+  :defun (exec-path-from-shell-initialize)
+  :custom ((exec-path-from-shell-check-startup-files)
+           (exec-path-from-shell-variables . '("PATH" "GOPATH" "JAVA_HOME")))
+  :config
+  (exec-path-from-shell-initialize))
+
+(leaf vertico
+  :doc "VERTical Interactive COmpletion"
+  :ensure t
+  :global-minor-mode t)
+
+(leaf marginalia
+  :doc "Enrich existing commands with completion annotations"
+  :ensure t
+  :global-minor-mode t)
+
+(leaf consult
+  :doc "Consulting completing-read"
+  :ensure t
+  :hook (completion-list-mode-hook . consult-preview-at-point-mode)
+  :defun consult-line
+  :preface
+(defun c/consult-line (&optional at-point)
+    "Consult-line uses things-at-point if set C-u prefix."
+    (interactive "P")
+    (if at-point
+        (consult-line (thing-at-point 'symbol))
+      (consult-line)))
+  :custom ((xref-show-xrefs-function . #'consult-xref)
+           (xref-show-definitions-function . #'consult-xref)
+           (consult-line-start-from-top . t))
+  :bind (;; C-c bindings (mode-specific-map)
+         ([remap switch-to-buffer] . consult-buffer) ; C-x b
+         ([remap project-switch-to-buffer] . consult-project-buffer) ; C-x p b
+
+         ;; M-g bindings (goto-map)
+         ([remap goto-line] . consult-goto-line)    ; M-g g
+         ([remap imenu] . consult-imenu)            ; M-g i
+         ("M-g f" . consult-flymake)
+
+         ;; C-M-s bindings
+         ("C-s" . c/consult-line)       ; isearch-forward
+         ("C-M-s" . nil)                ; isearch-forward-regexp
+         ("C-M-s s" . isearch-forward)
+         ("C-M-s C-s" . isearch-forward-regexp)
+         ("C-M-s r" . consult-ripgrep)
+
+         (minibuffer-local-map
+          :package emacs
+          ("C-r" . consult-history))))
+
+
+
+(leaf affe
+  :doc "Asynchronous Fuzzy Finder for Emacs"
+  :ensure t
+  :custom ((affe-highlight-function . 'orderless-highlight-matches)
+           (affe-regexp-function . 'orderless-pattern-compiler))
+  :bind (("C-M-s r" . affe-grep)
+         ("C-M-s f" . affe-find)))
+
+
+(leaf orderless
+  :doc "Completion style for matching regexps in any order"
+  :ensure t
+  :custom ((completion-styles . '(orderless))
+           (completion-category-defaults . nil)
+           (completion-category-overrides . '((file (styles partial-completion))))))
+
+(leaf embark-consult
+  :doc "Consult integration for Embark"
+  :ensure t
+  :bind ((minibuffer-mode-map
+          :package emacs
+          ("M-." . embark-dwim)
+          ("C-." . embark-act))))
+
+(leaf corfu
+  :doc "Completion in Region FUnction"
+  :ensure t
+  :global-minor-mode global-corfu-mode corfu-popupinfo-mode
+  :custom ((corfu-auto . t)
+           (corfu-auto-delay . 0)
+           (corfu-auto-prefix . 1)
+           (corfu-popupinfo-delay . nil)) ; manual
+  :bind ((corfu-map
+          ("C-s" . corfu-insert-separator))))
+
+(leaf cape
+  :doc "Completion At Point Extensions"
+  :ensure t
+  :config
+  (add-to-list 'completion-at-point-functions #'cape-file))
+
+
+
+
+;;
+;; eglot
+;;
+;;
+(leaf eglot
+  :doc "The Emacs Client for LSP servers"
+  :hook (;;(clojure-mode-hook . eglot-ensure)
+	 (c-mode-hook . eglot-ensure)
+	 (c++-mode-hook . eglot-ensure))
+  :custom ((eldoc-echo-area-use-multiline-p . nil)
+           (eglot-connect-timeout . 600)))
+
+(leaf eglot-booster
+  :when (executable-find "emacs-lsp-booster")
+  :vc ( :url "https://github.com/jdtsmith/eglot-booster")
+  :global-minor-mode t)
+
+
+(leaf puni
+  :doc "Parentheses Universalistic"
+  :ensure t
+  :global-minor-mode puni-global-mode
+  :bind (puni-mode-map
+         ;; default mapping
+         ;; ("C-M-f" . puni-forward-sexp)
+         ;; ("C-M-b" . puni-backward-sexp)
+         ;; ("C-M-a" . puni-beginning-of-sexp)
+         ;; ("C-M-e" . puni-end-of-sexp)
+         ;; ("M-)" . puni-syntactic-forward-punct)
+         ;; ("C-M-u" . backward-up-list)
+         ;; ("C-M-d" . backward-down-list)
+         ("C-)" . puni-slurp-forward)
+         ("C-}" . puni-barf-forward)
+         ("M-(" . puni-wrap-round)
+         ("M-s" . puni-splice)
+         ("M-r" . puni-raise)
+         ("M-U" . puni-splice-killing-backward)
+         ("M-z" . puni-squeeze))
+  :config
+  (leaf elec-pair
+    :doc "Automatic parenthesis pairing"
+    :global-minor-mode electric-pair-mode))
+
+
+(provide 'init)
+
+;;;
+;;; This will enable emacs to compile a simple cpp single file without any makefile by just pressing [f9] key
+;;;
+(defun code-compile()
+  (interactive)
+  (unless (file-exists-p "Makefile")
+    (set (make-local-variable 'compile-command)
+	 (let ((file (file-name-nondirectory buffer-file-name)))
+	   (format "%s -o %s %s"
+		   (if (equal (file-name-extension file) "cpp") "g++" "gcc")
+		   (file-name-sans-extension file)
+		   file)))
+    (compile compile-command)))
+(global-set-key [f9] 'code-compile)
+
+
