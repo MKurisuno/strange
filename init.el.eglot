@@ -55,15 +55,15 @@
   :bind (c-mode-base-map
          ("C-c c" . compile))
   :preface
-  (defun my-c-c++-mode-init ()
+  (defun cc++-mode-init ()
     (c-set-style "bsd")
     (setq c-basic-offset 4)
     (setq indent-tabs-mode nil)
     (c-set-offset 'innamespace 0)
     (c-set-offset 'arglist-close 0))
   :hook
-  (add-hook 'c-mode-hook 'my-c-c++-mode-init)
-  (add-hook 'c++-mode-hook 'my-c-c++-mode-init)
+  (add-hook 'c-mode-hook 'cc++-mode-init)
+  (add-hook 'c++-mode-hook 'cc++-mode-init)
   )
 
 (leaf paren
@@ -80,16 +80,16 @@
   :ensure t
   :custom
   (highlight-indent-guides-method  . 'character)
-  ;;(highlight-indent-guides-method  . 'fill)
-  (highlight-indent-guides-auto-enabled . t)
+    ;;  (highlight-indent-guides-auto-enabled . t)
+  (highlight-indent-guides-auto-enabled . nil)
   (highlight-indent-guides-responsive . t)
   (highlight-indent-guides-character . ?\|)
   :hook
   (prog-mode-hook . highlight-indent-guides-mode)
   :config
-;;  (set-face-background 'highlight-indent-guides-odd-face "gray")
-;;  (set-face-background 'highlight-indent-guides-even-face "white")
-;;  (set-face-foreground 'highlight-indent-guides-character-face "dimgray")
+  (set-face-background 'highlight-indent-guides-odd-face "grey")
+  (set-face-background 'highlight-indent-guides-even-face "dimgray")
+  (set-face-foreground 'highlight-indent-guides-character-face "dimgray")
 )
 
 
