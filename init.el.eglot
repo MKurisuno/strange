@@ -80,16 +80,16 @@
   :ensure t
   :custom
   (highlight-indent-guides-method  . 'character)
-    ;;  (highlight-indent-guides-auto-enabled . t)
   (highlight-indent-guides-auto-enabled . nil)
   (highlight-indent-guides-responsive . t)
   (highlight-indent-guides-character . ?\|)
-  :hook
+  (highlight-indent-guides-delay . 0)
+:hook
   (prog-mode-hook . highlight-indent-guides-mode)
   :config
-  (set-face-background 'highlight-indent-guides-odd-face "grey")
-  (set-face-background 'highlight-indent-guides-even-face "dimgray")
-  (set-face-foreground 'highlight-indent-guides-character-face "dimgray")
+;;  (set-face-background 'highlight-indent-guides-odd-face "Dimgrey")
+;;  (set-face-background 'highlight-indent-guides-even-face "DimGrey")
+  (set-face-foreground 'highlight-indent-guides-character-face "dimgrey")
 )
 
 
