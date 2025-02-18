@@ -61,7 +61,12 @@
 
 
 
-        
-
+# Disable bluetooth service
+  sudo systemctl disable bluetooth.service
+  
+# Disable printer service
+  sudo systemctl stop cups.service
+  sudo systemctl disable cups.service
+  
 
 
