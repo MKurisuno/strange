@@ -29,6 +29,11 @@
             2>/dev/null
     --- end of scan.sh ---
 
+
+#Default Editor
+ sudo update-alternatives --config editor
+
+
 # crontab 
   crontab -e
   # m h dom mon dow command 
