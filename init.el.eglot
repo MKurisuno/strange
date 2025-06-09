@@ -48,6 +48,8 @@
   :doc "delete selection if you insert"
   :global-minor-mode delete-selection-mode)
 
+
+
 (leaf cc-mode
   :doc "major mode for editing C and similar languages"
   :tag "builtin"
@@ -65,6 +67,16 @@
   (add-hook 'c-mode-hook 'cc++-mode-init)
   (add-hook 'c++-mode-hook 'cc++-mode-init)
   )
+
+;;; cmake-mode
+(leaf cmake-mode
+  :ensure t
+  :mode
+  ("CMakeLists\\.txt\\'" . cmake-mode)
+  ("\\.cmake\\'" . cmake-mode)
+  
+  )
+
 
 (leaf paren
   :doc "highlight matching paren"

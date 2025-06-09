@@ -29,15 +29,15 @@
             2>/dev/null
     --- end of scan.sh ---
 
-
-#Default Editor
- sudo update-alternatives --config editor
-
-
 # crontab 
   crontab -e
   # m h dom mon dow command 
   0 10 * * * /home/kurisuno/.clamav/scan.sh
+
+
+#Default Editor
+ sudo update-alternatives --config editor
+
 
 
 # bash switch to zsh
