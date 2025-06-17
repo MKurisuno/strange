@@ -1,10 +1,15 @@
-;; 
+;;  -*- lexical-binding: t; -*-
 ;;
 ;;
 ;;
 ;; 2024.12.16
 ;;
+;;M-x elisp-enable-lexical-binding RET
 ;;
+;;
+;;
+
+
 
 (eval-and-compile
   (customize-set-variable
@@ -47,6 +52,16 @@
   :global-minor-mode delete-selection-mode)
 
 
+;;
+;; macrostep. paren.delimiter.higtlight
+;;
+
+
+(leaf macrostep
+  :ensure t
+  :bind (("C-c e" . macrostep-expand)))
+
+
 (leaf paren
   :doc "highlight matching paren"
   :global-minor-mode show-paren-mode)
@@ -55,61 +70,6 @@
   :hook
   (prog-mode-hook . rainbow-delimiters-mode)
   )
-
-
-(leaf treesit
-  :config
-  (setopt treesit-font-lock-level 4)
-  (setopt treesit-language-source-alist
-        '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-          (cpp  "https://github.com/tree-sitter/tree-sitter-cpp" "v0.22.0")
-	  (c    "https://github.com/tree-sitter/tree-sitter-c" "v0.24.0")
-	  (cmake  "https://github.com/uyha/tree-sitter-cmake")
-	  (css "https://github.com/tree-sitter/tree-sitter-css")
-	  (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-          (go "https://github.com/tree-sitter/tree-sitter-go")
-          (html "https://github.com/tree-sitter/tree-sitter-html")
-          (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-          (json "https://github.com/tree-sitter/tree-sitter-json" )
-          (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-          (toml "https://github.com/tree-sitter/tree-sitter-toml")
-          (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-          (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-          (yaml "https://github.com/ikatyang/tree-sitter-yaml")
-	  )
-	)
-)
-
-
-
-
-
-
-
-;;; cmake-mode
-(leaf cmake-mode
-  :ensure t
-  :mode
-  ("CMakeLists\\.txt\\'" . cmake-mode)
-  ("\\.cmake\\'" . cmake-mode)
-)  
-
-
-(leaf cc-mode
-  :doc "major mode for editing C and similar languages"
-  :tag "builtin"
-  :defvar (c-basic-offset)
-  :bind (c-mode-base-map
-         ("C-c c" . compile))
-  :mode-hook
-  (c-mode-hook . ((c-set-style "bsd")
-                  (setq c-basic-offset 4)))
-  (c++-mode-hook . ((c-set-style "bsd")
-                    (setq c-basic-offset 4))))
-
-
-
-
 (leaf  highlight-indent-guides
   :ensure t
   :custom
@@ -118,13 +78,13 @@
   (highlight-indent-guides-responsive . t)
   (highlight-indent-guides-character . ?\|)
   (highlight-indent-guides-delay . 0)
-:hook
+  :hook
   (prog-mode-hook . highlight-indent-guides-mode)
   :config
-;;  (set-face-background 'highlight-indent-guides-odd-face "Dimgrey")
-;;  (set-face-background 'highlight-indent-guides-even-face "DimGrey")
+  ;;  (set-face-background 'highlight-indent-guides-odd-face "Dimgrey")
+  ;;  (set-face-background 'highlight-indent-guides-even-face "DimGrey")
   (set-face-foreground 'highlight-indent-guides-character-face "dimgrey")
-)
+  )
 
 
 
@@ -142,6 +102,11 @@
   :bind ((prog-mode-map
           ("M-n" . flymake-goto-next-error)
           ("M-p" . flymake-goto-prev-error))))
+
+(leaf which-key
+  :doc "Display available keybindings in popup"
+  :ensure t
+  :global-minor-mode t)
 
 
 (leaf exec-path-from-shell
@@ -169,7 +134,7 @@
   :hook (completion-list-mode-hook . consult-preview-at-point-mode)
   :defun consult-line
   :preface
-(defun c/consult-line (&optional at-point)
+  (defun c/consult-line (&optional at-point)
     "Consult-line uses things-at-point if set C-u prefix."
     (interactive "P")
     (if at-point
@@ -244,6 +209,7 @@
 
 
 
+
 ;;
 ;; eglot
 ;;
@@ -288,138 +254,145 @@
     :global-minor-mode electric-pair-mode))
 
 
-;;
-;;
-;; Treemacs
-;;
-;;
-(leaf treemacs
-  :ensure t
-  :bind (("M-0" . treemacs-select-window)
-	 ("C-x t 1" . treemacs-delete-other-windows)
-	 ("C-x t t" . treemacs)
-	 ("C-x t d" . treemacs-select-directory)
-	 ("C-x t B" . treemacs-bookmark)
-	 ("C-x t C-t" . treemacs-find-file)
-	 ("C-x t M-t" . treemacs-find-tag))
-  :config
-  (with-eval-after-load 'winum
-    (define-key winum-keymap
-		(kbd "M-0")
-		#'treemacs-select-window))
 
-  (with-eval-after-load 'treemacs
-    (progn
-      (setq treemacs-collapse-dirs (if treemacs-python-executable 3 0)
-	    treemacs-deferred-git-apply-delay 0.5
-	    treemacs-directory-name-transformer #'identity
-	    treemacs-display-in-side-window t
-	    treemacs-eldoc-display 'simple
-	    treemacs-file-event-delay 2000
-	    treemacs-file-extension-regex treemacs-last-period-regex-value
-	    treemacs-file-follow-delay 0.2
-	    treemacs-file-name-transformer #'identity
-	    treemacs-follow-after-init t
-	    treemacs-expand-after-init t
-	    treemacs-find-workspace-method 'find-for-file-or-pick-first
-	    treemacs-git-command-pipe ""
-	    treemacs-goto-tag-strategy 'refetch-index
-	    treemacs-header-scroll-indicators '(nil . "^^^^^^")
-	    treemacs-hide-dot-git-directory t
-	    treemacs-indentation 2
-	    treemacs-indentation-string " "
-	    treemacs-is-never-other-window nil
-	    treemacs-max-git-entries 5000
-	    treemacs-missing-project-action 'ask
-	    treemacs-move-files-by-mouse-dragging t
-	    treemacs-move-forward-on-expand nil
-	    treemacs-no-png-images nil
-	    treemacs-no-delete-other-windows t
-	    treemacs-project-follow-cleanup nil
-	    treemacs-persist-file (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-	    treemacs-position 'left
-	    treemacs-read-string-input 'from-child-frame
-	    treemacs-recenter-distance 0.1
-	    treemacs-recenter-after-file-follow nil
-	    treemacs-recenter-after-tag-follow nil
-	    treemacs-recenter-after-project-jump 'always
-	    treemacs-recenter-after-project-expand 'on-distance
-	    treemacs-litter-directories '("/node_modules" "/.venv" "/.cask")
-	    treemacs-project-follow-into-home nil
-	    treemacs-show-cursor nil
-	    treemacs-show-hidden-files t
-	    treemacs-silent-filewatch nil
-	    treemacs-silent-refresh nil
-	    treemacs-sorting 'alphabetic-asc
-	    treemacs-select-when-already-in-treemacs 'move-back
-	    treemacs-space-between-root-nodes t
-	    treemacs-tag-follow-cleanup t
-	    treemacs-tag-follow-delay 1.5
-	    treemacs-text-scale nil
-	    treemacs-user-mode-line-format nil
-	    treemacs-user-header-line-format nil
-	    treemacs-wide-toggle-width 70
-	    treemacs-width 35
-	    treemacs-width-increment 1
-	    treemacs-width-is-initially-locked t
-	    treemacs-workspace-switch-cleanup nil)
-      (treemacs-follow-mode t)
-      (treemacs-filewatch-mode t)
-      (treemacs-fringe-indicator-mode 'always)
-      (when treemacs-python-executable
-	(treemacs-git-commit-diff-mode t))
-      (pcase (cons
-	      (not (null (executable-find "git")))
-	      (not (null treemacs-python-executable)))
-	(`(t . t)
-	 (treemacs-git-mode 'deferred))
-	(`(t . _)
-	 (treemacs-git-mode 'simple)))
-      (treemacs-hide-gitignored-files-mode nil)))
+
+
+
+
+(leaf treesit
+  :custom ((treesit-font-lock-level . 4))
+  :config
+  (require 'treesit)
+  ;; ここでいろいろ準備する
+  ;;  (add-to-list 'auto-mode-alist '("\\.clj[sc]?\\'" . clojure-mode))
+  ;;  (add-to-list 'auto-mode-alist '("\\.edn\\'" . clojure-mode))
+  (add-to-list 'auto-mode-alist '( "CMakeLists\\.txt\\'" . cmake-mode))
+  (add-to-list 'auto-mode-alist '( "\\.cmake\\'". cmake-mode))
+  (add-to-list 'major-mode-remap-alist '(cmake-mode . cmake-ts-mode))
+  (add-to-list 'auto-mode-alist '( "\\.cpp\\'" . c++-mode))
+  (add-to-list 'auto-mode-alist '( "\\.cc\\'". c++-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))  
+  (add-to-list 'auto-mode-alist '( "\\.c\\'" . c-mode))
+  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))  
+  ;;(add-to-list 'treesit-language-source-alist
+  ;;	       '((cmake  . "https://github.com/uyha/tree-sitter-cmake")
+  ;;		 ))
   )
 
 
 
 
-  (leaf treemacs-projectile
-    :ensure t
-    :config
-    (with-eval-after-load 'projectile
-      (eval-after-load 'treemacs
-	'(require 'treemacs-projectile nil nil)))
-    )
-
-  (leaf treemacs-icons-dired
-    :ensure t
-    :commands treemacs-icons-dired-enable-once
-    :hook ((dired-mode-hook . treemacs-icons-dired-enable-once)))
-
-  (leaf treemacs-magit
-    :ensure t
-    :config
-    (with-eval-after-load 'magit
-      (eval-after-load 'treemacs
-	'(require 'treemacs-magit nil nil))))
-
-  (leaf treemacs-persp
-    :ensure t
-    :config
-    (with-eval-after-load 'persp-mode
-      (eval-after-load 'treemacs
-	'(progn
-	   (require 'treemacs-persp nil nil)
-	   (treemacs-set-scope-type 'Perspectives)
-	   t))))
-
-  (leaf treemacs-tab-bar
-    :ensure t
-    :config
-    (with-eval-after-load 'treemacs
-      (require 'treemacs-tab-bar nil nil)
-      (treemacs-set-scope-type 'Tabs)))
+(leaf projectile
+  :ensure t
+  :config
+  (projectile-mode +1)
+  ;; Recommended keymap prefix on Windows/Linux
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  )
 
 
-;;(treemacs-start-on-boot)
+
+
+;;
+;;
+;; Treemacs 
+;;
+;;
+(leaf treemacs
+  :ensure t
+  :bind
+  ;;((define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action))
+  (:treemacs-mode-map
+      ([mouse-1] . #'treemacs-single-click-expand-action))
+  (("C-x t t" . treemacs)
+   ("M-0"       . treemacs-select-window)
+   ("C-x t 1"   . treemacs-delete-other-windows)
+   ("C-x t d"   . treemacs-select-directory)
+   ("C-x t B"   . treemacs-bookmark)
+   ("C-x t C-t" . treemacs-find-file)
+   ("C-x t M-t" . treemacs-find-tag))
+  :custom
+  (progn 'treemacs
+	 (custom-set-variables
+	  '(treemacs-collapse-dirs                   (if treemacs-python-executable 3 0))
+	  '(treemacs-deferred-git-apply-delay        0.5)
+	  '(treemacs-directory-name-transformer      #'identity)
+	  '(treemacs-display-in-side-window          t	)
+          '(treemacs-eldoc-display                   'simple)
+          '(treemacs-file-event-delay                2000)
+          '(treemacs-file-extension-regex            treemacs-last-period-regex-value)
+          '(treemacs-file-follow-delay               0.2)
+	  '(treemacs-file-name-transformer           #'identity)
+          '(treemacs-follow-after-init               t)
+          '(treemacs-expand-after-init               t)
+          '(treemacs-find-workspace-method           'find-for-file-or-pick-first)
+          '(treemacs-git-command-pipe                "")
+          '(treemacs-goto-tag-strategy               'refetch-index)
+          '(treemacs-header-scroll-indicators        '(nil . "^^^^^^"))
+          '(treemacs-hide-dot-git-directory          t)
+          '(treemacs-indentation                     2)
+          '(treemacs-indentation-string              " ")
+          '(treemacs-is-never-other-window           nil)
+          '(treemacs-max-git-entries                 5000)
+          '(treemacs-missing-project-action          'ask)
+          '(treemacs-move-files-by-mouse-dragging    t)
+          '(treemacs-move-forward-on-expand          nil)
+          '(treemacs-no-png-images                   nil)
+          '(treemacs-no-delete-other-windows         t)
+          '(treemacs-project-follow-cleanup          nil)
+          '(treemacs-persist-file       (expand-file-name ".cache/treemacs-persist" user-emacs-directory))
+          '(treemacs-position                        'left)
+          '(treemacs-read-string-input               'from-child-frame)
+          '(treemacs-recenter-distance               0.1)
+          '(treemacs-recenter-after-file-follow      nil)
+          '(treemacs-recenter-after-tag-follow       nil)
+          '(treemacs-recenter-after-project-jump     'always)
+          '(treemacs-recenter-after-project-expand   'on-distance)
+          '(treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask"))
+          '(treemacs-project-follow-into-home        nil)
+          '(treemacs-show-cursor                     nil)
+          '(treemacs-show-hidden-files               t)
+          '(treemacs-silent-filewatch                nil)
+          '(treemacs-silent-refresh                  nil)
+          '(treemacs-sorting                         'alphabetic-asc)
+          '(treemacs-select-when-already-in-treemacs 'move-back)
+          '(treemacs-space-between-root-nodes        t)
+          '(treemacs-tag-follow-cleanup              t)
+          '(treemacs-tag-follow-delay                1.5)
+          '(treemacs-text-scale                      nil)
+          '(treemacs-user-mode-line-format           nil)
+          '(treemacs-user-header-line-format         nil)
+          '(treemacs-wide-toggle-width               70)
+          '(treemacs-width                           35)
+          '(treemacs-width-increment                 1)
+          '(treemacs-width-is-initially-locked       t)
+          '(treemacs-workspace-switch-cleanup        nil)
+	  ;;
+	  '(foo-package-to-enable t "Customized with leaf in foo-package block")
+          '(foo-package-to-disable nil "Customized with leaf in foo-package block")
+          '(foo-package-to-symbol 'symbol "Customized with leaf in foo-package block")
+          '(foo-package-to-function #'ignore "Customized with leaf in foo-package block")
+          '(foo-package-to-lambda (lambda (elm) (message elm)) "Customized with leaf in foo-package block"))
+
+	 ;; The default width and height of the icons is 22 pixels. If you are
+	 ;; using a Hi-DPI display, uncomment this to double the icon size.
+	 ;;(treemacs-resize-icons 44)
+	 (treemacs-follow-mode . t)
+	 (treemacs-filewatch-mode . t)
+	 (treemacs-fringe-indicator-mode . 'always)
+
+	 (when treemacs-python-executable
+	   (treemacs-git-commit-diff-mode . t))
+	 ;;(treemacs-git-mode . 'deferred)	 
+	 (treemacs-git-mode 'simple)
+
+	 )
+  :hook
+  (treemacs-mode-hook . (lambda ()
+			  (setq mode-line-format nil)
+			  (display-line-numbers-mode 0)))
+)
+
 
 
 
