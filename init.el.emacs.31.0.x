@@ -1,10 +1,10 @@
 ;;  -*- lexical-binding: t; -*-
-;;
+;;;M-x elisp-enable-lexical-binding RET
 ;;
 ;;
 ;; 2024.12.16
+;; 2025.06.20 Update 
 ;;
-;;M-x elisp-enable-lexical-binding RET
 ;;
 ;;
 ;;
@@ -210,24 +210,6 @@
 
 
 
-;;
-;; eglot
-;;
-;;
-(leaf eglot
-  :doc "The Emacs Client for LSP servers"
-  :hook (;;(clojure-mode-hook . eglot-ensure)
-	 (c-mode-hook . eglot-ensure)
-	 (c++-mode-hook . eglot-ensure))
-  :custom ((eldoc-echo-area-use-multiline-p . nil)
-           (eglot-connect-timeout . 600)))
-
-(leaf eglot-booster
-  :when (executable-find "emacs-lsp-booster")
-  :vc ( :url "https://github.com/jdtsmith/eglot-booster")
-  :global-minor-mode t)
-
-
 (leaf puni
   :doc "Parentheses Universalistic"
   :ensure t
@@ -257,9 +239,7 @@
 
 
 
-
-
-(leaf treesit
+(leaf *treesit
   :custom ((treesit-font-lock-level . 4))
   :config
   (require 'treesit)
@@ -268,16 +248,41 @@
   ;;  (add-to-list 'auto-mode-alist '("\\.edn\\'" . clojure-mode))
   (add-to-list 'auto-mode-alist '( "CMakeLists\\.txt\\'" . cmake-mode))
   (add-to-list 'auto-mode-alist '( "\\.cmake\\'". cmake-mode))
-  (add-to-list 'major-mode-remap-alist '(cmake-mode . cmake-ts-mode))
-  (add-to-list 'auto-mode-alist '( "\\.cpp\\'" . c++-mode))
-  (add-to-list 'auto-mode-alist '( "\\.cc\\'". c++-mode))
-  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))  
-  (add-to-list 'auto-mode-alist '( "\\.c\\'" . c-mode))
+  (add-to-list 'auto-mode-alist '( "\\.py$'". python-mode))
+  (add-to-list 'auto-mode-alist '( "\\.json\\'". js-json-mode))
+   ;;
   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))  
-  ;;(add-to-list 'treesit-language-source-alist
-  ;;	       '((cmake  . "https://github.com/uyha/tree-sitter-cmake")
-  ;;		 ))
+  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(cmake-mode . cmake-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
   )
+
+;;
+;; eglot
+;;
+(leaf eglot
+  :doc "The Emacs Client for LSP servers"
+  :ensure t
+  :config
+  (add-to-list 'eglot-server-programs '(python-mode "pylsp"))
+  (add-to-list 'eglot-server-programs '(cmake-ts-mode "cmake-language-server"))
+  
+  :hook (;;(clojure-mode-hook . eglot-ensure)
+	 (c-ts-mode-hook . eglot-ensure)
+	 (c++-ts-mode-hook . eglot-ensure)
+	 (python-ts-mode-hook . eglot-ensure)
+	 (cmake-ts-mode-hook . eglot-ensure)
+	 )
+  :custom ((eldoc-echo-area-use-multiline-p . nil)
+           (eglot-connect-timeout . 600)))
+
+
+(leaf eglot-booster
+  :when (executable-find "emacs-lsp-booster")
+  :vc ( :url "https://github.com/jdtsmith/eglot-booster")
+  :global-minor-mode t)
+
 
 
 
@@ -289,9 +294,6 @@
   ;; Recommended keymap prefix on Windows/Linux
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   )
-
-
-
 
 ;;
 ;;
@@ -312,6 +314,7 @@
    ("C-x t C-t" . treemacs-find-file)
    ("C-x t M-t" . treemacs-find-tag))
   :custom
+  (custom-set-variables  '(treemacs-python-executable . "/home/kurisuno/.local/bin/python3" ))
   (progn 'treemacs
 	 (custom-set-variables
 	  '(treemacs-collapse-dirs                   (if treemacs-python-executable 3 0))
@@ -394,6 +397,21 @@
 )
 
 
+(leaf treemacs-evil
+  :after (treemacs evil)
+  :ensure t)
+
+(leaf treemacs-projectile
+  :after (treemacs projectile)
+  :ensure t)
+
+(leaf treemacs-icons-dired
+  :hook (dired-mode . treemacs-icons-dired-enable-once)
+  :ensure t)
+
+(leaf treemacs-magit
+  :after (treemacs magit)
+  :ensure t)
 
 
 
