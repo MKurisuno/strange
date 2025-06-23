@@ -78,10 +78,12 @@
 # Wifi pawer-save-mode off
  sudo iwconfig
  sudo iwconfig wlp3s0 power off
-
  sudo emacs /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
-  # File to be place under /etc/NetworkManager/conf.d
+   File to be place under /etc/NetworkManager/conf.d
    [connection]
-  # Values are 0 (use default), 1 (ignore/don't touch), 2 (disable) or 3 (enable).
+   Values are 0 (use default),
+   1 (ignore/don't touch),
+   2 (disable) or
+   3 (enable).
    wifi.powersave = 2
 
