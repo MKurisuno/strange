@@ -101,20 +101,8 @@ src-hilite-lesspipe.sh
    MKurisuno/strange.git  dot.gitconfig   
 
 
-
-
-##  python3...   Install local dir  
- ---Install python3 /  
-  $python3 --version --->3.xx  
-  $sudo apt install python3-pip  
-  $pip3 --version  
- ---Install python package which pip3  in local dir.  
-  $mkdir -p ~/.local/bin  
-  
-
 ## gnome-terminal
   https://draculatheme.com/gnome-terminal  
-
 
 
 ##  Disable bluetooth service
