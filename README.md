@@ -57,7 +57,7 @@ src-hilite-lesspipe.sh
 
 ### crontab   
   $ crontab -e  
-  0 10 * * * /home/kurisuno/.clamav/scan.sh  
+  0 10 * * * $HOME/.clamav/scan.sh  
 
 
 ##  Default Editor
