@@ -79,7 +79,7 @@ src-hilite-lesspipe.sh
    	dracula/zsh   
 
 ## emacs 
-Version > 30.0.50. 
+Version > 30.0.50.  
    init.el    
    eraly-init.el  
    For drucura-theme  
