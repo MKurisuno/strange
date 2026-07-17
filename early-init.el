@@ -1,7 +1,7 @@
-;;; package --- Summary
+;;; package --- Summary  -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; ---
-;; --- Nuc6i5 20241116 
+;; ---  20241116 
 
 (setq package-enable-at-startup nil)
 
@@ -34,7 +34,9 @@
 
 (setq vc-follow-symlinks t)
 
-(setq byte-compile-warnings '(cl-functions))
+
+
+(define-key key-translation-map [?\C-h] [?\C-?])
 
 
 
@@ -48,8 +50,33 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 ;; Set initial frame size and position
 (setq initial-frame-alist
-      (append   '((top . 5) (left . 1550) (width . 140) (height . 140)) initial-frame-alist)
+      (append   '((top . 0) (left . 1000) (width . 115) (height . 1280)) initial-frame-alist)
       )
+
+
+
+ ;; スクロールした際のカーソルの移動行数
+ (setq scroll-conservatively 1)
+ 
+ ;; スクロール開始のマージンの行数
+(setq scroll-margin 5)
+
+ 
+ 
+ ;; 1 画面スクロール時に重複させる行数
+(setq next-screen-context-lines 5) 
+ 
+ ;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
+ (setq scroll-preserve-screen-position t)
+ 
+
+
+
+
+
+
+
+
 
 ;; 
 ;; Dracula theme  
@@ -59,12 +86,14 @@
 ;; Don't change the font size for some headings and titles (default t)
 ;;(setq dracula-enlarge-headings nil)
 ;; Adjust font size of titles level 1 (default 1.3)
-;;(setq dracula-height-title-1 1.25)
+(setq dracula-height-title-1 1.25)
 ;; Adjust font size of titles level 2 (default 1.1)
-;;(setq dracula-height-title-2 1.15)
+(setq dracula-height-title-2 1.15)
 ;; Adjust font size of titles level 3 (default 1.0)
-;;(setq dracula-height-title-3 1.05)
+(setq dracula-height-title-3 1.05)
 ;; Adjust font size of document titles (default 1.44)
 (setq dracula-height-doc-title 1.4)
 ;; Use less pink and bold on the mode-line and minibuffer (default nil)
 (setq dracula-alternate-mode-line-and-minibuffer t)
+;; Use normal weight for syntax faces like keywords, functions, and variables (default t)
+(setq dracula-bolder-keywords nil)

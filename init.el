@@ -1,4 +1,4 @@
-;;  -*- lexical-binding: t; -*-
+;;-*- lexical-binding: t; -*-
 ;;;M-x elisp-enable-lexical-binding RET
 ;;
 ;;
@@ -62,14 +62,23 @@
   :bind (("C-c e" . macrostep-expand)))
 
 
-(leaf paren
-  :doc "highlight matching paren"
-  :global-minor-mode show-paren-mode)
 (leaf rainbow-delimiters
   :ensure t
   :hook
   (prog-mode-hook . rainbow-delimiters-mode)
   )
+
+(leaf paren
+  :ensure t
+  :hook
+  (after-init-hook . show-paren-mode)
+  :custom-face
+  (show-paren-match . '((nil (:background "#44475a" :foreground "#f1fa8c"))))  
+  :custom ((show-paren-style . 'mixed)
+           (show-paren-when-point-inside-paren . t)
+           (show-paren-when-point-in-periphery . t))
+  )
+
 (leaf  highlight-indent-guides
   :ensure t
   :custom
@@ -85,9 +94,6 @@
   ;;  (set-face-background 'highlight-indent-guides-even-face "DimGrey")
   (set-face-foreground 'highlight-indent-guides-character-face "dimgrey")
   )
-
-
-
 
 
 (leaf simple
@@ -231,6 +237,7 @@
          ("M-U" . puni-splice-killing-backward)
          ("M-z" . puni-squeeze))
   :config
+  
   (leaf elec-pair
     :doc "Automatic parenthesis pairing"
     :global-minor-mode electric-pair-mode))
@@ -240,23 +247,37 @@
 
 
 (leaf *treesit
-  :custom ((treesit-font-lock-level . 4))
+         ;;(setq treesit-font-lock-level 4)
+  :custom ((treesit-font-lock-level . 4)
+	   )
   :config
   (require 'treesit)
   ;; ここでいろいろ準備する
   ;;  (add-to-list 'auto-mode-alist '("\\.clj[sc]?\\'" . clojure-mode))
   ;;  (add-to-list 'auto-mode-alist '("\\.edn\\'" . clojure-mode))
-  (add-to-list 'auto-mode-alist '( "CMakeLists\\.txt\\'" . cmake-mode))
-  (add-to-list 'auto-mode-alist '( "\\.cmake\\'". cmake-mode))
+  ;;  (add-to-list 'treesit-language-source-alist
+  ;;             '(conao3-clojure "https://github.com/conao3-playground/tree-sitter-conao3-clojure"))
+  (add-to-list 'treesit-language-source-alist
+	       '(yaml "https://github.com/ikatyang/tree-sitter-yaml"))
+   ;; 
+  (add-to-list 'auto-mode-alist '( "CMakeLists\\.txt\\'" . cmake-ts-mode))
+  (add-to-list 'auto-mode-alist '( "\\.cmake\\'". cmake-ts-mode))
   (add-to-list 'auto-mode-alist '( "\\.py$'". python-mode))
   (add-to-list 'auto-mode-alist '( "\\.json\\'". js-json-mode))
-   ;;
+  (add-to-list 'auto-mode-alist '( "\\.php\\'". php-ts-mode))
+  (add-to-list 'auto-mode-alist '( "\\.yaml\\'". yaml-ts-mode))
+  (add-to-list 'auto-mode-alist '( "\\.yam\\'". yaml-ts-mode))
+  ;;
   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))  
   (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
   (add-to-list 'major-mode-remap-alist '(cmake-mode . cmake-ts-mode))
   (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
   (add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(php-mode . php-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(yaml-mode . yaml-ts-mode))
   )
+
+
 
 ;;
 ;; eglot
@@ -265,14 +286,18 @@
   :doc "The Emacs Client for LSP servers"
   :ensure t
   :config
-  (add-to-list 'eglot-server-programs '(python-mode "pylsp"))
-  (add-to-list 'eglot-server-programs '(cmake-ts-mode "cmake-language-server"))
+  
+  ;;(add-to-list 'eglot-server-programs '(python-mode "pylsp"))
+  ;;(add-to-list 'eglot-server-programs '(cmake-ts-mode "cmake-language-server"))
+  ;;(add-to-list 'eglot-server-programs '((c++-mode c-mode) "ccls"))
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+
   
   :hook (;;(clojure-mode-hook . eglot-ensure)
 	 (c-ts-mode-hook . eglot-ensure)
 	 (c++-ts-mode-hook . eglot-ensure)
-	 (python-ts-mode-hook . eglot-ensure)
-	 (cmake-ts-mode-hook . eglot-ensure)
+	 ;;(python-ts-mode-hook . eglot-ensure)
+	 ;;(cmake-ts-mode-hook . eglot-ensure)
 	 )
   :custom ((eldoc-echo-area-use-multiline-p . nil)
            (eglot-connect-timeout . 600)))
@@ -282,8 +307,6 @@
   :when (executable-find "emacs-lsp-booster")
   :vc ( :url "https://github.com/jdtsmith/eglot-booster")
   :global-minor-mode t)
-
-
 
 
 
@@ -304,9 +327,8 @@
   :ensure t
   :bind
   ;;((define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action))
-  (:treemacs-mode-map
-      ([mouse-1] . #'treemacs-single-click-expand-action))
-  (("C-x t t" . treemacs)
+  (:treemacs-mode-map ([mouse-1] . #'treemacs-single-click-expand-action))
+  (("C-x t t"   . treemacs)
    ("M-0"       . treemacs-select-window)
    ("C-x t 1"   . treemacs-delete-other-windows)
    ("C-x t d"   . treemacs-select-directory)
@@ -314,10 +336,11 @@
    ("C-x t C-t" . treemacs-find-file)
    ("C-x t M-t" . treemacs-find-tag))
   :custom
-  (custom-set-variables  '(treemacs-python-executable . "/home/kurisuno/.local/bin/python3" ))
+  
   (progn 'treemacs
 	 (custom-set-variables
-	  '(treemacs-collapse-dirs                   (if treemacs-python-executable 3 0))
+	  '(treemacs-collapse-dirs                   (if (executable-find "python3") 3 0) )
+	  '(treemacs-collapse-dirs                   (if treemacs-python-executable 3 0) )
 	  '(treemacs-deferred-git-apply-delay        0.5)
 	  '(treemacs-directory-name-transformer      #'identity)
 	  '(treemacs-display-in-side-window          t	)
@@ -329,7 +352,6 @@
           '(treemacs-follow-after-init               t)
           '(treemacs-expand-after-init               t)
           '(treemacs-find-workspace-method           'find-for-file-or-pick-first)
-          '(treemacs-git-command-pipe                "")
           '(treemacs-goto-tag-strategy               'refetch-index)
           '(treemacs-header-scroll-indicators        '(nil . "^^^^^^"))
           '(treemacs-hide-dot-git-directory          t)
@@ -376,19 +398,16 @@
           '(foo-package-to-symbol 'symbol "Customized with leaf in foo-package block")
           '(foo-package-to-function #'ignore "Customized with leaf in foo-package block")
           '(foo-package-to-lambda (lambda (elm) (message elm)) "Customized with leaf in foo-package block"))
-
+	 ;;
 	 ;; The default width and height of the icons is 22 pixels. If you are
 	 ;; using a Hi-DPI display, uncomment this to double the icon size.
 	 ;;(treemacs-resize-icons 44)
 	 (treemacs-follow-mode . t)
 	 (treemacs-filewatch-mode . t)
 	 (treemacs-fringe-indicator-mode . 'always)
-
-	 (when treemacs-python-executable
-	   (treemacs-git-commit-diff-mode . t))
+	 ;;(treemacs-fringe-indicator-mode . 'only-when-focused)
 	 ;;(treemacs-git-mode . 'deferred)	 
-	 (treemacs-git-mode 'simple)
-
+	 (treemacs-git-mode . 'simple)
 	 )
   :hook
   (treemacs-mode-hook . (lambda ()
@@ -415,8 +434,8 @@
 
 
 
-
 (provide 'init)
+
 
 ;;;
 ;;; This will enable emacs to compile a simple cpp single file without any makefile by just pressing [f9] key

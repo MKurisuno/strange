@@ -13,7 +13,8 @@ setopt histignorealldups sharehistory
 
 
 export EDITOR='emacs -nw'
- 
+
+
 # Use emacs keybindings even if our EDITOR is set to vi
 #bindkey -e
 
@@ -38,9 +39,6 @@ zstyle ':completion:*:(cd|less):*' maticher 'm:{a-z}={A-Z}'
 
 #zstyle ':completion:*:setopt:*' menu true select 
 #zstyle ':completion:*' file-list all
-
-
-
 #zstyle ':completion:*' verbose true
 #zstyle ':completion:*:*:*:*:descriptions' format '%F{green}-- %d --%f'
 #zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
@@ -70,11 +68,20 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
 alias ls='ls --color=auto'
+
 alias l='ls -lF'
 alias la='ls -a'
 alias ll='ls -alF'
 alias lx='ls -aF'
 alias vdir='vdir --color=auto'
+
+
+
+#less highloght opotion
+# sudo apt install source-highlight
+export LESSOPEN="| $HOME/bin/src-hilite-lesspipe.sh %s"
+#export LESSOPEN="| $HOME/bin/src-hilite-lesspipe.sh %s"
+export LESS="-R"
 
 
 #
@@ -90,6 +97,7 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-completions
 zinit light zdharma/history-search-multi-word
 zinit light dracula/zsh
+
 
 
 # Dracula zsh
@@ -149,11 +157,13 @@ ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#F8F8F2'
 ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#FF79C6'
 ZSH_HIGHLIGHT_STYLES[globbing]='fg=#F8F8F2'
 ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=#BD93F9'
-#ZSH_HIGHLIGHT_STYLES[command-substitution]='fg=?'
-#ZSH_HIGHLIGHT_STYLES[command-substitution-unquoted]='fg=?'
-#ZSH_HIGHLIGHT_STYLES[process-substitution]='fg=?'
-#ZSH_HIGHLIGHT_STYLES[arithmetic-expansion]='fg=?'
+
+ZSH_HIGHLIGHT_STYLES[command-substitution]='fg=?'
+ZSH_HIGHLIGHT_STYLES[command-substitution-unquoted]='fg=?'
+ZSH_HIGHLIGHT_STYLES[process-substitution]='fg=?'
+ZSH_HIGHLIGHT_STYLES[arithmetic-expansion]='fg=?'
 ZSH_HIGHLIGHT_STYLES[back-quoted-argument-unclosed]='fg=#FF5555'
+
 ZSH_HIGHLIGHT_STYLES[redirection]='fg=#F8F8F2'
 ZSH_HIGHLIGHT_STYLES[arg0]='fg=#F8F8F2'
 ZSH_HIGHLIGHT_STYLES[default]='fg=#F8F8F2'
