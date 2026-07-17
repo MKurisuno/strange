@@ -83,7 +83,7 @@ Version > 30.0.50
    init.el    
    eraly-init.el  
    For drucura-theme  
-       $ ln -s duracura-theme-**/dracura-theme.el  .emacs.d/themes/dracura-theme.el 
+       $ ln -s dracura-theme-**/dracura-theme.el  .emacs.d/themes/dracura-theme.el 
 
 ## gnu-source-highlight
   download from 
