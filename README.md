@@ -127,8 +127,6 @@ src-hilite-lesspipe.sh
 
 
 ##  Wifi pawer-save-mode off
- $ sudo iwconfig  
- $ sudo iwconfig wlp3s0 power off  
  $ sudo emacs /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf  
    File to be place under /etc/NetworkManager/conf.d   
    [connection]  
