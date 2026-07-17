@@ -23,7 +23,7 @@ src-hilite-lesspipe.sh
  Check the Kernel to recognize GPU.  
   $ lspci | grep -i nvidia  
 
- Check nvidia-gpu driver avairable.
+ Check nvidia-gpu driver avairable.  
   $ sudo ubuntu-drivers list  
   $ sudo apt update  
   $ sudo apt upgrade  
