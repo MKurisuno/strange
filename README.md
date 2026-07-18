@@ -42,7 +42,7 @@ src-hilite-lesspipe.sh
 
 
 ## for Virus  
-   $ sudo apt install clamav  clamav-daemon  
+   $ sudo apt install clamav clamav-daemon  
    $ mkdir .clamav  
    $ mkdir .clamav/history  
    $ chmod 755 scan.sh  
@@ -69,7 +69,7 @@ src-hilite-lesspipe.sh
   To change login-shell   
   $chsh -s /usr/bin/zsh  
   To change terminal shell  
-     Instead of SHELL to load custum command    
+  Instead of SHELL to load custum command    
      custum command is  /usr/bin/zsh   
   ---dot.zshrc---  
       zinit  
@@ -116,6 +116,7 @@ Version > 30.0.50.
 
 
 ##  Wifi pawer-save-mode off
+ if wifi is unstable,  
  $ sudo emacs /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf  
    File to be place under /etc/NetworkManager/conf.d   
    [connection]  
