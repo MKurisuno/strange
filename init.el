@@ -2,9 +2,9 @@
 ;;;M-x elisp-enable-lexical-binding RET
 ;;
 ;;
-;; 2024.12.16
-;; 2025.06.20 Update 
-;;
+;; Since 2024.12.16
+;
+;; 2026.07.21 Last Update 
 ;;
 ;;
 ;;
@@ -243,6 +243,21 @@
     :global-minor-mode electric-pair-mode))
 
 
+
+;;(setq-default c-basic-offset 4     ;;基本インデント量4
+;;              tab-width 4          ;;タブ幅4
+;;               indent-tabs-mode nil) 
+
+
+;; C++ style
+;; C++ style
+(add-hook 'c++-mode-hook
+          '(lambda()
+             (c-ts-mode-set-style "k&r")
+             (setq indent-tabs-mode nil)     ; インデントは空白文字で行う（TABコードを空白に変換）
+             (c-set-offset 'innamespace 0)   ; namespace {}の中はインデントしない
+             (c-set-offset 'arglist-close 0) ; 関数の引数リストの閉じ括弧はインデントしない
+             ))
 
 
 

@@ -1,7 +1,8 @@
 ;;; package --- Summary  -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; ---
-;; ---  20241116 
+;; ---  20241116
+;; ---  20260721 
 
 (setq package-enable-at-startup nil)
 
@@ -29,9 +30,7 @@
 ;;(setq read-process-output-max (* 8 1024 1024))
 
 (setq inhibit-compacting-font-caches t)
-
 (setq history-delete-duplicates t)
-
 (setq vc-follow-symlinks t)
 
 
@@ -48,6 +47,8 @@
 
 ;; asking (yes or no) exchange to (y or n)
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+
 ;; Set initial frame size and position
 (setq initial-frame-alist
       (append   '((top . 0) (left . 1000) (width . 115) (height . 1280)) initial-frame-alist)
@@ -57,18 +58,18 @@
 
  ;; スクロールした際のカーソルの移動行数
  (setq scroll-conservatively 1)
- 
  ;; スクロール開始のマージンの行数
 (setq scroll-margin 5)
-
- 
- 
  ;; 1 画面スクロール時に重複させる行数
 (setq next-screen-context-lines 5) 
- 
  ;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
  (setq scroll-preserve-screen-position t)
- 
+
+;;複数Windowの移動に (C-x o) ではなく　アローキーを使う
+(global-set-key (kbd "C-c <left>")  'windmove-left)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
+(global-set-key (kbd "C-c <up>")    'windmove-up)
+(global-set-key (kbd "C-c <down>")  'windmove-down)
 
 
 
