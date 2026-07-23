@@ -2,9 +2,9 @@
 ;;;M-x elisp-enable-lexical-binding RET
 ;;
 ;;
-;; Since 2024.12.16
-;
-;; 2026.07.21 Last Update 
+;; 2024.12.16
+;; 2025.06.20 Update 
+;;
 ;;
 ;;
 ;;
@@ -79,21 +79,21 @@
            (show-paren-when-point-in-periphery . t))
   )
 
-(leaf  highlight-indent-guides
-  :ensure t
-  :custom
-  (highlight-indent-guides-method  . 'character)
-  (highlight-indent-guides-auto-enabled . nil)
-  (highlight-indent-guides-responsive . t)
-  (highlight-indent-guides-character . ?\|)
-  (highlight-indent-guides-delay . 0)
-  :hook
-  (prog-mode-hook . highlight-indent-guides-mode)
-  :config
+;;(leaf  highlight-indent-guides
+;;  :ensure t
+;;  :custom
+;;  (highlight-indent-guides-method  . 'character)
+;;  (highlight-indent-guides-auto-enabled . nil)
+;;  (highlight-indent-guides-responsive . t)
+;;  (highlight-indent-guides-character . ?\|)
+;;  (highlight-indent-guides-delay . 0)
+;;  :hook
+;;  (prog-mode-hook . highlight-indent-guides-mode)
+;;  :config
   ;;  (set-face-background 'highlight-indent-guides-odd-face "Dimgrey")
   ;;  (set-face-background 'highlight-indent-guides-even-face "DimGrey")
-  (set-face-foreground 'highlight-indent-guides-character-face "dimgrey")
-  )
+;;  (set-face-foreground 'highlight-indent-guides-character-face "dimgrey")
+;;  )
 
 
 (leaf simple
@@ -244,22 +244,6 @@
 
 
 
-;;(setq-default c-basic-offset 4     ;;基本インデント量4
-;;              tab-width 4          ;;タブ幅4
-;;               indent-tabs-mode nil) 
-
-
-;; C++ style
-;; C++ style
-(add-hook 'c++-mode-hook
-          '(lambda()
-             (c-ts-mode-set-style "k&r")
-             (setq indent-tabs-mode nil)     ; インデントは空白文字で行う（TABコードを空白に変換）
-             (c-set-offset 'innamespace 0)   ; namespace {}の中はインデントしない
-             (c-set-offset 'arglist-close 0) ; 関数の引数リストの閉じ括弧はインデントしない
-             ))
-
-
 
 (leaf *treesit
          ;;(setq treesit-font-lock-level 4)
@@ -267,7 +251,6 @@
 	   )
   :config
   (require 'treesit)
-  ;; ここでいろいろ準備する
   ;;  (add-to-list 'auto-mode-alist '("\\.clj[sc]?\\'" . clojure-mode))
   ;;  (add-to-list 'auto-mode-alist '("\\.edn\\'" . clojure-mode))
   ;;  (add-to-list 'treesit-language-source-alist
@@ -295,33 +278,56 @@
 
 
 ;;
+;;
+;; Set indent off set = 4 
+;; Set tab-width      = 4 
+;;
+(add-hook 'c++-ts-mode-hook
+          (lambda ()
+	    
+            (setq-local tab-width 4)
+            (setq-local indent-tabs-mode t) ; Tab文字で揃えるなら t
+            ;; 行頭インデント幅（tree-sitter系で効くことが多い）
+            (setq-local c-ts-mode-indent-offset 4)
+            (setq-local c-basic-offset 4)
+	    (setq-local c-auto-newline t)
+	    ))
+
+;;
 ;; eglot
 ;;
 (leaf eglot
   :doc "The Emacs Client for LSP servers"
   :ensure t
   :config
-  
   ;;(add-to-list 'eglot-server-programs '(python-mode "pylsp"))
   ;;(add-to-list 'eglot-server-programs '(cmake-ts-mode "cmake-language-server"))
   ;;(add-to-list 'eglot-server-programs '((c++-mode c-mode) "ccls"))
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-
   
-  :hook (;;(clojure-mode-hook . eglot-ensure)
-	 (c-ts-mode-hook . eglot-ensure)
+  ;; eglot  と　clangd のインデント設定を無効化する
+  (with-eval-after-load 'eglot  (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider))
+  (with-eval-after-load 'eglot  (add-to-list 'eglot-ignored-server-capabilities :documentRangeFormattingProvider))
+  
+  :hook ((c-ts-mode-hook . eglot-ensure)
 	 (c++-ts-mode-hook . eglot-ensure)
 	 ;;(python-ts-mode-hook . eglot-ensure)
 	 ;;(cmake-ts-mode-hook . eglot-ensure)
 	 )
   :custom ((eldoc-echo-area-use-multiline-p . nil)
-           (eglot-connect-timeout . 600)))
+           (eglot-connect-timeout . 600) )
+  )
+
+
+
+
 
 
 (leaf eglot-booster
   :when (executable-find "emacs-lsp-booster")
   :vc ( :url "https://github.com/jdtsmith/eglot-booster")
   :global-minor-mode t)
+
 
 
 
@@ -333,7 +339,12 @@
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   )
 
-;;
+
+(leaf ag
+  :ensure t)
+(leaf rg
+  :ensure t)
+
 ;;
 ;; Treemacs 
 ;;
