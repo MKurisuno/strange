@@ -10,7 +10,6 @@
 ;;
 
 
-
 (eval-and-compile
   (customize-set-variable
    'package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
@@ -33,14 +32,23 @@
   :doc "tools for customizing Emacs and Lisp packages"
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
 
+
 (leaf mozc
   :ensure t
   :config
   :custom
   (default-input-method . "japanese-mozc")
   (mozc-helper-program-name  . "mozc_emacs_helper")
-  (mozc-leim-title . "♡かな")
-)
+  (mozc-leim-title . "かな")
+  :init
+;;  (defun mozc-toggle-and-variable-pitch-on ()
+;;    (interactive)
+;;    (toggle-input-method)
+;;    (when (fboundp 'variable-pitch-mode)
+;;      (variable-pitch-mode 1)))
+;;  (global-set-key (kbd "C-\\") #'mozc-toggle-and-variable-pitch-on)
+  
+  )
 
 
 (leaf autorevert
@@ -55,8 +63,6 @@
 ;;
 ;; macrostep. paren.delimiter.higtlight
 ;;
-
-
 (leaf macrostep
   :ensure t
   :bind (("C-c e" . macrostep-expand)))
@@ -125,7 +131,7 @@
   (exec-path-from-shell-initialize))
 
 (leaf vertico
-  :doc "VERTical Interactive COmpletion"
+  :doc "VERTical Interactive Completion"
   :ensure t
   :global-minor-mode t)
 
@@ -284,7 +290,6 @@
 ;;
 (add-hook 'c++-ts-mode-hook
           (lambda ()
-	    
             (setq-local tab-width 4)
             (setq-local indent-tabs-mode t) ; Tab文字で揃えるなら t
             ;; 行頭インデント幅（tree-sitter系で効くことが多い）
@@ -337,6 +342,7 @@
   (projectile-mode +1)
   ;; Recommended keymap prefix on Windows/Linux
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  
   )
 
 
@@ -369,7 +375,7 @@
 	  '(treemacs-collapse-dirs                   (if treemacs-python-executable 3 0) )
 	  '(treemacs-deferred-git-apply-delay        0.5)
 	  '(treemacs-directory-name-transformer      #'identity)
-	  '(treemacs-display-in-side-window          t)
+	  '(treemacs-display-in-side-window          t	)
           '(treemacs-eldoc-display                   'simple)
           '(treemacs-file-event-delay                2000)
           '(treemacs-file-extension-regex            treemacs-last-period-regex-value)
@@ -460,7 +466,38 @@
 
 
 
+
+(with-eval-after-load 'treemacs
+  (defun my/treemacs-layout ()
+    (let ((treemacs-side 'left))
+      ;; 1) まず左右分割を作る（右側を用意）
+      (when (not (window-at-side-p nil 'left))
+        (split-window-horizontally))
+      ;; 2) 左側(Treemacs側)を確実に選ぶ
+      (when (window-at-side-p nil 'left)
+        (select-window (next-window))) ; selectedを右へ寄せる保険（次で「右」操作するため）
+      ;; 3) 今のselectedが右側になっている前提で右側を左右分割
+      ;;    その後、いちばん右へ寄せて上下分割
+      (when (window-at-side-p nil 'right)
+        ;; 右側を左右に分割
+        (split-window-horizontally)
+        ;; いちばん右へ移動（環境差があるので once で寄せる）
+        (other-window 1)
+        ;; いちばん右だけ上下分割
+        (split-window-vertically)
+        ;; 右側操作の後、Treemacs側へ戻す（任意だけど崩れにくい）
+        (other-window -1))))
+
+  (advice-add 'treemacs :before
+              (lambda (&rest _args)
+                (my/treemacs-layout))))
+
+
+
+
 (provide 'init)
+
+
 
 
 ;;;
@@ -471,7 +508,7 @@
   (unless (file-exists-p "Makefile")
     (set (make-local-variable 'compile-command)
 	 (let ((file (file-name-nondirectory buffer-file-name)))
-	   (format "%s -o %s %s"
+	   (format "%s -std=c++20 -o %s %s"
 		   (if (equal (file-name-extension file) "cpp") "g++" "gcc")
 		   (file-name-sans-extension file)
 		   file)))

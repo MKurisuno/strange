@@ -5,7 +5,7 @@
 
 (setq package-enable-at-startup nil)
 
-(toggle-scroll-bar nil)              ;; For making scroll bar invisible
+(toggle-scroll-bar nil)           ;; For making scroll bar invisible
 ;;(push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
 
@@ -72,10 +72,11 @@
 
 ;; Set c-set-style
 ; ;https://en.wikipedia.org/wiki/Indentation_style
-(setq c-default-style
-      '((java-mode . "java")
-        (awk-mode . "awk")
-        (other . "gnu")))
+;;(setq c-default-style
+;;    '((java-mode . "java")
+;;    (awk-mode . "awk")
+;;  (other . "gnu")))
+
 
 
 
@@ -101,4 +102,20 @@
 ;; Use less pink and bold on the mode-line and minibuffer (default nil)
 (setq dracula-alternate-mode-line-and-minibuffer t)
 ;; Use normal weight for syntax faces like keywords, functions, and variables (default t)
-(setq dracula-bolder-keywords nil)
+;;(setq dracula-bolder-keywords nil)
+(setq dracula-bolder-keywords t)
+
+
+
+;;(setq-default line-spacing 0)
+
+
+(set-face-attribute 'default nil :font "JetBrains Mono-11" :height 120 :weight 'normal)
+(set-fontset-font t 'japanese-jisx0208
+                  (font-spec :family "JetBrains CJK JP" :height 120)
+                  nil 'append)
+(set-fontset-font t 'katakana-jisx0201
+                  (font-spec :family "JetBrains CJK JP" :height 120)
+                  nil 'append)
+
+(variable-pitch-mode +1)
