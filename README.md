@@ -141,7 +141,7 @@ Version > 30.1.50.
   3) Insert in init.el  
       (add-to-list 'eglot-server-programs '(php-mode . ("intelephense" "--stdio")))
 
-### Python_LanguageServer   
+### Python_LanguageServer:Pyright   
    1) Install pyright  
       $sudo npm install -g pyright    
    2) Insert in init.el    
