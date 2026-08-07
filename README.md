@@ -121,28 +121,26 @@ Version > 30.1.50.
    File to be place under /etc/NetworkManager/conf.d   
    [connection]  
    Values are 0 (use default),  
-   1 (ignore/don't touch),  
-   2 (disable) or  
-   3 (enable).  
+   1) (ignore/don't touch)    
+   2) (disable)   
+   3) (enable)   
    wifi.powersave = 2  
 
-## python3 environment  2026.08.07
-  $python3 -m env Augustus
+### python3 environment  2026.08.07
+  $python3 -m env Augustus   
   $source Augastus/bin/active
 
-## PHP Language Server Intelephense
- 1) Install Node.js
-  sudo apt update
-  sudo apt install -y curl ca-certificates
-  curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-  sudo apt install -y nodejs
-
- 2)Install Intelephense
-  sudo npm install -g intelephense
-
- 3) Insert in init.el
-  (with-eval-after-load 'eglot
-   (add-to-list 'eglot-server-programs
-                '(php-mode . ("intelephense" "--stdio"))))
+### PHP_LanguageServer:Intelephense   
+  1) Install Node.js  
+    $sudo apt update  
+    $sudo apt install -y curl ca-certificates  
+    $curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -  
+    $sudo apt install -y nodejs  
+  2) Install Intelephense  
+    $sudo npm install -g intelephense  
+  3) Insert in init.el  
+      (with-eval-after-load 'eglot  
+         (add-to-list 'eglot-server-programs  
+            '(php-mode . ("intelephense" "--stdio"))))　  　
 
 
