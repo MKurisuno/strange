@@ -143,7 +143,7 @@ Version > 30.1.50.
 
 ### Python_LanguageServer   
    1) Install pyright  
-      $sudo install -g pyright    
+      $sudo npm install -g pyright    
    2) Insert in init.el    
       (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))  
 
