@@ -126,5 +126,8 @@ Version > 30.1.50.
    3 (enable).  
    wifi.powersave = 2  
 
-
+## python3 environment  2026.08.07
+  $python3 -m env Augustus
+  $source Augastus/bin/active
+ 
 
