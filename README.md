@@ -129,5 +129,20 @@ Version > 30.1.50.
 ## python3 environment  2026.08.07
   $python3 -m env Augustus
   $source Augastus/bin/active
- 
+
+## PHP Language Server Intelephense
+ 1) Install Node.js
+  sudo apt update
+  sudo apt install -y curl ca-certificates
+  curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+  sudo apt install -y nodejs
+
+ 2)Install Intelephense
+  sudo npm install -g intelephense
+
+ 3) Insert in init.el
+  (with-eval-after-load 'eglot
+   (add-to-list 'eglot-server-programs
+                '(php-mode . ("intelephense" "--stdio"))))
+
 
