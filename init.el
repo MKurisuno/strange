@@ -9,6 +9,16 @@
 ;;
 ;;
 
+(set-face-attribute 'default nil
+                    :font (font-spec :family "JetBrains Mono" :size 14))
+
+(set-fontset-font t 'japanese-jisx0208
+                  (font-spec :name "Noto Sans JP" :size 12 :height 85) nil 'prepend)
+
+(set-fontset-font t 'cjk-misc
+                  (font-spec :name "Noto Sans JP" :size 12 :height 85) nil 'prepend)
+
+
 
 (eval-and-compile
   (customize-set-variable
@@ -17,6 +27,7 @@
   (package-initialize)
   (use-package leaf :ensure t)
 
+  
   (leaf leaf-keywords
     :ensure t
     :init
@@ -40,15 +51,59 @@
   (default-input-method . "japanese-mozc")
   (mozc-helper-program-name  . "mozc_emacs_helper")
   (mozc-leim-title . "かな")
-  :init
-;;  (defun mozc-toggle-and-variable-pitch-on ()
-;;    (interactive)
-;;    (toggle-input-method)
-;;    (when (fboundp 'variable-pitch-mode)
-;;      (variable-pitch-mode 1)))
-;;  (global-set-key (kbd "C-\\") #'mozc-toggle-and-variable-pitch-on)
-  
   )
+
+
+(with-eval-after-load 'mozc		
+(set-face-attribute 'mozc-cand-overlay-focused-face nil :height 0.85 :foreground "#21222C":background "#BD93F9" :weight 'bold)
+(set-face-attribute 'mozc-cand-overlay-odd-face nil :height 0.85 :foreground "#FFFFFF" :background "#6272A4" ) 
+(set-face-attribute 'mozc-cand-overlay-even-face nil :height 0.85 :foreground "F8F8F2" :background "#282A36" ) 
+(set-face-attribute 'mozc-cand-overlay-footer-face nil :height 0.80 :foreground "#8BE9FD" :background "#333844")
+(set-face-attribute 'mozc-preedit-selected-face nil :height 0.90 :foreground "#8BE9FD" :background "#191A21" :weight 'bold)
+(set-face-attribute 'mozc-preedit-face nil :height 0.85 :foreground "#8BE9FD" :background "#28sA36" :weight 'bold)
+
+)
+
+
+;;  base:
+;;    - &Background               '#282A36'                                       # Background
+;;    - &Foreground               '#F8F8F2'                                       # Foreground
+;;    - &Selection                '#44475A'                                       # Selection
+;;    - &Comment                  '#6272A4'                                       # Comments
+;;    - &Cyan                     '#8BE9FD'                                       # Cyan
+;;    - &Green                    '#50FA7B'                                       # Green
+;;    - &Orange                   '#FFB86C'                                       # Orange
+;;    - &Pink                     '#FF79C6'                                       # Pink
+;;    - &Purple                   '#BD93F9'                                       # Purple
+;;    - &Red                      '#FF5555'                                       # Red
+;;    - &Yellow                   '#F1FA8C'                                       # Yellow
+;;  ansi:
+;;    - &AnsiColor0               '#21222C'                                       # Black
+;;    - &AnsiColor1               '#FF5555'                                       # Red
+;;    - &AnsiColor2               '#50FA7B'                                       # Green
+;;    - &AnsiColor3               '#F1FA8C'                                       # Yellow
+;;    - &AnsiColor4               '#BD93F9'                                       # Purple
+;;    - &AnsiColor5               '#FF79C6'                                       # Pink
+;;    - &AnsiColor6               '#8BE9FD'                                       # Cyan
+;;    - &AnsiColor7               '#F8F8F2'                                       # Light white
+;;    - &AnsiColor8               '#6272A4'                                       # Dark gray
+;;    - &AnsiColor9               '#FF6E6E'                                       # Light red
+;;    - &AnsiColor10              '#69FF94'                                       # Light green
+;;    - &AnsiColor11              '#FFFFA5'                                       # Light yellow
+;;    - &AnsiColor12              '#D6ACFF'                                       # Light purple
+;;    - &AnsiColor13              '#FF92DF'                                       # Light pink
+;;    - &AnsiColor14              '#A4FFFF'                                       # Light cyan
+;;    - &AnsiColor15              '#FFFFFF'                                       # White
+
+;; uiElements:
+;;    - &LineHighlightColor       '#353747'                                       # Line-highlight
+;;    - &NonTextCharacterColor    '#3E404A'                                       # Invisible
+;;    - &WhiteColor               '#FFFFFF'                                       # White
+;;    - &TabDropBackgroundColor   '#343746'                                       # Draggable
+;;    - &BackgroundColorLighter   '#424450'                                       # Lighter background
+;;    - &BackgroundColorLight     '#343746'                                       # Light background
+;;    - &BackgroundColorDark      '#21222C'                                       # Dark background
+;;    - &BackgroundColorDarker    '#191A21'                                       # Darker background
 
 
 (leaf autorevert
@@ -252,7 +307,6 @@
 
 
 (leaf *treesit
-         ;;(setq treesit-font-lock-level 4)
   :custom ((treesit-font-lock-level . 4)
 	   )
   :config
@@ -288,15 +342,15 @@
 ;; Set indent off set = 4 
 ;; Set tab-width      = 4 
 ;;
-(add-hook 'c++-ts-mode-hook
-          (lambda ()
-            (setq-local tab-width 4)
-            (setq-local indent-tabs-mode t) ; Tab文字で揃えるなら t
-            ;; 行頭インデント幅（tree-sitter系で効くことが多い）
-            (setq-local c-ts-mode-indent-offset 4)
-            (setq-local c-basic-offset 4)
-	    (setq-local c-auto-newline t)
-	    ))
+;;(add-hook 'c++-ts-mode-hook
+;;          (lambda ()
+;;            (setq-local tab-width 4)
+;;            (setq-local indent-tabs-mode t) ; Tab文字で揃えるなら t
+;;            ;; 行頭インデント幅（tree-sitter系で効くことが多い）
+;;            (setq-local c-ts-mode-indent-offset 4)
+;;            (setq-local c-basic-offset 4)
+;;	    (setq-local c-auto-newline t)
+;;	    ))
 
 ;;
 ;; eglot
@@ -314,8 +368,8 @@
   (with-eval-after-load 'eglot  (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider))
   (with-eval-after-load 'eglot  (add-to-list 'eglot-ignored-server-capabilities :documentRangeFormattingProvider))
   
-  :hook ((c-ts-mode-hook . eglot-ensure)
-	 (c++-ts-mode-hook . eglot-ensure)
+  :hook ((c-mode-hook . eglot-ensure)
+	 (c++-mode-hook . eglot-ensure)
 	 ;;(python-ts-mode-hook . eglot-ensure)
 	 ;;(cmake-ts-mode-hook . eglot-ensure)
 	 )
@@ -419,8 +473,8 @@
           '(treemacs-text-scale                      nil)
           '(treemacs-user-mode-line-format           nil)
           '(treemacs-user-header-line-format         nil)
-          '(treemacs-wide-toggle-width               70)
-          '(treemacs-width                           35)
+          '(treemacs-wide-toggle-width               50)
+          '(treemacs-width                           30) ;;default 35 
           '(treemacs-width-increment                 1)
           '(treemacs-width-is-initially-locked       t)
           '(treemacs-workspace-switch-cleanup        nil)

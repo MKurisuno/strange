@@ -92,30 +92,17 @@
 ;; Don't change the font size for some headings and titles (default t)
 ;;(setq dracula-enlarge-headings nil)
 ;; Adjust font size of titles level 1 (default 1.3)
-(setq dracula-height-title-1 1.25)
+(setq dracula-height-title-1 1.2)
 ;; Adjust font size of titles level 2 (default 1.1)
-(setq dracula-height-title-2 1.15)
+(setq dracula-height-title-2 1.0)
 ;; Adjust font size of titles level 3 (default 1.0)
-(setq dracula-height-title-3 1.05)
+(setq dracula-height-title-3 1.0)
 ;; Adjust font size of document titles (default 1.44)
-(setq dracula-height-doc-title 1.4)
+(setq dracula-height-doc-title 1.44)
 ;; Use less pink and bold on the mode-line and minibuffer (default nil)
 (setq dracula-alternate-mode-line-and-minibuffer t)
 ;; Use normal weight for syntax faces like keywords, functions, and variables (default t)
-;;(setq dracula-bolder-keywords nil)
 (setq dracula-bolder-keywords t)
 
 
 
-;;(setq-default line-spacing 0)
-
-
-(set-face-attribute 'default nil :font "JetBrains Mono-11" :height 120 :weight 'normal)
-(set-fontset-font t 'japanese-jisx0208
-                  (font-spec :family "JetBrains CJK JP" :height 120)
-                  nil 'append)
-(set-fontset-font t 'katakana-jisx0201
-                  (font-spec :family "JetBrains CJK JP" :height 120)
-                  nil 'append)
-
-(variable-pitch-mode +1)
