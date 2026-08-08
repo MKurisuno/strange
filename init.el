@@ -1,4 +1,4 @@
-;;-*- lexical-binding: t; -*-
+;-*- lexical-binding: t; -*-
 ;;;M-x elisp-enable-lexical-binding RET
 ;;
 ;;
@@ -11,10 +11,8 @@
 
 (set-face-attribute 'default nil
                     :font (font-spec :family "JetBrains Mono" :size 14))
-
 (set-fontset-font t 'japanese-jisx0208
                   (font-spec :name "Noto Sans JP" :size 12 :height 85) nil 'prepend)
-
 (set-fontset-font t 'cjk-misc
                   (font-spec :name "Noto Sans JP" :size 12 :height 85) nil 'prepend)
 
@@ -54,56 +52,20 @@
   )
 
 
-(with-eval-after-load 'mozc		
-(set-face-attribute 'mozc-cand-overlay-focused-face nil :height 0.85 :foreground "#21222C":background "#BD93F9" :weight 'bold)
-(set-face-attribute 'mozc-cand-overlay-odd-face nil :height 0.85 :foreground "#FFFFFF" :background "#6272A4" ) 
-(set-face-attribute 'mozc-cand-overlay-even-face nil :height 0.85 :foreground "F8F8F2" :background "#282A36" ) 
-(set-face-attribute 'mozc-cand-overlay-footer-face nil :height 0.80 :foreground "#8BE9FD" :background "#333844")
-(set-face-attribute 'mozc-preedit-selected-face nil :height 0.90 :foreground "#8BE9FD" :background "#191A21" :weight 'bold)
-(set-face-attribute 'mozc-preedit-face nil :height 0.85 :foreground "#8BE9FD" :background "#28sA36" :weight 'bold)
-
-)
-
-
-;;  base:
-;;    - &Background               '#282A36'                                       # Background
-;;    - &Foreground               '#F8F8F2'                                       # Foreground
-;;    - &Selection                '#44475A'                                       # Selection
-;;    - &Comment                  '#6272A4'                                       # Comments
-;;    - &Cyan                     '#8BE9FD'                                       # Cyan
-;;    - &Green                    '#50FA7B'                                       # Green
-;;    - &Orange                   '#FFB86C'                                       # Orange
-;;    - &Pink                     '#FF79C6'                                       # Pink
-;;    - &Purple                   '#BD93F9'                                       # Purple
-;;    - &Red                      '#FF5555'                                       # Red
-;;    - &Yellow                   '#F1FA8C'                                       # Yellow
-;;  ansi:
-;;    - &AnsiColor0               '#21222C'                                       # Black
-;;    - &AnsiColor1               '#FF5555'                                       # Red
-;;    - &AnsiColor2               '#50FA7B'                                       # Green
-;;    - &AnsiColor3               '#F1FA8C'                                       # Yellow
-;;    - &AnsiColor4               '#BD93F9'                                       # Purple
-;;    - &AnsiColor5               '#FF79C6'                                       # Pink
-;;    - &AnsiColor6               '#8BE9FD'                                       # Cyan
-;;    - &AnsiColor7               '#F8F8F2'                                       # Light white
-;;    - &AnsiColor8               '#6272A4'                                       # Dark gray
-;;    - &AnsiColor9               '#FF6E6E'                                       # Light red
-;;    - &AnsiColor10              '#69FF94'                                       # Light green
-;;    - &AnsiColor11              '#FFFFA5'                                       # Light yellow
-;;    - &AnsiColor12              '#D6ACFF'                                       # Light purple
-;;    - &AnsiColor13              '#FF92DF'                                       # Light pink
-;;    - &AnsiColor14              '#A4FFFF'                                       # Light cyan
-;;    - &AnsiColor15              '#FFFFFF'                                       # White
-
-;; uiElements:
-;;    - &LineHighlightColor       '#353747'                                       # Line-highlight
-;;    - &NonTextCharacterColor    '#3E404A'                                       # Invisible
-;;    - &WhiteColor               '#FFFFFF'                                       # White
-;;    - &TabDropBackgroundColor   '#343746'                                       # Draggable
-;;    - &BackgroundColorLighter   '#424450'                                       # Lighter background
-;;    - &BackgroundColorLight     '#343746'                                       # Light background
-;;    - &BackgroundColorDark      '#21222C'                                       # Dark background
-;;    - &BackgroundColorDarker    '#191A21'                                       # Darker background
+(with-eval-after-load 'mozc
+  (set-face-attribute 'mozc-preedit-face nil :height 0.85
+		      :foreground "#8BE9FD" :background "#28sA36" :weight 'bold)
+  (set-face-attribute 'mozc-preedit-selected-face nil :height 0.90
+		      :foreground "#8BE9FD" :background "#191A21" :weight 'bold)
+  (set-face-attribute 'mozc-cand-overlay-focused-face nil :height 0.85
+		      :foreground "#21222C":background "#BD93F9" :weight 'bold)
+  (set-face-attribute 'mozc-cand-overlay-odd-face nil :height 0.85
+		      :foreground "#FFFFFF" :background "#6272A4" ) 
+  (set-face-attribute 'mozc-cand-overlay-even-face nil :height 0.85
+		      :foreground "F8F8F2" :background "#282A36" ) 
+  (set-face-attribute 'mozc-cand-overlay-footer-face nil :height 0.80
+		      :foreground "#50FA7B" :background "#333844")
+  )
 
 
 (leaf autorevert
@@ -313,8 +275,6 @@
   (require 'treesit)
   ;;  (add-to-list 'auto-mode-alist '("\\.clj[sc]?\\'" . clojure-mode))
   ;;  (add-to-list 'auto-mode-alist '("\\.edn\\'" . clojure-mode))
-  ;;  (add-to-list 'treesit-language-source-alist
-  ;;             '(conao3-clojure "https://github.com/conao3-playground/tree-sitter-conao3-clojure"))
   (add-to-list 'treesit-language-source-alist
 	       '(yaml "https://github.com/ikatyang/tree-sitter-yaml"))
    ;; 
@@ -338,9 +298,7 @@
 
 
 ;;
-;;
-;; Set indent off set = 4 
-;; Set tab-width      = 4 
+;; インデントの設定 c++-ts-mode 
 ;;
 ;;(add-hook 'c++-ts-mode-hook
 ;;          (lambda ()
@@ -352,6 +310,7 @@
 ;;	    (setq-local c-auto-newline t)
 ;;	    ))
 
+
 ;;
 ;; eglot
 ;;
@@ -359,23 +318,27 @@
   :doc "The Emacs Client for LSP servers"
   :ensure t
   :config
-  ;;(add-to-list 'eglot-server-programs '(python-mode "pylsp"))
   ;;(add-to-list 'eglot-server-programs '(cmake-ts-mode "cmake-language-server"))
-  ;;(add-to-list 'eglot-server-programs '((c++-mode c-mode) "ccls"))
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  ;;(add-to-list 'eglot-server-programs '((c++-ts-mode c-ts-mode) "ccls"))
   
-  ;; eglot  と　clangd のインデント設定を無効化する
-  (with-eval-after-load 'eglot  (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider))
-  (with-eval-after-load 'eglot  (add-to-list 'eglot-ignored-server-capabilities :documentRangeFormattingProvider))
+  (add-to-list 'eglot-server-programs '((c++-ts-mode) "clangd"))
+  (add-to-list 'eglot-server-programs '((c-ts-mode) "clangd"))
+  (add-to-list 'eglot-server-programs '(php-mode . ("intelephense" "--stdio")))
+  (add-to-list 'eglot-server-programs   '(python-mode . ("pyright-langserver" "--stdio")))
+
+  ;; eglotとclangd のインデント設定を無効化する
+  (with-eval-after-load 'eglot (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider))
+  (with-eval-after-load 'eglot (add-to-list 'eglot-ignored-server-capabilities :documentRangeFormattingProvider))
   
-  :hook ((c-mode-hook . eglot-ensure)
-	 (c++-mode-hook . eglot-ensure)
-	 ;;(python-ts-mode-hook . eglot-ensure)
+  :hook ((c-ts-mode-hook . eglot-ensure)
+	 (c++-ts-mode-hook . eglot-ensure)
+	 (php-ts-mode-hook . eglot-ensure)
 	 ;;(cmake-ts-mode-hook . eglot-ensure)
 	 )
   :custom ((eldoc-echo-area-use-multiline-p . nil)
            (eglot-connect-timeout . 600) )
   )
+
 
 
 
@@ -429,13 +392,13 @@
 	  '(treemacs-collapse-dirs                   (if treemacs-python-executable 3 0) )
 	  '(treemacs-deferred-git-apply-delay        0.5)
 	  '(treemacs-directory-name-transformer      #'identity)
-	  '(treemacs-display-in-side-window          t	)
+	  '(treemacs-display-in-side-window          t)
           '(treemacs-eldoc-display                   'simple)
           '(treemacs-file-event-delay                2000)
           '(treemacs-file-extension-regex            treemacs-last-period-regex-value)
           '(treemacs-file-follow-delay               0.2)
 	  '(treemacs-file-name-transformer           #'identity)
-          '(treemacs-follow-after-init               t)
+	  '(treemacs-follow-after-init               t)
           '(treemacs-expand-after-init               t)
           '(treemacs-find-workspace-method           'find-for-file-or-pick-first)
           '(treemacs-goto-tag-strategy               'refetch-index)
