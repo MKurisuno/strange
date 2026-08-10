@@ -233,7 +233,10 @@
   :doc "Completion At Point Extensions"
   :ensure t
   :config
-  (add-to-list 'completion-at-point-functions #'cape-file))
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-keyword)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  )
 
 
 
@@ -300,15 +303,14 @@
 ;;
 ;; インデントの設定 c++-ts-mode 
 ;;
-;;(add-hook 'c++-ts-mode-hook
-;;          (lambda ()
-;;            (setq-local tab-width 4)
-;;            (setq-local indent-tabs-mode t) ; Tab文字で揃えるなら t
-;;            ;; 行頭インデント幅（tree-sitter系で効くことが多い）
-;;            (setq-local c-ts-mode-indent-offset 4)
-;;            (setq-local c-basic-offset 4)
-;;	    (setq-local c-auto-newline t)
-;;	    ))
+(add-hook 'c++-ts-mode-hook
+          (lambda ()
+            (setq-local tab-width 4)
+            (setq-local indent-tabs-mode t) ; Tab文字で揃えるなら t
+            (setq-local c-ts-mode-indent-offset 4)
+            (setq-local c-basic-offset 4)
+	    (setq-local c-auto-newline t)
+	    ))
 
 
 ;;
