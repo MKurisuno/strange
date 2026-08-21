@@ -52,10 +52,15 @@
 
 
 ;; Set initial frame size and position
-(setq initial-frame-alist
-      (append   '((top . 0) (left . 1000) (width . 115) (height . 1100)) initial-frame-alist)
-      )
+;;(setq initial-frame-alist
+;;      (append   '((top . 0) (left . 1000) (width . 115) (height . 1100)) initial-frame-alist)
+;;      )
 
+;; Launch maximized on the monitor to the left.
+;; (A negative "left" value is measured from the right edge.)
+(push '(left       .        1) initial-frame-alist)
+;;(push '(left       .        -1) initial-frame-alist)
+(push '(fullscreen . maximized) default-frame-alist)
 
 
 ;; スクロールした際のカーソルの移動行数
@@ -67,24 +72,6 @@
 ;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
 (setq scroll-preserve-screen-position t)
 
-
-
-(setq truncate-lines nil)
-(setq truncate-partial-width-windows nil)
-(setq-default fringe-indicator-alist
-              (append (list '(continuation . (nil right-curly-arrow)))
-                      (remove (assoc 'continuation fringe-indicator-alist)
-                              fringe-indicator-alist)))
-;; fringeに表示するマークの形状を変更
-(define-fringe-bitmap 'right-curly-arrow
-  [#b00000000
-   #b00000000
-   #b00000000
-   #b00000000
-   #b01111110
-   #b01111110
-   #b00000110
-   #b00000110])
 
 
 

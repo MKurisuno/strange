@@ -427,16 +427,27 @@
 
 (leaf markdown-mode
   :ensure t
-  :mode ("\\.md\\'" . gfm-mode)
+ :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'"       . markdown-mode))
+  :bind (:markdown-mode-map
+	 ("C-c RET" . markdown-follow-link-at-point)
+         ("C-c C-c" . markdown-do-command)
+         ("M-RET"   . markdown-insert-list-item))
   :config
-  (setopt markdown-command '("pandoc" "--from=markdown" "--to=html5"))
-  (setopt markdown-fontify-code-blocks-natively t)
-  (setopt markdown-header-scaling t)
-  (setopt markdown-indent-on-enter 'indent-and-new-item)
-  ;;(leaf-key "<S-tab>" #'markdown-shifttab markdown-mode-map)
-  (define-key markdown-mode-map
-              (kbd "<S-tab>")
-              #'markdown-shifttab)
+  (setopt markdown-command                    "pandoc -f markdown+header_attributes-raw_html -t html5")
+  (setopt markdown-fontify-code-blocks-natively t)  ; コードブロックにシンタックスハイライト
+  (setopt markdown-header-scaling              t)    ; 見出しのサイズを段階的に
+  (setopt markdown-hide-markup                 nil)  ; マークアップを表示 (t で隠す)
+  (setopt markdown-command-needs-filename      t)
+  (setopt markdown-preview-use-browser         t)
+  (setopt browse-url-browser-function         'browse-url-generic)
+  (setopt browse-url-generic-program          "google-chrome")
+  (setopt markdown-content-type               "application/xhtml+xml")
+  (setopt markdown-css-paths
+	(list (expand-file-name "~/.emacs.d/elisp/css/markdown-cream.css")))
+  
+  (define-key markdown-mode-map (kbd "<S-tab>") #'markdown-shifttab)
+
   )
 
 
