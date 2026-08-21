@@ -4,7 +4,7 @@
 
 ### for kurisuno
 ### since 2024.12.02 
-### update 2026.06.27 
+### update 2026.08.21 
 
 ## files 
 dot.early-init.el  
@@ -55,7 +55,7 @@ src-hilite-lesspipe.sh
             2>/dev/null  
     --- end of scan.sh ---  
 
-### crontab   
+## crontab   
   $ crontab -e  
   0 10 * * * $HOME/.clamav/scan.sh  
 

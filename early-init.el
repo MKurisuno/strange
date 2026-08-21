@@ -22,16 +22,19 @@
 (setq create-lockfiles nil)
 
 ;;(setq gc-cons-threshold (* 10 128 1024 1024))
-(setq gc-cons-threshold (* 40 gc-cons-threshold)) ; 800K * n
+;;(setq gc-cons-threshold (* 40 gc-cons-threshold)) ; 800K * n
+;; GCを起動完了まで実質停止
+(setq gc-cons-threshold most-positive-fixnum)
 (setq garbage-collection-messages nil)
 
 
 ;;(setq read-process-output-max (* 8 1024 1024))
 
+(set-language-environment "Japanese")
+(prefer-coding-system 'utf-8)
 (setq inhibit-compacting-font-caches t)
 (setq history-delete-duplicates t)
 (setq vc-follow-symlinks t)
-
 
 
 (define-key key-translation-map [?\C-h] [?\C-?])
@@ -50,36 +53,38 @@
 
 ;; Set initial frame size and position
 (setq initial-frame-alist
-      (append   '((top . 0) (left . 1000) (width . 115) (height . 1280)) initial-frame-alist)
+      (append   '((top . 0) (left . 1000) (width . 115) (height . 1100)) initial-frame-alist)
       )
 
 
 
- ;; スクロールした際のカーソルの移動行数
- (setq scroll-conservatively 1)
- ;; スクロール開始のマージンの行数
+;; スクロールした際のカーソルの移動行数
+(setq scroll-conservatively 1)
+;; スクロール開始のマージンの行数
 (setq scroll-margin 3)
- ;; 1 画面スクロール時に重複させる行数
+;; 1 画面スクロール時に重複させる行数
 (setq next-screen-context-lines 5) 
- ;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
- (setq scroll-preserve-screen-position t)
-
-;;複数Windowの移動に (C-x o) ではなく　アローキーを使う
-(global-set-key (kbd "C-c <left>")  'windmove-left)
-(global-set-key (kbd "C-c <right>") 'windmove-right)
-(global-set-key (kbd "C-c <up>")    'windmove-up)
-(global-set-key (kbd "C-c <down>")  'windmove-down)
-
-;; Set c-set-style
-; ;https://en.wikipedia.org/wiki/Indentation_style
-;;(setq c-default-style
-;;    '((java-mode . "java")
-;;    (awk-mode . "awk")
-;;  (other . "gnu")))
+;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
+(setq scroll-preserve-screen-position t)
 
 
 
-
+(setq truncate-lines nil)
+(setq truncate-partial-width-windows nil)
+(setq-default fringe-indicator-alist
+              (append (list '(continuation . (nil right-curly-arrow)))
+                      (remove (assoc 'continuation fringe-indicator-alist)
+                              fringe-indicator-alist)))
+;; fringeに表示するマークの形状を変更
+(define-fringe-bitmap 'right-curly-arrow
+  [#b00000000
+   #b00000000
+   #b00000000
+   #b00000000
+   #b01111110
+   #b01111110
+   #b00000110
+   #b00000110])
 
 
 

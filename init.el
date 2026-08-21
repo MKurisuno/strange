@@ -1,4 +1,4 @@
-;-*- lexical-binding: t; -*-
+;;-*- lexical-binding: t; -*-
 ;;;M-x elisp-enable-lexical-binding RET
 ;;
 ;;
@@ -9,8 +9,25 @@
 ;;
 ;;
 
-(set-face-attribute 'default nil
-                    :font (font-spec :family "JetBrains Mono" :size 14))
+(when (version< emacs-version "30.0")
+  (error "This requires Emacs 30.0 and above!"))
+
+(defvar default-handlers file-name-handler-alist)
+(setq file-name-handler-alist nil)
+
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq file-name-handler-alist default-handlers)
+            (setq gc-cons-threshold (* 16 1024 1024))
+            (setq inhibit-message nil)
+            (message "Emacs ready in %s with %d GCs."
+                     (emacs-init-time) gcs-done)))
+
+
+
+
+(set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
+;;(set-face-attribute 'default nil :font (font-spec :family "Fira Code" :size 14))
 (set-fontset-font t 'japanese-jisx0208
                   (font-spec :name "Noto Sans JP" :size 12 :height 85) nil 'prepend)
 (set-fontset-font t 'cjk-misc
@@ -24,14 +41,19 @@
                        ("melpa" . "https://melpa.org/packages/")))
   (package-initialize)
   (use-package leaf :ensure t)
-
   
   (leaf leaf-keywords
     :ensure t
     :init
+    (leaf hydra :ensure t)
+    (leaf el-get :ensure t)
     (leaf blackout :ensure t)
     :config
-    (leaf-keywords-init)))
+    (leaf-keywords-init))
+  )
+
+
+
 
 (leaf leaf-convert
   :doc "Convert many format to leaf format"
@@ -49,8 +71,10 @@
   (default-input-method . "japanese-mozc")
   (mozc-helper-program-name  . "mozc_emacs_helper")
   (mozc-leim-title . "かな")
+  (custom-set-faces
+   '(mozc-preedit-selected-face
+     ((t (:background "#1E2029" :foreground "#bd93f9" :weight bold)))))
   )
-
 
 (with-eval-after-load 'mozc
   (set-face-attribute 'mozc-preedit-face nil :height 0.85
@@ -102,20 +126,17 @@
            (show-paren-when-point-in-periphery . t))
   )
 
+
 ;;(leaf  highlight-indent-guides
 ;;  :ensure t
 ;;  :custom
-;;  (highlight-indent-guides-method  . 'character)
-;;  (highlight-indent-guides-auto-enabled . nil)
-;;  (highlight-indent-guides-responsive . t)
-;;  (highlight-indent-guides-character . ?\|)
+;;  (highlight-indent-guides-method  . 'column)
+;;  (highlight-indent-guides-auto-enabled . t)
+;;  (highlight-indent-guides-responsive . 'top)
 ;;  (highlight-indent-guides-delay . 0)
 ;;  :hook
 ;;  (prog-mode-hook . highlight-indent-guides-mode)
 ;;  :config
-  ;;  (set-face-background 'highlight-indent-guides-odd-face "Dimgrey")
-  ;;  (set-face-background 'highlight-indent-guides-even-face "DimGrey")
-;;  (set-face-foreground 'highlight-indent-guides-character-face "dimgrey")
 ;;  )
 
 
@@ -269,6 +290,36 @@
     :global-minor-mode electric-pair-mode))
 
 
+(leaf magit
+  :when (version<= "25.1" emacs-version)
+  :ensure t
+  :preface
+  (defun c/git-commit-a ()
+    "Commit after add anything."
+    (interactive)
+    (shell-command "git add .")
+    (magit-commit-create))
+  :bind (("M-=" . hydra-magit/body))
+  :hydra (hydra-magit
+          (:hint nil :exit t)
+          "
+^^         hydra-magit
+^^------------------------------
+ _s_   magit-status
+ _C_   magit-clone
+ _c_   magit-commit
+ _d_   magit-diff-working-tree
+ _M-=_ magit-commit-create"
+          ("s" magit-status)
+          ("C" magit-clone)
+          ("c" magit-commit)
+          ("d" magit-diff-working-tree)
+          ("M-=" c/git-commit-a)))
+
+
+
+
+
 
 
 (leaf *treesit
@@ -282,35 +333,38 @@
 	       '(yaml "https://github.com/ikatyang/tree-sitter-yaml"))
    ;; 
   (add-to-list 'auto-mode-alist '( "CMakeLists\\.txt\\'" . cmake-ts-mode))
-  (add-to-list 'auto-mode-alist '( "\\.cmake\\'". cmake-ts-mode))
-  (add-to-list 'auto-mode-alist '( "\\.py$'". python-mode))
-  (add-to-list 'auto-mode-alist '( "\\.json\\'". js-json-mode))
+  (add-to-list 'auto-mode-alist '( "\\.cmake\\'" . cmake-ts-mode))
+  (add-to-list 'auto-mode-alist '( "\\.py\\'" . python-mode))
+  (add-to-list 'auto-mode-alist '( "\\.json\\'" . js-json-mode))
   (add-to-list 'auto-mode-alist '( "\\.php\\'". php-ts-mode))
-  (add-to-list 'auto-mode-alist '( "\\.yaml\\'". yaml-ts-mode))
-  (add-to-list 'auto-mode-alist '( "\\.yam\\'". yaml-ts-mode))
-  ;;
-  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))  
-  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(cmake-mode . cmake-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(php-mode . php-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(yaml-mode . yaml-ts-mode))
+  (add-to-list 'auto-mode-alist '( "\\.y?ml\\'". yaml-ts-mode))
+
+  (add-to-list 'auto-mode-alist '("\\.c\\'" . c-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-ts-mode))
   )
 
 
 
-;;
 ;; インデントの設定 c++-ts-mode 
-;;
 (add-hook 'c++-ts-mode-hook
           (lambda ()
+            (electric-indent-mode -1)
+            (setq-local default-tab-width 4)
             (setq-local tab-width 4)
-            (setq-local indent-tabs-mode t) ; Tab文字で揃えるなら t
-            (setq-local c-ts-mode-indent-offset 4)
-            (setq-local c-basic-offset 4)
-	    (setq-local c-auto-newline t)
-	    ))
+            (setq-local indent-tabs-mode t) 
+	    (setq-local c-ts-mode-indent-offset 4)
+            (setq-local c-basic-offset 4)))
+(add-hook 'c-ts-mode-hook
+          (lambda ()
+            (electric-indent-mode -1)
+            (setq-local default-tab-width 4)
+            (setq-local tab-width 4)
+            (setq-local indent-tabs-mode t) 
+	    (setq-local c-ts-mode-indent-offset 4)
+            (setq-local c-basic-offset 4)))
+
 
 
 ;;
@@ -369,6 +423,30 @@
   :ensure t)
 (leaf rg
   :ensure t)
+
+
+(leaf markdown-mode
+  :ensure t
+  :mode ("\\.md\\'" . gfm-mode)
+  :config
+  (setopt markdown-command '("pandoc" "--from=markdown" "--to=html5"))
+  (setopt markdown-fontify-code-blocks-natively t)
+  (setopt markdown-header-scaling t)
+  (setopt markdown-indent-on-enter 'indent-and-new-item)
+  ;;(leaf-key "<S-tab>" #'markdown-shifttab markdown-mode-map)
+  (define-key markdown-mode-map
+              (kbd "<S-tab>")
+              #'markdown-shifttab)
+  )
+
+
+
+
+
+
+
+
+
 
 ;;
 ;; Treemacs 
@@ -509,6 +587,41 @@
   (advice-add 'treemacs :before
               (lambda (&rest _args)
                 (my/treemacs-layout))))
+
+
+;; リガチャを有効にする
+
+(let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
+               (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
+               (36 . ".\\(?:>\\)")
+               (37 . ".\\(?:\\(?:%%\\)\\|%\\)")
+               (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
+               (42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
+               (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
+               (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
+               (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
+               (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
+               (48 . ".\\(?:x[a-zA-Z]\\)")
+               (58 . ".\\(?:::\\|[:=]\\)")
+               (59 . ".\\(?:;;\\|;\\)")
+               (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
+               (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
+               (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
+               (63 . ".\\(?:\\(\\?\\?\\)\\|[:=?]\\)")
+               (91 . ".\\(?:]\\)")
+               (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
+               (94 . ".\\(?:=\\)")
+               (119 . ".\\(?:ww\\)")
+               (123 . ".\\(?:-\\)")
+               (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
+               (126 . ".\\(?:~>\\|~~\\|[>=@~-]\\)")
+               )
+             ))
+  (dolist (char-regexp alist)
+    (set-char-table-range composition-function-table (car char-regexp)
+                          `([,(cdr char-regexp) 0 font-shape-gstring]))))
+
+
 
 
 
