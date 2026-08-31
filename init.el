@@ -194,22 +194,21 @@
   :bind (;; C-c bindings (mode-specific-map)
          ([remap switch-to-buffer] . consult-buffer) ; C-x b
          ([remap project-switch-to-buffer] . consult-project-buffer) ; C-x p b
-
          ;; M-g bindings (goto-map)
          ([remap goto-line] . consult-goto-line)    ; M-g g
          ([remap imenu] . consult-imenu)            ; M-g i
          ("M-g f" . consult-flymake)
-
          ;; C-M-s bindings
          ("C-s" . c/consult-line)       ; isearch-forward
          ("C-M-s" . nil)                ; isearch-forward-regexp
          ("C-M-s s" . isearch-forward)
          ("C-M-s C-s" . isearch-forward-regexp)
          ("C-M-s r" . consult-ripgrep)
-
          (minibuffer-local-map
           :package emacs
-          ("C-r" . consult-history))))
+			  ("C-r" . consult-history))
+	)
+)
 
 
 
@@ -393,7 +392,8 @@
 					    :documentOnTypeFormattingProvider))
   ;;Key-bind 
   (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
-  (define-key eglot-mode-map (kbd "<f7>") 'eglot-momentary-inlay-hints)
+  (define-key eglot-mode-map (kbd "<f7>") 'xref-find-reference)
+  (define-key eglot-mode-map (kbd "<f8>") 'eglot-momentary-inlay-hints)
   ;; M-.  : xref-find-definitions
   ;; M-,  : xref-go-back
   ;; M-?  : xref-find-reference
@@ -414,38 +414,24 @@
 
   )
 
-
-  
-
-
-
-
-
-
-
 (leaf eglot-booster
   :when (executable-find "emacs-lsp-booster")
   :vc ( :url "https://github.com/jdtsmith/eglot-booster")
   :global-minor-mode t)
-
-
-
 
 (leaf projectile
   :ensure t
   :config
   (projectile-mode +1)
   ;; Recommended keymap prefix on Windows/Linux
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  
+  :bind (:projectile-mode-map 
+	("C-c p" . 'projectile-command-map))
   )
-
 
 (leaf ag
   :ensure t)
 (leaf rg
   :ensure t)
-
 
 (leaf markdown-mode
   :ensure t
@@ -466,21 +452,14 @@
   (setopt browse-url-generic-program          "google-chrome")
   (setopt markdown-content-type               "application/xhtml+xml")
   (setopt markdown-css-paths
-	(list (expand-file-name "~/.emacs.d/elisp/css/markdown-cream.css")))
-  
+  (list (expand-file-name "~/.emacs.d/elisp/css/markdown-cream.css")))
+
   (define-key markdown-mode-map (kbd "<S-tab>") #'markdown-shifttab)
 
   )
 
 
-
-
-
-
-
-
-
-
+;;
 ;;
 ;; Treemacs 
 ;;
@@ -498,7 +477,6 @@
    ("C-x t C-t" . treemacs-find-file)
    ("C-x t M-t" . treemacs-find-tag))
   :custom
-  
   (progn 'treemacs
 	 (custom-set-variables
 	  '(treemacs-collapse-dirs                   (if (executable-find "python3") 3 0) )
@@ -520,56 +498,58 @@
 	  '(treemacs-indentation                     2)
 	  '(treemacs-indentation-string              " ")
 	  '(treemacs-is-never-other-window           nil)
-          '(treemacs-max-git-entries                 5000)
-          '(treemacs-missing-project-action          'ask)
-          '(treemacs-move-files-by-mouse-dragging    t)
-          '(treemacs-move-forward-on-expand          nil)
-          '(treemacs-no-png-images                   nil)
-          '(treemacs-no-delete-other-windows         t)
-          '(treemacs-project-follow-cleanup          nil)
-          '(treemacs-persist-file       (expand-file-name ".cache/treemacs-persist" user-emacs-directory))
-          '(treemacs-position                        'left)
-          '(treemacs-read-string-input               'from-child-frame)
-          '(treemacs-recenter-distance               0.1)
-          '(treemacs-recenter-after-file-follow      nil)
-          '(treemacs-recenter-after-tag-follow       nil)
-          '(treemacs-recenter-after-project-jump     'always)
-          '(treemacs-recenter-after-project-expand   'on-distance)
-          '(treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask"))
-          '(treemacs-project-follow-into-home        nil)
-          '(treemacs-show-cursor                     nil)
-          '(treemacs-show-hidden-files               t)
-          '(treemacs-silent-filewatch                nil)
-          '(treemacs-silent-refresh                  nil)
-          '(treemacs-sorting                         'alphabetic-asc)
-          '(treemacs-select-when-already-in-treemacs 'move-back)
-          '(treemacs-space-between-root-nodes        t)
-          '(treemacs-tag-follow-cleanup              t)
-          '(treemacs-tag-follow-delay                1.5)
-          '(treemacs-text-scale                      nil)
-          '(treemacs-user-mode-line-format           nil)
-          '(treemacs-user-header-line-format         nil)
-          '(treemacs-wide-toggle-width               50)
-          '(treemacs-width                           30) ;;default 35 
-          '(treemacs-width-increment                 1)
-          '(treemacs-width-is-initially-locked       t)
-          '(treemacs-workspace-switch-cleanup        nil)
-	  ;;     '(foo-package-to-enable t "Customized with leaf in foo-package block")
-          '(foo-package-to-disable nil "Customized with leaf in foo-package block")
-          '(foo-package-to-symbol 'symbol "Customized with leaf in foo-package block")
-          '(foo-package-to-function #'ignore "Customized with leaf in foo-package block")
-          '(foo-package-to-lambda (lambda (elm) (message elm)) "Customized with leaf in foo-package block"))
-	 ;;
-	 ;; The default width and height of the icons is 22 pixels. If you are
-	 ;; using a Hi-DPI display, uncomment this to double the icon size.
-	 ;;(treemacs-resize-icons 44)
+	  '(treemacs-max-git-entries                 5000)
+	  '(treemacs-missing-project-action          'ask)
+	  '(treemacs-move-files-by-mouse-dragging    t)
+	  '(treemacs-move-forward-on-expand          nil)
+	  '(treemacs-no-png-images                   nil)
+	  '(treemacs-no-delete-other-windows         t)
+	  '(treemacs-project-follow-cleanup          nil)
+	  '(treemacs-persist-file       (expand-file-name ".cache/treemacs-persist" user-emacs-directory))
+	  '(treemacs-position                        'left)
+	  '(treemacs-read-string-input               'from-child-frame)
+	  '(treemacs-recenter-distance               0.1)
+	  '(treemacs-recenter-after-file-follow      nil)
+	  '(treemacs-recenter-after-tag-follow       nil)
+	  '(treemacs-recenter-after-project-jump     'always)
+	  '(treemacs-recenter-after-project-expand   'on-distance)
+	  '(treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask"))
+	  '(treemacs-project-follow-into-home        nil)
+	  '(treemacs-show-cursor                     nil)
+	  '(treemacs-show-hidden-files               t)
+	  '(treemacs-silent-filewatch                nil)
+	  '(treemacs-silent-refresh                  nil)
+	  '(treemacs-sorting                         'alphabetic-asc)
+	  '(treemacs-select-when-already-in-treemacs 'move-back)
+	  '(treemacs-space-between-root-nodes        t)
+	  '(treemacs-tag-follow-cleanup              t)
+	  '(treemacs-tag-follow-delay                1.5)
+	  '(treemacs-text-scale                      nil)
+	  '(treemacs-user-mode-line-format           nil)
+	  '(treemacs-user-header-line-format         nil)
+	  '(treemacs-wide-toggle-width               50)
+	  '(treemacs-width                           30) ;;default 35 
+	  '(treemacs-width-increment                 1)
+	  '(treemacs-width-is-initially-locked       t)
+	  '(treemacs-workspace-switch-cleanup        nil)
+	  '(foo-package-to-enable t "Customized with leaf in foo-package block")
+	  '(foo-package-to-disable nil "Customized with leaf in foo-package block")
+	  '(foo-package-to-symbol 'symbol "Customized with leaf in foo-package block")
+	  '(foo-package-to-function #'ignore "Customized with leaf in foo-package block")
+	  '(foo-package-to-lambda (lambda (elm) (message elm)) "Customized with leaf in foo-package block")
+	  )
+	  ;;
+	  ;; The default width and height of the icons is 22 pixels. If you are
+	  ;; using a Hi-DPI display, uncomment this to double the icon size.
+	  ;;(treemacs-resize-icons 44)
 	 (treemacs-follow-mode . t)
 	 (treemacs-filewatch-mode . t)
 	 (treemacs-fringe-indicator-mode . 'always)
-	 ;;(treemacs-fringe-indicator-mode . 'only-when-focused)
-	 ;;(treemacs-git-mode . 'deferred)	 
+	  ;;(treemacs-fringe-indicator-mode . 'only-when-focused)
+	  ;;(treemacs-git-mode . 'deferred)	 
 	 (treemacs-git-mode . 'simple)
-	 )
+  )
+  
   :hook
   (treemacs-mode-hook . (lambda ()
 			  (setq mode-line-format nil)
