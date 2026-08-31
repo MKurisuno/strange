@@ -24,8 +24,6 @@
                      (emacs-init-time) gcs-done)))
 
 
-
-
 (set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
 ;;(set-face-attribute 'default nil :font (font-spec :family "Fira Code" :size 14))
 (set-fontset-font t 'japanese-jisx0208
@@ -246,9 +244,13 @@
   :custom ((corfu-auto . t)
            (corfu-auto-delay . 0)
            (corfu-auto-prefix . 1)
-           (corfu-popupinfo-delay . nil)) ; manual
+           (corfu-popupinfo-delay . nil)
+	   ) ; manual
   :bind ((corfu-map
-          ("C-s" . corfu-insert-separator))))
+          ("C-s" . corfu-insert-separator)
+	  ))
+  )
+
 
 (leaf cape
   :doc "Completion At Point Extensions"
@@ -267,7 +269,7 @@
   :doc "Parentheses Universalistic"
   :ensure t
   :global-minor-mode puni-global-mode
-  :bind (puni-mode-map
+  :bind (:puni-mode-map
          ;; default mapping
          ;; ("C-M-f" . puni-forward-sexp)
          ;; ("C-M-b" . puni-backward-sexp)
@@ -376,16 +378,27 @@
   :config
   ;;(add-to-list 'eglot-server-programs '(cmake-ts-mode "cmake-language-server"))
   ;;(add-to-list 'eglot-server-programs '((c++-ts-mode c-ts-mode) "ccls"))
-  
   (add-to-list 'eglot-server-programs '((c++-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '((c-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '(php-mode . ("intelephense" "--stdio")))
   (add-to-list 'eglot-server-programs   '(python-mode . ("pyright-langserver" "--stdio")))
-
+  (setopt eglot-autoshutwon t)
+  (setopt eglot-sync-connect 0)
   ;; eglotとclangd のインデント設定を無効化する
-  (with-eval-after-load 'eglot (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider))
-  (with-eval-after-load 'eglot (add-to-list 'eglot-ignored-server-capabilities :documentRangeFormattingProvider))
-  
+  (with-eval-after-load 'eglot (add-to-list 'eglot-ignored-server-capabilities 
+					    :documentFormattingProvider))
+  (with-eval-after-load 'eglot (add-to-list 'eglot-ignored-server-capabilities 
+					    :documentRangeFormattingProvider))
+  (with-eval-after-load 'eglot (add-to-list 'eglot-ignored-server-capabilities 
+					    :documentOnTypeFormattingProvider))
+  ;;Key-bind 
+  (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
+  (define-key eglot-mode-map (kbd "<f7>") 'eglot-momentary-inlay-hints)
+  ;; M-.  : xref-find-definitions
+  ;; M-,  : xref-go-back
+  ;; M-?  : xref-find-reference
+  ;; C-h. : Display Symbol's Document 
+  ;; C-c i : Completion at point 
   :hook ((c-ts-mode-hook . eglot-ensure)
 	 (c++-ts-mode-hook . eglot-ensure)
 	 (php-ts-mode-hook . eglot-ensure)
@@ -393,7 +406,16 @@
 	 )
   :custom ((eldoc-echo-area-use-multiline-p . nil)
            (eglot-connect-timeout . 600) )
+  :bind (
+	 ("C-c i" . 'completion-at-point)
+         ("C-c r" . 'eglot-rename) 
+         ("C-c o" . 'eglot-code-action-organize-imports)
+	 ) 
+
   )
+
+
+  
 
 
 

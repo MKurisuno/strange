@@ -37,7 +37,8 @@
 (setq vc-follow-symlinks t)
 
 
-(define-key key-translation-map [?\C-h] [?\C-?])
+;;(define-key key-translation-map [?\C-h] [?\C-?])
+
 
 
 
@@ -71,6 +72,7 @@
 (setq next-screen-context-lines 5) 
 ;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
 (setq scroll-preserve-screen-position t)
+
 
 
 
