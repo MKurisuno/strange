@@ -235,9 +235,9 @@
            (corfu-auto-delay . 0)
            (corfu-auto-prefix . 1)
            (corfu-popupinfo-delay . nil)
-					 (corfu-cycle . t)
-					 (corfu-quit-no-match 'separator)
-		   ) ;manual
+           (corfu-cycle . t)
+           (corfu-quit-no-match 'separator)
+          ) ;manual
   :bind ((corfu-map
           ("C-s" . corfu-insert-separator)
 	  ))
