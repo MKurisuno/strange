@@ -387,11 +387,10 @@
   (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
   (define-key eglot-mode-map (kbd "<f7>") 'xref-find-reference)
   (define-key eglot-mode-map (kbd "<f8>") 'eglot-momentary-inlay-hints)
-  :bind (
-	 ("C-c i" . 'completion-at-point)
+  :bind (("C-c i" . 'completion-at-point)
          ("C-c r" . 'eglot-rename) 
          ("C-c o" . 'eglot-code-action-organize-imports)
-	 ) 
+　　　　　)
   ;; M-.  : xref-find-definitions
   ;; M-,  : xref-go-back
   ;; M-?  : xref-find-reference
@@ -400,10 +399,10 @@
   ;; C-c a : Rename 
 
   :hook ((c-ts-mode-hook . eglot-ensure)
-	 (c++-ts-mode-hook . eglot-ensure)
-	 (php-ts-mode-hook . eglot-ensure)
-	 ;;(cmake-ts-mode-hook . eglot-ensure)
-	 )
+	       (c++-ts-mode-hook . eglot-ensure)
+	       (php-ts-mode-hook . eglot-ensure)
+	　　　　 ;;(cmake-ts-mode-hook . eglot-ensure)
+        )
   :custom ((eldoc-echo-area-use-multiline-p . nil)
            (eglot-connect-timeout . 600)
 	   )
