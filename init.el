@@ -70,7 +70,7 @@
     (set-face-attribute 'mozc-preedit-selected-face nil :height 0.90
 			:foreground "#8BE9FD" :background "#191A21" :weight 'bold)
     (set-face-attribute 'mozc-cand-overlay-focused-face nil :height 0.85
-			:foreground "#21222C":background "#BD93F9" :weight 'bold)
+			:foreground "#21222C" :background "#BD93F9" :weight 'bold)
     (set-face-attribute 'mozc-cand-overlay-odd-face nil :height 0.85
 			:foreground "#FFFFFF" :background "#6272A4" ) 
     (set-face-attribute 'mozc-cand-overlay-even-face nil :height 0.85
