@@ -376,7 +376,7 @@
   (add-to-list 'eglot-server-programs '((c++-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '((c-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '(php-mode . ("intelephense" "--stdio")))
-  (add-to-list 'eglot-server-programs   '(python-mode . ("pyright-langserver" "--stdio")))
+  (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
   (setopt eglot-autoshutwon t)
   (setopt eglot-sync-connect 0)
   ;; eglotとclangd のインデント設定を無効化する
