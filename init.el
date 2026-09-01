@@ -1,5 +1,6 @@
-;;-*- lexical-binding: t; -*-
-;;;M-x elisp-enable-lexical-binding RET
+;; -*- lexical-binding: t; -*-
+;;; M.Kurisuno .emacs/init.el  
+;;
 ;;
 ;;
 ;; 2024.12.16
@@ -8,6 +9,7 @@
 ;;
 ;;
 ;;
+
 
 (when (version< emacs-version "30.0")
   (error "This requires Emacs 30.0 and above!"))
@@ -50,9 +52,6 @@
     (leaf-keywords-init))
   )
 
-
-
-
 (leaf leaf-convert
   :doc "Convert many format to leaf format"
   :ensure t)
@@ -65,28 +64,24 @@
 (leaf mozc
   :ensure t
   :config
+  (with-eval-after-load 'mozc
+    (set-face-attribute 'mozc-preedit-face nil :height 0.85
+			:foreground "#8BE9FD" :background "#28sA36" :weight 'bold)
+    (set-face-attribute 'mozc-preedit-selected-face nil :height 0.90
+			:foreground "#8BE9FD" :background "#191A21" :weight 'bold)
+    (set-face-attribute 'mozc-cand-overlay-focused-face nil :height 0.85
+			:foreground "#21222C":background "#BD93F9" :weight 'bold)
+    (set-face-attribute 'mozc-cand-overlay-odd-face nil :height 0.85
+			:foreground "#FFFFFF" :background "#6272A4" ) 
+    (set-face-attribute 'mozc-cand-overlay-even-face nil :height 0.85
+			:foreground "F8F8F2" :background "#282A36" ) 
+    (set-face-attribute 'mozc-cand-overlay-footer-face nil :height 0.80
+			:foreground "#50FA7B" :background "#333844")
+    )
   :custom
   (default-input-method . "japanese-mozc")
   (mozc-helper-program-name  . "mozc_emacs_helper")
   (mozc-leim-title . "かな")
-  (custom-set-faces
-   '(mozc-preedit-selected-face
-     ((t (:background "#1E2029" :foreground "#bd93f9" :weight bold)))))
-  )
-
-(with-eval-after-load 'mozc
-  (set-face-attribute 'mozc-preedit-face nil :height 0.85
-		      :foreground "#8BE9FD" :background "#28sA36" :weight 'bold)
-  (set-face-attribute 'mozc-preedit-selected-face nil :height 0.90
-		      :foreground "#8BE9FD" :background "#191A21" :weight 'bold)
-  (set-face-attribute 'mozc-cand-overlay-focused-face nil :height 0.85
-		      :foreground "#21222C":background "#BD93F9" :weight 'bold)
-  (set-face-attribute 'mozc-cand-overlay-odd-face nil :height 0.85
-		      :foreground "#FFFFFF" :background "#6272A4" ) 
-  (set-face-attribute 'mozc-cand-overlay-even-face nil :height 0.85
-		      :foreground "F8F8F2" :background "#282A36" ) 
-  (set-face-attribute 'mozc-cand-overlay-footer-face nil :height 0.80
-		      :foreground "#50FA7B" :background "#333844")
   )
 
 
@@ -106,7 +101,6 @@
   :ensure t
   :bind (("C-c e" . macrostep-expand)))
 
-
 (leaf rainbow-delimiters
   :ensure t
   :hook
@@ -123,7 +117,6 @@
            (show-paren-when-point-inside-paren . t)
            (show-paren-when-point-in-periphery . t))
   )
-
 
 ;;(leaf  highlight-indent-guides
 ;;  :ensure t
@@ -211,7 +204,6 @@
 )
 
 
-
 (leaf affe
   :doc "Asynchronous Fuzzy Finder for Emacs"
   :ensure t
@@ -219,7 +211,6 @@
            (affe-regexp-function . 'orderless-pattern-compiler))
   :bind (("C-M-s r" . affe-grep)
          ("C-M-s f" . affe-find)))
-
 
 (leaf orderless
   :doc "Completion style for matching regexps in any order"
@@ -243,13 +234,15 @@
   :custom ((corfu-auto . t)
            (corfu-auto-delay . 0)
            (corfu-auto-prefix . 1)
+	   (corfu-popupinfo-mode . t)
            (corfu-popupinfo-delay . nil)
+	   (corfu-cycle .t)
+	   (corfu-quit-no-match 'separator)
 	   ) ; manual
   :bind ((corfu-map
           ("C-s" . corfu-insert-separator)
 	  ))
   )
-
 
 (leaf cape
   :doc "Completion At Point Extensions"
@@ -259,10 +252,6 @@
   (add-to-list 'completion-at-point-functions #'cape-keyword)
   (add-to-list 'completion-at-point-functions #'cape-file)
   )
-
-
-
-
 
 (leaf puni
   :doc "Parentheses Universalistic"
@@ -274,7 +263,7 @@
          ;; ("C-M-b" . puni-backward-sexp)
          ;; ("C-M-a" . puni-beginning-of-sexp)
          ;; ("C-M-e" . puni-end-of-sexp)
-         ;; ("M-)" . puni-syntactic-forward-punct)
+         ;; ("M-)"   . puni-syntactic-forward-punct)
          ;; ("C-M-u" . backward-up-list)
          ;; ("C-M-d" . backward-down-list)
          ("C-)" . puni-slurp-forward)
@@ -289,7 +278,6 @@
   (leaf elec-pair
     :doc "Automatic parenthesis pairing"
     :global-minor-mode electric-pair-mode))
-
 
 (leaf magit
   :when (version<= "25.1" emacs-version)
@@ -318,11 +306,6 @@
           ("M-=" c/git-commit-a)))
 
 
-
-
-
-
-
 (leaf *treesit
   :custom ((treesit-font-lock-level . 4)
 	   )
@@ -346,9 +329,6 @@
   (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-ts-mode))
   )
 
-
-
-;; インデントの設定 c++-ts-mode 
 (add-hook 'c++-ts-mode-hook
           (lambda ()
             (electric-indent-mode -1)
@@ -368,6 +348,22 @@
 
 
 
+
+(leaf eldoc
+  :ensure nil
+  :hook
+  ((prog-mode-hook . eldoc-mode)))
+
+(leaf eldoc-box
+  :ensure t
+  :bind
+  (("C-c d" . eldoc-box-help-at-point))
+  :hook
+  ((eglot-managed-mode-hook
+    . (lambda ()
+        (eldoc-box-hover-at-point-mode 1))))
+  )
+
 ;;
 ;; eglot
 ;;
@@ -384,34 +380,35 @@
   (setopt eglot-autoshutwon t)
   (setopt eglot-sync-connect 0)
   ;; eglotとclangd のインデント設定を無効化する
-  (with-eval-after-load 'eglot (add-to-list 'eglot-ignored-server-capabilities 
-					    :documentFormattingProvider))
-  (with-eval-after-load 'eglot (add-to-list 'eglot-ignored-server-capabilities 
-					    :documentRangeFormattingProvider))
-  (with-eval-after-load 'eglot (add-to-list 'eglot-ignored-server-capabilities 
-					    :documentOnTypeFormattingProvider))
-  ;;Key-bind 
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider)
+    (add-to-list 'eglot-ignored-server-capabilities :documentRangeFormattingProvider)
+    (add-to-list 'eglot-ignored-server-capabilities :documentOnTypeFormattingProvider))
+  ;;Function-Key-bind 
   (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
   (define-key eglot-mode-map (kbd "<f7>") 'xref-find-reference)
   (define-key eglot-mode-map (kbd "<f8>") 'eglot-momentary-inlay-hints)
+  :bind (
+	 ("C-c i" . 'completion-at-point)
+         ("C-c r" . 'eglot-rename) 
+         ("C-c o" . 'eglot-code-action-organize-imports)
+	 ) 
   ;; M-.  : xref-find-definitions
   ;; M-,  : xref-go-back
   ;; M-?  : xref-find-reference
   ;; C-h. : Display Symbol's Document 
-  ;; C-c i : Completion at point 
+  ;; C-c i : Completion at point
+  ;; C-c a : Rename 
+
   :hook ((c-ts-mode-hook . eglot-ensure)
 	 (c++-ts-mode-hook . eglot-ensure)
 	 (php-ts-mode-hook . eglot-ensure)
 	 ;;(cmake-ts-mode-hook . eglot-ensure)
 	 )
   :custom ((eldoc-echo-area-use-multiline-p . nil)
-           (eglot-connect-timeout . 600) )
-  :bind (
-	 ("C-c i" . 'completion-at-point)
-         ("C-c r" . 'eglot-rename) 
-         ("C-c o" . 'eglot-code-action-organize-imports)
-	 ) 
-
+           (eglot-connect-timeout . 600)
+	   )
+  
   )
 
 (leaf eglot-booster
@@ -454,7 +451,7 @@
   (setopt markdown-css-paths
   (list (expand-file-name "~/.emacs.d/elisp/css/markdown-cream.css")))
 
-  (define-key markdown-mode-map (kbd "<S-tab>") #'markdown-shifttab)
+  (define-key markdown-mode-map (kbd "<S-tab>") 'markdown-shifttab)
 
   )
 
