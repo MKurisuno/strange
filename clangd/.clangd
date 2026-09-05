@@ -1,0 +1,53 @@
+If:
+    PathMatch: .*
+
+CompileFlags:
+     Add:
+     - -std=c++23
+     - -Wextra
+
+
+Diagnostics:
+  ClangTidy:
+    CheckOptions:
+      
+    Add:
+      - modernize-use-auto
+      - modernize-use-nullptr
+      - readability-*                         
+    Remove:
+      - modernize-use-trailing-return-type
+      - modernize-use-nodiscard
+      - readability-magic-numbers
+      - readability-else-after-return
+
+Completion:
+  AllScopes: Yes
+  ArgumentLists: FullPlaceholders
+  HeaderInsertion: IWYU
+  CodePatterns: All
+
+
+InlayHints:
+  BlockEnd: false
+  Designators: true
+  Enabled: true
+  ParameterNames: true
+  DeducedTypes: true
+  DefaultArguments: false
+  TypeNameLimit: 24
+
+Hover:
+  ShowAKA: false
+
+SemanticTokens:
+  DisabledKinds:
+  - commnet
+  DisabledModifiers:
+  - deprecated
+
+Documentation:
+  CommentFormat: Markdown
+
+
+
