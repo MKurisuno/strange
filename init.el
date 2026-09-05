@@ -367,28 +367,18 @@
   :hook
   ((prog-mode-hook . eldoc-mode)))
 
-;;(leaf eldoc-box
-;;  :ensure t
-;;  :bind
-;;  (("C-c d" . eldoc-box-help-at-point))
-;;  :hook
-;;  ((eglot-managed-mode-hook
-;;    . (lambda ()
-;;	(eldoc-box-hover-at-point-mode 1)
-;;	)))
-;;  :config
-;;  (with-eval-after-load 'eldoc-box
-;;    (set-face-attribute 'eldoc-box-body nil
-;;			:family "Noto Sans Mono"
-;;			:height 0.85
-;;			:weight 'normal
-;;			:slant 'italic))
-;;  :custom
-;;  ((eldoc-box-max-pixel-width . 600)
-;;   (eldoc-box-max-pixel-height . 180))
-;;  )
-;;
-;;
+
+(leaf eldoc-box
+  :ensure t
+  :bind  (("C-c d" . eldoc-box-help-at-point))
+  :hook  ((eglot-managed-mode-hook . (lambda () (eldoc-box-hover-at-point-mode 1) )))
+  :config
+  (with-eval-after-load 'eldoc-box (set-face-attribute 'eldoc-box-body nil :family "Noto Sans Mono" :height 0.85 :weight 'normal :slant 'italic))
+  :custom
+  ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 180))
+  )
+
+
 
 ;;
 ;; eglot
