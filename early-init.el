@@ -37,6 +37,7 @@
 (setq vc-follow-symlinks t)
 
 
+;; 基本的には使わない
 ;;(define-key key-translation-map [?\C-h] [?\C-?])
 
 
@@ -83,6 +84,7 @@
 ;;               github dracula/emacs
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (load-theme 'dracula t)
+
 ;; Don't change the font size for some headings and titles (default t)
 ;;(setq dracula-enlarge-headings nil)
 ;; Adjust font size of titles level 1 (default 1.3)
@@ -97,6 +99,3 @@
 (setq dracula-alternate-mode-line-and-minibuffer t)
 ;; Use normal weight for syntax faces like keywords, functions, and variables (default t)
 (setq dracula-bolder-keywords t)
-
-
-

@@ -1,4 +1,4 @@
-;; -*- lexical-binding: t; -*-
+;;; init.el  -*- lexical-binding: t; -*-
 ;;; M.Kurisuno .emacs/init.el  
 ;;
 ;;
@@ -11,8 +11,10 @@
 ;;
 
 
+
 (when (version< emacs-version "30.0")
   (error "This requires Emacs 30.0 and above!"))
+
 
 (defvar default-handlers file-name-handler-alist)
 (setq file-name-handler-alist nil)
@@ -24,7 +26,6 @@
             (setq inhibit-message nil)
             (message "Emacs ready in %s with %d GCs."
                      (emacs-init-time) gcs-done)))
-
 
 (set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
 ;;(set-face-attribute 'default nil :font (font-spec :family "Fira Code" :size 14))
@@ -70,7 +71,7 @@
     (set-face-attribute 'mozc-preedit-selected-face nil :height 0.90
 			:foreground "#8BE9FD" :background "#191A21" :weight 'bold)
     (set-face-attribute 'mozc-cand-overlay-focused-face nil :height 0.85
-			:foreground "#21222C" :background "#BD93F9" :weight 'bold)
+			:foreground "#21222C":background "#BD93F9" :weight 'bold)
     (set-face-attribute 'mozc-cand-overlay-odd-face nil :height 0.85
 			:foreground "#FFFFFF" :background "#6272A4" ) 
     (set-face-attribute 'mozc-cand-overlay-even-face nil :height 0.85
@@ -140,9 +141,11 @@
 
 (leaf flymake
   :doc "A universal on-the-fly syntax checker"
+  :hook (emacs-lisp-mode-hook . flymake-mode)
   :bind ((prog-mode-map
           ("M-n" . flymake-goto-next-error)
-          ("M-p" . flymake-goto-prev-error))))
+          ("M-p" . flymake-goto-prev-error)))
+  )
 
 (leaf which-key
   :doc "Display available keybindings in popup"
@@ -234,10 +237,11 @@
   :custom ((corfu-auto . t)
            (corfu-auto-delay . 0)
            (corfu-auto-prefix . 1)
+	   (corfu-popupinfo-mode . t)
            (corfu-popupinfo-delay . nil)
-           (corfu-cycle . t)
-           (corfu-quit-no-match 'separator)
-          ) ;manual
+	   (corfu-cycle .t)
+	   (corfu-quit-no-match 'separator)
+	   ) ; manual
   :bind ((corfu-map
           ("C-s" . corfu-insert-separator)
 	  ))
@@ -273,10 +277,16 @@
          ("M-U" . puni-splice-killing-backward)
          ("M-z" . puni-squeeze))
   :config
-  
   (leaf elec-pair
     :doc "Automatic parenthesis pairing"
     :global-minor-mode electric-pair-mode))
+
+
+(leaf yasnippet
+  :ensure t
+  :global-minor-mode   yas-global-mode )
+
+
 
 (leaf magit
   :when (version<= "25.1" emacs-version)
@@ -310,6 +320,7 @@
 	   )
   :config
   (require 'treesit)
+  (defvar treesit-language-source-alist)
   ;;  (add-to-list 'auto-mode-alist '("\\.clj[sc]?\\'" . clojure-mode))
   ;;  (add-to-list 'auto-mode-alist '("\\.edn\\'" . clojure-mode))
   (add-to-list 'treesit-language-source-alist
@@ -321,6 +332,8 @@
   (add-to-list 'auto-mode-alist '( "\\.json\\'" . js-json-mode))
   (add-to-list 'auto-mode-alist '( "\\.php\\'". php-ts-mode))
   (add-to-list 'auto-mode-alist '( "\\.y?ml\\'". yaml-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.clangd\\'" . yaml-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.clang-tidy\\'" . yaml-ts-mode))
 
   (add-to-list 'auto-mode-alist '("\\.c\\'" . c-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-ts-mode))
@@ -350,18 +363,32 @@
 
 (leaf eldoc
   :ensure nil
+  :config
   :hook
   ((prog-mode-hook . eldoc-mode)))
 
-(leaf eldoc-box
-  :ensure t
-  :bind
-  (("C-c d" . eldoc-box-help-at-point))
-  :hook
-  ((eglot-managed-mode-hook
-    . (lambda ()
-        (eldoc-box-hover-at-point-mode 1))))
-  )
+;;(leaf eldoc-box
+;;  :ensure t
+;;  :bind
+;;  (("C-c d" . eldoc-box-help-at-point))
+;;  :hook
+;;  ((eglot-managed-mode-hook
+;;    . (lambda ()
+;;	(eldoc-box-hover-at-point-mode 1)
+;;	)))
+;;  :config
+;;  (with-eval-after-load 'eldoc-box
+;;    (set-face-attribute 'eldoc-box-body nil
+;;			:family "Noto Sans Mono"
+;;			:height 0.85
+;;			:weight 'normal
+;;			:slant 'italic))
+;;  :custom
+;;  ((eldoc-box-max-pixel-width . 600)
+;;   (eldoc-box-max-pixel-height . 180))
+;;  )
+;;
+;;
 
 ;;
 ;; eglot
@@ -372,12 +399,13 @@
   :config
   ;;(add-to-list 'eglot-server-programs '(cmake-ts-mode "cmake-language-server"))
   ;;(add-to-list 'eglot-server-programs '((c++-ts-mode c-ts-mode) "ccls"))
+  (defvar eglot-server-programs)
+  (defvar eglot-ignored-server-capabilities)
+
   (add-to-list 'eglot-server-programs '((c++-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '((c-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '(php-mode . ("intelephense" "--stdio")))
-  (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
-  (setopt eglot-autoshutwon t)
-  (setopt eglot-sync-connect 0)
+  (add-to-list 'eglot-server-programs   '(python-mode . ("pyright-langserver" "--stdio")))
   ;; eglotとclangd のインデント設定を無効化する
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider)
@@ -390,21 +418,24 @@
   :bind (("C-c i" . 'completion-at-point)
          ("C-c r" . 'eglot-rename) 
          ("C-c o" . 'eglot-code-action-organize-imports)
-　　　　　)
-  ;; M-.  : xref-find-definitions
-  ;; M-,  : xref-go-back
-  ;; M-?  : xref-find-reference
-  ;; C-h. : Display Symbol's Document 
+	 ) 
+  ;; M-.   : xref-find-definitions
+  ;; M-,   : xref-go-back
+  ;; M-?   : xref-find-reference
+  ;; C-M-. : xref-apropros
+  ;; C-h-. : Display-local-help
   ;; C-c i : Completion at point
   ;; C-c a : Rename 
 
   :hook ((c-ts-mode-hook . eglot-ensure)
-	       (c++-ts-mode-hook . eglot-ensure)
-	       (php-ts-mode-hook . eglot-ensure)
-	　　　　 ;;(cmake-ts-mode-hook . eglot-ensure)
-        )
+	 (c++-ts-mode-hook . eglot-ensure)
+	 (php-ts-mode-hook . eglot-ensure)
+	 ;;(cmake-ts-mode-hook . eglot-ensure)
+	 )
   :custom ((eldoc-echo-area-use-multiline-p . nil)
            (eglot-connect-timeout . 600)
+	   (eglot-autoshutwon . t)
+	   (eglot-sync-connect . 0)
 	   )
   
   )
@@ -573,6 +604,7 @@
 
 (with-eval-after-load 'treemacs
   (defun my/treemacs-layout ()
+    (defvar treemacs-side)
     (let ((treemacs-side 'left))
       ;; 1) まず左右分割を作る（右側を用意）
       (when (not (window-at-side-p nil 'left))
@@ -634,7 +666,6 @@
 
 
 
-(provide 'init)
 
 
 
@@ -642,16 +673,18 @@
 ;;;
 ;;; This will enable emacs to compile a simple cpp single file without any makefile by just pressing [f9] key
 ;;;
-(defun code-compile()
-  (interactive)
-  (unless (file-exists-p "Makefile")
-    (set (make-local-variable 'compile-command)
-	 (let ((file (file-name-nondirectory buffer-file-name)))
-	   (format "%s -std=c++20 -o %s %s"
-		   (if (equal (file-name-extension file) "cpp") "g++" "gcc")
-		   (file-name-sans-extension file)
-		   file)))
-    (compile compile-command)))
-(global-set-key [f9] 'code-compile)
+;;(defun code-compile()
+;;  (interactive)
+;;  (unless (file-exists-p "Makefile")
+;;    (set (make-local-variable 'compile-command)
+;;	 (let ((file (file-name-nondirectory buffer-file-name)))
+;;	   (format "%s -std=c++20 -o %s %s"
+;;		   (if (equal (file-name-extension file) "cpp") "g++" "gcc")
+;;		   (file-name-sans-extension file)
+;;		   file)))
+;;    (compile compile-command)))
+;;(global-set-key [f9] 'code-compile)
+
+(provide 'init);;;
 
 
