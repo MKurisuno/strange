@@ -95,8 +95,10 @@ Version > 30.1.50.
 
 
 ## Clangd 
-  ~/.config/clangd/config.yaml  
-
+  ~/.config/clangd/config.yaml    
+  {project}/.clangd    
+  {project}/.clang-tidy    
+  {project}/.clang-format 
 
 ## git 
    MKurisuno/strange.git  dot.gitconfig   
