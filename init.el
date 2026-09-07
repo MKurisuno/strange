@@ -162,7 +162,7 @@
   :config
   (exec-path-from-shell-initialize))
 
-(leaf vertico
+ (leaf vertico
   :doc "VERTical Interactive Completion"
   :ensure t
   :global-minor-mode t)
@@ -237,10 +237,10 @@
   :custom ((corfu-auto . t)
            (corfu-auto-delay . 0)
            (corfu-auto-prefix . 1)
-	   (corfu-popupinfo-mode . t)
+		   (corfu-popupinfo-mode . t)
            (corfu-popupinfo-delay . nil)
-	   (corfu-cycle .t)
-	   (corfu-quit-no-match 'separator)
+		   (corfu-cycle .t)
+		   (corfu-quit-no-match 'separator)
 	   ) ; manual
   :bind ((corfu-map
           ("C-s" . corfu-insert-separator)
@@ -347,7 +347,7 @@
             (setq-local default-tab-width 4)
             (setq-local tab-width 4)
             (setq-local indent-tabs-mode t) 
-	    (setq-local c-ts-mode-indent-offset 4)
+			(setq-local c-ts-mode-indent-offset 4)
             (setq-local c-basic-offset 4)))
 (add-hook 'c-ts-mode-hook
           (lambda ()
@@ -355,7 +355,7 @@
             (setq-local default-tab-width 4)
             (setq-local tab-width 4)
             (setq-local indent-tabs-mode t) 
-	    (setq-local c-ts-mode-indent-offset 4)
+			(setq-local c-ts-mode-indent-offset 4)
             (setq-local c-basic-offset 4)))
 
 
