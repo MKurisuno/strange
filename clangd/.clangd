@@ -2,15 +2,14 @@ If:
     PathMatch: .*
 
 CompileFlags:
+     CompilationDatabase: build
      Add:
      - -std=c++23
      - -Wextra
 
-
 Diagnostics:
   ClangTidy:
     CheckOptions:
-      
     Add:
       - modernize-use-auto
       - modernize-use-nullptr
@@ -48,6 +47,3 @@ SemanticTokens:
 
 Documentation:
   CommentFormat: Markdown
-
-
-

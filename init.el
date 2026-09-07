@@ -374,8 +374,10 @@
   :hook  ((eglot-managed-mode-hook . (lambda () (eldoc-box-hover-at-point-mode 1) )))
   :config
   (with-eval-after-load 'eldoc-box (set-face-attribute 'eldoc-box-body nil :family "Noto Sans Mono" :height 0.85 :weight 'normal :slant 'italic))
-  :custom
-  ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 180))
+  :custom ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 180))
+  :custom-face (eldoc-box-body . '((t (:background "#282c34" :foreground "#bbc2cf"))))
+               (eldoc-box-border . '((t (:background "#5c6370"))))
+
   )
 
 
@@ -405,9 +407,9 @@
   (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
   (define-key eglot-mode-map (kbd "<f7>") 'xref-find-reference)
   (define-key eglot-mode-map (kbd "<f8>") 'eglot-momentary-inlay-hints)
-  :bind (("C-c i" . 'completion-at-point)
-         ("C-c r" . 'eglot-rename) 
-         ("C-c o" . 'eglot-code-action-organize-imports)
+  :bind (("C-c i" . completion-at-point)
+         ("C-c r" . eglot-rename) 
+         ("C-c o" . eglot-code-action-organize-imports)
 	 ) 
   ;; M-.   : xref-find-definitions
   ;; M-,   : xref-go-back
