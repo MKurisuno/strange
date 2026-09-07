@@ -234,14 +234,14 @@
   :doc "Completion in Region FUnction"
   :ensure t
   :global-minor-mode global-corfu-mode corfu-popupinfo-mode
-  :custom ((corfu-auto . t)
-           (corfu-auto-delay . 0)
-           (corfu-auto-prefix . 1)
-		   (corfu-popupinfo-mode . t)
-           (corfu-popupinfo-delay . nil)
-		   (corfu-cycle .t)
-		   (corfu-quit-no-match 'separator)
-	   ) ; manual
+  :custom (
+	   (corfu-auto . t)
+	   (corfu-auto-delay . 0)
+	   (corfu-auto-prefix . 1)
+	   (corfu-popupinfo-mode . t)
+	   (corfu-popupinfo-delay . nil)
+	   (corfu-cycle .t)
+	   (corfu-quit-no-match 'separator)) ; manual
   :bind ((corfu-map
           ("C-s" . corfu-insert-separator)
 	  ))
@@ -341,22 +341,22 @@
   (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-ts-mode))
   )
 
-(add-hook 'c++-ts-mode-hook
-          (lambda ()
-            (electric-indent-mode -1)
-            (setq-local default-tab-width 4)
-            (setq-local tab-width 4)
-            (setq-local indent-tabs-mode t) 
-			(setq-local c-ts-mode-indent-offset 4)
-            (setq-local c-basic-offset 4)))
+(add-hook 'c++-ts-mode-hook 
+	  (lambda ()
+	    (electric-indent-mode -1)
+	    (setq-local default-tab-width 4)
+	    (setq-local tab-width 4)
+	    (setq-local indent-tabs-mode t)
+	    (setq-local c-ts-mode-indent-offset 4)
+	    (setq-local c-basic-offset 4)))
 (add-hook 'c-ts-mode-hook
-          (lambda ()
-            (electric-indent-mode -1)
-            (setq-local default-tab-width 4)
-            (setq-local tab-width 4)
-            (setq-local indent-tabs-mode t) 
-			(setq-local c-ts-mode-indent-offset 4)
-            (setq-local c-basic-offset 4)))
+	  (lambda ()
+	    (electric-indent-mode -1)
+	    (setq-local default-tab-width 4)
+	    (setq-local tab-width 4)
+	    (setq-local indent-tabs-mode t)
+	    (setq-local c-ts-mode-indent-offset 4)
+	    (setq-local c-basic-offset 4)))
 
 
 
