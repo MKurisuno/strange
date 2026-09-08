@@ -330,9 +330,9 @@
   (add-to-list 'auto-mode-alist '( "\\.json\\'" . js-json-mode))
   (add-to-list 'auto-mode-alist '( "\\.php\\'". php-ts-mode))
   (add-to-list 'auto-mode-alist '( "\\.y?ml\\'". yaml-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.clangd\\'" . yaml-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.clang-tidy\\'" . yaml-ts-mode))
-
+;  (dolist (file '("\\.clangd\\'" "\\.clang-tidy\\'" "\\.clang-format\\'"))
+;    (add-to-list 'auto-mode-alist (cons file 'yaml-ts-mode)))
+  (add-to-list 'auto-mode-alist '("\\.clang\\(?:d\\|-tidy\\|-format\\)\\'" . yaml-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.c\\'" . c-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-ts-mode))
