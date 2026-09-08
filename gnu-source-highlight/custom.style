@@ -1,0 +1,48 @@
+keyword    pink        b ;
+type       cyan        b ;
+classname  cyan        b ;
+
+string     yellow ;
+regexp     orange ;
+specialchar pink        b ;
+
+comment    blue   i;
+number     purple ;
+preproc    pink        b ;
+
+symbol     cyan ;
+function   green        b ;
+cbracket   yellow ;
+variable   white ;
+
+// line numbers
+linenum    blue ;
+
+// other elements for ChangeLog and Log files
+date       purple ;
+time       purple ;
+ip         cyan ;
+file       orange ;
+name       green ;
+
+// Internet related
+url        cyan         u ;
+
+// for diffs
+oldfile    red          b ;
+newfile    green        b ;
+difflines  blue ;
+
+// for css
+selector   pink         b ;
+property   cyan ;
+value      green ;
+
+// for feature (Cucumber) files
+cuketag    purple       b ;
+gherken    cyan ;
+given      red          b ;
+when       pink         b ;
+then       yellow       b ;
+and_but    orange ;
+table      white ;
