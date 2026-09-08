@@ -239,17 +239,15 @@
   :doc "Completion in Region FUnction"
   :ensure t
   :global-minor-mode global-corfu-mode corfu-popupinfo-mode
-  :custom (
-	   (corfu-auto . t)
-	   (corfu-auto-delay . 0)
-	   (corfu-auto-prefix . 1)
-	   (corfu-popupinfo-mode . t)
-	   (corfu-popupinfo-delay . nil)
-	   (corfu-cycle .t)
-	   (corfu-quit-no-match 'separator)) ; manual
-  :bind ((corfu-map
-          ("C-s" . corfu-insert-separator)))
-  )
+  :custom ((corfu-auto . t)
+	       (corfu-auto-delay . 0)
+	       (corfu-auto-prefix . 1)
+	       (corfu-popupinfo-mode . t)
+	       (corfu-popupinfo-delay . nil)
+	       (corfu-cycle .t)
+	       (corfu-quit-no-match 'separator)) ; manual
+  :bind   ((corfu-map
+          ("C-s" . corfu-insert-separator))))
 
 (leaf cape
   :doc "Completion At Point Extensions"
@@ -362,7 +360,7 @@
 (leaf eldoc
   :ensure nil
   :config ;; MiniBuffer へのechoの文字の大きさを調節
-  (custom-set-faces  '(markdown-header-face-3 ((t (:height 0.95)))))
+  (custom-set-faces  '(markdown-header-face-3 ((t (:height 0.85)))))
   :hook
   ((prog-mode-hook . eldoc-mode)))
 
@@ -373,11 +371,11 @@
 ;;  :hook  ((eglot-managed-mode-hook . (lambda () (eldoc-box-hover-at-point-mode 1) )))
   :custom ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 120))
   :custom-face
-  (eldoc-box-body . ' ((t (:background "#282A36" :foreground "#f8f8f2" :family "JetBrains Mono" :height 0.90 :weight normal :slant normal alpha 70))))
+  (eldoc-box-body . ' ((t (:background "#282A36" :foreground "#f8f8f2" :family "JetBrains Mono" :height 0.90 :weight normal :slant normal :alpha 70))))
   (eldoc-box-border . '((t (:background "#44475a" ))))
   ;;:config (setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88) ;;Emacs自体を透過する設定(壁紙が透けて見える)
   :config
-  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 1.0)) ;HoverからのEchoの一行目の文字の大きさを調節
+  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.90)) ;HoverからのEchoの一行目の文字の大きさを調節
 )
 
 
@@ -405,8 +403,7 @@
     (add-to-list 'eglot-ignored-server-capabilities :documentOnTypeFormattingProvider))
   :bind (("C-c i" . completion-at-point)
          ("C-c r" . eglot-rename)
-	 ("C-c o" . eglot-code-action-organize-imports)
-	 )
+		 ("C-c o" . eglot-code-action-organize-imports))
   ;; M-.   : xref-find-definitions
   ;; M-,   : xref-go-back
   ;; M-?   : xref-find-reference
@@ -437,37 +434,39 @@
   (projectile-mode +1)
   ;; Recommended keymap prefix on Windows/Linux
   :bind (:projectile-mode-map
-	("C-c p" . 'projectile-command-map))
-  )
+	("C-c p" . 'projectile-command-map)))
 
 (leaf ag
   :ensure t)
 (leaf rg
   :ensure t)
 
+
+
+
 (leaf markdown-mode
   :ensure t
- :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'"       . markdown-mode))
-  :bind (:markdown-mode-map
-	 ("C-c RET" . markdown-follow-link-at-point)
-         ("C-c C-c" . markdown-do-command)
-         ("M-RET"   . markdown-insert-list-item))
-  :config
-  (setopt markdown-command                    "pandoc -f markdown+header_attributes-raw_html -t html5")
-  (setopt markdown-fontify-code-blocks-natively t)  ; コードブロックにシンタックスハイライト
-  (setopt markdown-header-scaling              t)    ; 見出しのサイズを段階的に
-  (setopt markdown-hide-markup                 nil)  ; マークアップを表示 (t で隠す)
-  (setopt markdown-command-needs-filename      t)
-  (setopt markdown-preview-use-browser         t)
-  (setopt browse-url-browser-function         'browse-url-generic)
-  (setopt browse-url-generic-program          "google-chrome")
-  (setopt markdown-content-type               "application/xhtml+xml")
-  (setopt markdown-css-paths
-  (list (expand-file-name "~/.emacs.d/elisp/css/markdown-cream.css")))
-
-  (define-key markdown-mode-map (kbd "<S-tab>") 'markdown-shifttab)
-
+  :mode
+  (("\\.md\\'" . markdown-mode)
+   ("\\.markdown\\'" . markdown-mode))
+  :custom
+  ((markdown-command . "pandoc")
+   (markdown-fontify-code-blocks-natively . t)
+   (markdown-header-scaling . t)
+   (markdown-enable-math . t)
+   (markdown-url-compose-char . nil))
+  :custom-face
+  (markdown-header-face-1 . '((t (:weight bold :height 1.3))))
+  (markdown-header-face-2 . '((t (:weight bold :height 1.2))))
+  (markdown-header-face-3 . '((t (:weight bold :height 1.1))))
+  (markdown-header-face-4 . '((t (:weight bold :height 1.0))))
+  :hook
+  ((markdown-mode-hook . visual-line-mode)
+   (markdown-mode-hook . flyspell-mode))
+  :bind
+  (:markdown-mode-map
+   ("C-c C-t" . markdown-toc-generate-toc)
+   ("C-c C-p" . markdown-preview))
   )
 
 
