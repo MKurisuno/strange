@@ -100,4 +100,4 @@
 ;; Use normal weight for syntax faces like keywords, functions, and variables (default t)
 (setq dracula-bolder-keywords t)
 
-(setq resize-mini-windows nil)
+;;(setq resize-mini-windows nil)

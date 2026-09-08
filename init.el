@@ -359,10 +359,8 @@
 
 (leaf eldoc
   :ensure nil
-  :config
-  ;; MiniBuffer へのechoの文字の大きさを調節
-  (custom-set-faces  '(markdown-header-face-3 ((t (:height 1.0)))))
-  ;;   '(markdown-header-face-6 ((t (:height 1.0))))
+  :config ;; MiniBuffer へのechoの文字の大きさを調節
+  (custom-set-faces  '(markdown-header-face-3 ((t (:height 0.95)))))
   :hook
   ((prog-mode-hook . eldoc-mode)))
 
@@ -370,14 +368,14 @@
 (leaf eldoc-box
   :ensure t
   :bind  (("C-c d" . eldoc-box-help-at-point))
-  :hook  ((eglot-managed-mode-hook . (lambda () (eldoc-box-hover-at-point-mode 1) )))
+;;  :hook  ((eglot-managed-mode-hook . (lambda () (eldoc-box-hover-at-point-mode 1) )))
   :custom ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 120))
   :custom-face
   (eldoc-box-body . ' ((t (:background "#282A36" :foreground "#f8f8f2" :family "JetBrains Mono" :height 0.90 :weight normal :slant normal alpha 70)))) 
   (eldoc-box-border . '((t (:background "#44475a" ))))
   ;;:config (setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88) ;;Emacs自体を透過する設定(壁紙が透けて見える)
   :config
-  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 1.2)) ;HoverからのEchoの一行目の文字の大きさを調節
+  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 1.0)) ;HoverからのEchoの一行目の文字の大きさを調節
 )
 
 
