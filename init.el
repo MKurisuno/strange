@@ -1,19 +1,21 @@
-;;; init.el  -*- lexical-binding: t; -*-
-;;; M.Kurisuno .emacs/init.el  
+;;; init --- Personal Emacs configuration -*- lexical-binding: t; -*-
+;;; Commentary:
+;; Personal Emacs configuration.
+;; M.Kurisuno .emacs/init.el
 ;;
 ;;
 ;;
 ;; 2024.12.16
-;; 2025.06.20 Update 
+;; 2025.06.20 Update
+;; 2026.09.08 Update
 ;;
 ;;
 ;;
-;;
 
 
 
 
-
+;;; Code:
 (when (version< emacs-version "30.0")
   (error "This requires Emacs 30.0 and above!"))
 
@@ -205,7 +207,7 @@
          ("C-M-s s" . isearch-forward)
          ("C-M-s C-s" . isearch-forward-regexp)
          ("C-M-s r" . consult-ripgrep)
-         (minibuffer-local-map :package emacs 
+         (minibuffer-local-map :package emacs
 			 ("C-r" . consult-history)))
 )
 
@@ -340,7 +342,7 @@
   (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-ts-mode))
   )
 
-(add-hook 'c++-ts-mode-hook 
+(add-hook 'c++-ts-mode-hook
 	  (lambda ()
 	    (electric-indent-mode -1)
 	    (setq-local default-tab-width 4)
@@ -371,7 +373,7 @@
 ;;  :hook  ((eglot-managed-mode-hook . (lambda () (eldoc-box-hover-at-point-mode 1) )))
   :custom ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 120))
   :custom-face
-  (eldoc-box-body . ' ((t (:background "#282A36" :foreground "#f8f8f2" :family "JetBrains Mono" :height 0.90 :weight normal :slant normal alpha 70)))) 
+  (eldoc-box-body . ' ((t (:background "#282A36" :foreground "#f8f8f2" :family "JetBrains Mono" :height 0.90 :weight normal :slant normal alpha 70))))
   (eldoc-box-border . '((t (:background "#44475a" ))))
   ;;:config (setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88) ;;Emacs自体を透過する設定(壁紙が透けて見える)
   :config
@@ -402,17 +404,16 @@
     (add-to-list 'eglot-ignored-server-capabilities :documentRangeFormattingProvider)
     (add-to-list 'eglot-ignored-server-capabilities :documentOnTypeFormattingProvider))
   :bind (("C-c i" . completion-at-point)
-         ("C-c r" . eglot-rename) 
-         ("C-c o" . eglot-code-action-organize-imports)
-	 ) 
+         ("C-c r" . eglot-rename)
+	 ("C-c o" . eglot-code-action-organize-imports)
+	 )
   ;; M-.   : xref-find-definitions
   ;; M-,   : xref-go-back
   ;; M-?   : xref-find-reference
   ;; C-M-. : xref-apropros
   ;; C-h-. : Display-local-help
   ;; C-c i : Completion at point
-  ;; C-c a : Rename 
-
+  ;; C-c a : Rename
   :hook ((c-ts-mode-hook . eglot-ensure)
 	     (c++-ts-mode-hook . eglot-ensure)
 		 (php-ts-mode-hook . eglot-ensure)
@@ -435,7 +436,7 @@
   :config
   (projectile-mode +1)
   ;; Recommended keymap prefix on Windows/Linux
-  :bind (:projectile-mode-map 
+  :bind (:projectile-mode-map
 	("C-c p" . 'projectile-command-map))
   )
 
@@ -472,7 +473,7 @@
 
 ;;
 ;;
-;; Treemacs 
+;; Treemacs
 ;;
 ;;
 (leaf treemacs
@@ -539,7 +540,7 @@
 	  '(treemacs-user-mode-line-format           nil)
 	  '(treemacs-user-header-line-format         nil)
 	  '(treemacs-wide-toggle-width               50)
-	  '(treemacs-width                           30) ;;default 35 
+	  '(treemacs-width                           30) ;;default 35
 	  '(treemacs-width-increment                 1)
 	  '(treemacs-width-is-initially-locked       t)
 	  '(treemacs-workspace-switch-cleanup        nil)
@@ -557,7 +558,7 @@
 	 (treemacs-filewatch-mode . t)
 	 (treemacs-fringe-indicator-mode . 'always)
 	  ;;(treemacs-fringe-indicator-mode . 'only-when-focused)
-	  ;;(treemacs-git-mode . 'deferred)	 
+	  ;;(treemacs-git-mode . 'deferred)
 	 (treemacs-git-mode . 'simple)
   )
   
@@ -586,32 +587,27 @@
 
 
 
+(defun my/treemacs-layout ()
+  "左側にウィンドウがなければ左右分割し、右側を上下に分割する."
+  ;;左側にウィンドウがなければ左右分割
+  (unless (window-at-side-p nil 'left)
+    (split-window-horizontally))
+  ;; 右側へ移動
+  (when (window-at-side-p nil 'left)
+    (select-window (next-window)))
+  ;; 右側をさらに左右分割し、最右側を上下分割
+  (when (window-at-side-p nil 'right)
+    (split-window-horizontally)
+    (other-window 1)
+    (split-window-vertically)
+    (other-window -1)))
+(defun my/treemacs-before (&rest _args)
+  "Treemacs の起動前にウィンドウレイアウトを設定する."
+  (my/treemacs-layout))
 
 (with-eval-after-load 'treemacs
-  (defun my/treemacs-layout ()
-    (defvar treemacs-side)
-    (let ((treemacs-side 'left))
-      ;; 1) まず左右分割を作る（右側を用意）
-      (when (not (window-at-side-p nil 'left))
-        (split-window-horizontally))
-      ;; 2) 左側(Treemacs側)を確実に選ぶ
-      (when (window-at-side-p nil 'left)
-        (select-window (next-window))) ; selectedを右へ寄せる保険（次で「右」操作するため）
-      ;; 3) 今のselectedが右側になっている前提で右側を左右分割
-      ;;    その後、いちばん右へ寄せて上下分割
-      (when (window-at-side-p nil 'right)
-        ;; 右側を左右に分割
-        (split-window-horizontally)
-        ;; いちばん右へ移動（環境差があるので once で寄せる）
-        (other-window 1)
-        ;; いちばん右だけ上下分割
-        (split-window-vertically)
-        ;; 右側操作の後、Treemacs側へ戻す（任意だけど崩れにくい）
-        (other-window -1))))
+  (advice-add #'treemacs :before #'my/treemacs-before))
 
-  (advice-add 'treemacs :before
-              (lambda (&rest _args)
-                (my/treemacs-layout))))
 
 
 ;; リガチャを有効にする
@@ -670,6 +666,5 @@
 ;;    (compile compile-command)))
 ;;(global-set-key [f9] 'code-compile)
 
-(provide 'init);;;
-
-
+(provide 'init)
+;;; init.el ends here
