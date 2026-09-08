@@ -12,9 +12,9 @@ dot.init.el
 dot.zshrc  
 dot.gitconfig  
 gnu-source-highlight  
-  src-hilite-lesspipe.sh  
-  esc256.outlang  
-  src-hilite-lesspipe.sh  
+　　　　　src-hilite-lesspipe.sh  
+　　　　　esc256.outlang  
+　　　　　src-hilite-lesspipe.sh  
 
 ## Japanese directory name exchange to English
  $ LANG=C xdg-user-dirs-gtk-update
