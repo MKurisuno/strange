@@ -32,7 +32,6 @@
                      (emacs-init-time) gcs-done)))
 
 (set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
-;(set-face-attribute 'default nil :font (font-spec :family "Fira Code" :size 14))
 (set-fontset-font t 'japanese-jisx0208 (font-spec :name "Noto Sans JP" :size 12 :height 85) nil 'prepend)
 (set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans JP" :size 12 :height 85) nil 'prepend)
 
@@ -360,7 +359,9 @@
 (leaf eldoc
   :ensure nil
   :config ;; MiniBuffer へのechoの文字の大きさを調節
-  (custom-set-faces  '(markdown-header-face-3 ((t (:height 0.85)))))
+  ;(custom-set-faces  '(markdown-header-face-3 ((t (:height 0.85)))))
+  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 1.0)) ;HoverからのEchoの一行目の文字の大きさを調節
+
   :hook
   ((prog-mode-hook . eldoc-mode)))
 
@@ -375,7 +376,7 @@
   (eldoc-box-border . '((t (:background "#44475a" ))))
   ;;:config (setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88) ;;Emacs自体を透過する設定(壁紙が透けて見える)
   :config
-  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.90)) ;HoverからのEchoの一行目の文字の大きさを調節
+  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.95)) ;HoverからのEchoの一行目の文字の大きさを調節
 )
 
 
@@ -450,7 +451,7 @@
   (("\\.md\\'" . markdown-mode)
    ("\\.markdown\\'" . markdown-mode))
   :custom
-  ((markdown-command . "pandoc")
+  ((markdown-command . "pandoc -f markdown+header_attributes-raw_html -t html5")
    (markdown-fontify-code-blocks-natively . t)
    (markdown-header-scaling . t)
    (markdown-enable-math . t)
