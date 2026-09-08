@@ -11,9 +11,10 @@ dot.early-init.el
 dot.init.el  
 dot.zshrc  
 dot.gitconfig  
-src-hilite-lesspipe.sh  
-esc256.outlang  
-src-hilite-lesspipe.sh  
+gnu-source-highlight  
+  src-hilite-lesspipe.sh  
+  esc256.outlang  
+  src-hilite-lesspipe.sh  
 
 ## Japanese directory name exchange to English
  $ LANG=C xdg-user-dirs-gtk-update
@@ -89,16 +90,17 @@ Version > 30.1.50.
   download from 
          ftp://ftp.gnu.org/gnu/src-highlite     
     install  ~/.source-hightlight/   
-  src-hilite-lesspipe.sh ---> ~/bin/      
-  esc256.outlang         ---> .source-highlight/  
-  custom.style           ---> .source-highlight/    
+    src-hilite-lesspipe.sh   --->  ~/bin/      
+    esc256.outlang           --->  .source-highlight/  
+    custom.style             --->  .source-highlight/    
 
 
 ## Clangd 
-  ~/.config/clangd/config.yaml    
-  {project}/.clangd    
-  {project}/.clang-tidy    
-  {project}/.clang-format 
+   clang
+     ~/.config/clangd/config.yaml    
+     {project}/.clangd    
+     {project}/.clang-tidy    
+     {project}/.clang-format 
 
 ## git 
    MKurisuno/strange.git  dot.gitconfig   
