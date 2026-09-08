@@ -12,6 +12,8 @@
 
 
 
+
+
 (when (version< emacs-version "30.0")
   (error "This requires Emacs 30.0 and above!"))
 
@@ -28,11 +30,9 @@
                      (emacs-init-time) gcs-done)))
 
 (set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
-;;(set-face-attribute 'default nil :font (font-spec :family "Fira Code" :size 14))
-(set-fontset-font t 'japanese-jisx0208
-                  (font-spec :name "Noto Sans JP" :size 12 :height 85) nil 'prepend)
-(set-fontset-font t 'cjk-misc
-                  (font-spec :name "Noto Sans JP" :size 12 :height 85) nil 'prepend)
+;(set-face-attribute 'default nil :font (font-spec :family "Fira Code" :size 14))
+(set-fontset-font t 'japanese-jisx0208 (font-spec :name "Noto Sans JP" :size 12 :height 85) nil 'prepend)
+(set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans JP" :size 12 :height 85) nil 'prepend)
 
 
 
@@ -61,30 +61,41 @@
   :doc "tools for customizing Emacs and Lisp packages"
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
 
-
 (leaf mozc
   :ensure t
-  :config
-  (with-eval-after-load 'mozc
-    (set-face-attribute 'mozc-preedit-face nil :height 0.85
-			:foreground "#8BE9FD" :background "#28sA36" :weight 'bold)
-    (set-face-attribute 'mozc-preedit-selected-face nil :height 0.90
-			:foreground "#8BE9FD" :background "#191A21" :weight 'bold)
-    (set-face-attribute 'mozc-cand-overlay-focused-face nil :height 0.85
-			:foreground "#21222C":background "#BD93F9" :weight 'bold)
-    (set-face-attribute 'mozc-cand-overlay-odd-face nil :height 0.85
-			:foreground "#FFFFFF" :background "#6272A4" ) 
-    (set-face-attribute 'mozc-cand-overlay-even-face nil :height 0.85
-			:foreground "F8F8F2" :background "#282A36" ) 
-    (set-face-attribute 'mozc-cand-overlay-footer-face nil :height 0.80
-			:foreground "#50FA7B" :background "#333844")
-    )
   :custom
   (default-input-method . "japanese-mozc")
-  (mozc-helper-program-name  . "mozc_emacs_helper")
-  (mozc-leim-title . "かな")
-  )
-
+  (mozc-helper-program-name . "mozc_emacs_helper")
+  (mozc-leim-title . "あ")
+  :config
+  (with-eval-after-load 'mozc
+    (set-face-attribute 'mozc-preedit-face nil
+                        :height 0.85
+                        :foreground "#8BE9FD"
+                        :background "#282A36"
+                        :weight 'bold)
+    (set-face-attribute 'mozc-preedit-selected-face nil
+                        :height 0.90
+                        :foreground "#282A36"
+                        :background "#8BE9FD"
+                        :weight 'bold)
+    (set-face-attribute 'mozc-cand-overlay-focused-face nil
+                        :height 0.85
+                        :foreground "#282A36"
+                        :background "#BD93F9"
+                        :weight 'bold)
+    (set-face-attribute 'mozc-cand-overlay-odd-face nil
+                        :height 0.85
+                        :foreground "#F8F8F2"
+                        :background "#44475A")
+    (set-face-attribute 'mozc-cand-overlay-even-face nil
+                        :height 0.85
+                        :foreground "#F8F8F2"
+                        :background "#282A36")
+    (set-face-attribute 'mozc-cand-overlay-footer-face nil
+                        :height 0.80
+                        :foreground "#50FA7B"
+                        :background "#282A36")))
 
 (leaf autorevert
   :doc "revert buffers when files on disk change"
@@ -94,9 +105,8 @@
   :doc "delete selection if you insert"
   :global-minor-mode delete-selection-mode)
 
-
 ;;
-;; macrostep. paren.delimiter.higtlight
+;; macrostep. paren. delimiter. higtlight
 ;;
 (leaf macrostep
   :ensure t
@@ -105,19 +115,17 @@
 (leaf rainbow-delimiters
   :ensure t
   :hook
-  (prog-mode-hook . rainbow-delimiters-mode)
-  )
+  (prog-mode-hook . rainbow-delimiters-mode))
 
 (leaf paren
   :ensure t
   :hook
   (after-init-hook . show-paren-mode)
   :custom-face
-  (show-paren-match . '((nil (:background "#44475a" :foreground "#f1fa8c"))))  
+  (show-paren-match . '((nil (:background "#44475a" :foreground "#f1fa8c"))))
   :custom ((show-paren-style . 'mixed)
            (show-paren-when-point-inside-paren . t)
-           (show-paren-when-point-in-periphery . t))
-  )
+           (show-paren-when-point-in-periphery . t)))
 
 ;;(leaf  highlight-indent-guides
 ;;  :ensure t
@@ -131,7 +139,6 @@
 ;;  :config
 ;;  )
 
-
 (leaf simple
   :doc "basic editing commands for Emacs"
   :custom ((kill-read-only-ok . t)
@@ -144,14 +151,12 @@
   :hook (emacs-lisp-mode-hook . flymake-mode)
   :bind ((prog-mode-map
           ("M-n" . flymake-goto-next-error)
-          ("M-p" . flymake-goto-prev-error)))
-  )
+          ("M-p" . flymake-goto-prev-error))))
 
 (leaf which-key
   :doc "Display available keybindings in popup"
   :ensure t
   :global-minor-mode t)
-
 
 (leaf exec-path-from-shell
   :doc "Get environment variables such as $PATH from the shell"
@@ -200,10 +205,8 @@
          ("C-M-s s" . isearch-forward)
          ("C-M-s C-s" . isearch-forward-regexp)
          ("C-M-s r" . consult-ripgrep)
-         (minibuffer-local-map
-          :package emacs
-			  ("C-r" . consult-history))
-	)
+         (minibuffer-local-map :package emacs 
+			 ("C-r" . consult-history)))
 )
 
 
@@ -243,8 +246,7 @@
 	   (corfu-cycle .t)
 	   (corfu-quit-no-match 'separator)) ; manual
   :bind ((corfu-map
-          ("C-s" . corfu-insert-separator)
-	  ))
+          ("C-s" . corfu-insert-separator)))
   )
 
 (leaf cape
@@ -281,12 +283,9 @@
     :doc "Automatic parenthesis pairing"
     :global-minor-mode electric-pair-mode))
 
-
 (leaf yasnippet
   :ensure t
   :global-minor-mode   yas-global-mode )
-
-
 
 (leaf magit
   :when (version<= "25.1" emacs-version)
@@ -358,12 +357,12 @@
 	    (setq-local c-ts-mode-indent-offset 4)
 	    (setq-local c-basic-offset 4)))
 
-
-
-
 (leaf eldoc
   :ensure nil
   :config
+  ;; MiniBuffer へのechoの文字の大きさを調節
+  (custom-set-faces  '(markdown-header-face-3 ((t (:height 1.0)))))
+  ;;   '(markdown-header-face-6 ((t (:height 1.0))))
   :hook
   ((prog-mode-hook . eldoc-mode)))
 
@@ -372,13 +371,14 @@
   :ensure t
   :bind  (("C-c d" . eldoc-box-help-at-point))
   :hook  ((eglot-managed-mode-hook . (lambda () (eldoc-box-hover-at-point-mode 1) )))
+  :custom ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 120))
+  :custom-face
+  (eldoc-box-body . ' ((t (:background "#282A36" :foreground "#f8f8f2" :family "JetBrains Mono" :height 0.90 :weight normal :slant normal alpha 70)))) 
+  (eldoc-box-border . '((t (:background "#44475a" ))))
+  ;;:config (setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88) ;;Emacs自体を透過する設定(壁紙が透けて見える)
   :config
-  (with-eval-after-load 'eldoc-box (set-face-attribute 'eldoc-box-body nil :family "Noto Sans Mono" :height 0.85 :weight 'normal :slant 'italic))
-  :custom ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 180))
-  :custom-face (eldoc-box-body . '((t (:background "#282c34" :foreground "#bbc2cf"))))
-               (eldoc-box-border . '((t (:background "#5c6370"))))
-
-  )
+  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 1.2)) ;HoverからのEchoの一行目の文字の大きさを調節
+)
 
 
 
@@ -403,10 +403,6 @@
     (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider)
     (add-to-list 'eglot-ignored-server-capabilities :documentRangeFormattingProvider)
     (add-to-list 'eglot-ignored-server-capabilities :documentOnTypeFormattingProvider))
-  ;;Function-Key-bind 
-  (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
-  (define-key eglot-mode-map (kbd "<f7>") 'xref-find-reference)
-  (define-key eglot-mode-map (kbd "<f8>") 'eglot-momentary-inlay-hints)
   :bind (("C-c i" . completion-at-point)
          ("C-c r" . eglot-rename) 
          ("C-c o" . eglot-code-action-organize-imports)
@@ -420,16 +416,15 @@
   ;; C-c a : Rename 
 
   :hook ((c-ts-mode-hook . eglot-ensure)
-	 (c++-ts-mode-hook . eglot-ensure)
-	 (php-ts-mode-hook . eglot-ensure)
-	 ;;(cmake-ts-mode-hook . eglot-ensure)
+	     (c++-ts-mode-hook . eglot-ensure)
+		 (php-ts-mode-hook . eglot-ensure)
+		 ;;(cmake-ts-mode-hook . eglot-ensure)
 	 )
   :custom ((eldoc-echo-area-use-multiline-p . nil)
            (eglot-connect-timeout . 600)
-	   (eglot-autoshutwon . t)
-	   (eglot-sync-connect . 0)
+		   (eglot-autoshutwon . t)
+		   (eglot-sync-connect . 0)
 	   )
-  
   )
 
 (leaf eglot-booster

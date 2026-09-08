@@ -86,7 +86,7 @@
 (load-theme 'dracula t)
 
 ;; Don't change the font size for some headings and titles (default t)
-;;(setq dracula-enlarge-headings nil)
+(setq dracula-enlarge-headings nil)
 ;; Adjust font size of titles level 1 (default 1.3)
 (setq dracula-height-title-1 1.2)
 ;; Adjust font size of titles level 2 (default 1.1)
@@ -99,3 +99,5 @@
 (setq dracula-alternate-mode-line-and-minibuffer t)
 ;; Use normal weight for syntax faces like keywords, functions, and variables (default t)
 (setq dracula-bolder-keywords t)
+
+(setq resize-mini-windows nil)
