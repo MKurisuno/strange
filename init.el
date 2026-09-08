@@ -404,7 +404,7 @@
     (add-to-list 'eglot-ignored-server-capabilities :documentOnTypeFormattingProvider))
   :bind (("C-c i" . completion-at-point)
          ("C-c r" . eglot-rename)
-		 ("C-c o" . eglot-code-action-organize-imports))
+         ("C-c o" . eglot-code-action-organize-imports))
   ;; M-.   : xref-find-definitions
   ;; M-,   : xref-go-back
   ;; M-?   : xref-find-reference
@@ -413,14 +413,14 @@
   ;; C-c i : Completion at point
   ;; C-c a : Rename
   :hook ((c-ts-mode-hook . eglot-ensure)
-	     (c++-ts-mode-hook . eglot-ensure)
-		 (php-ts-mode-hook . eglot-ensure)
+	       (c++- ts-mode-hook . eglot-ensure)
+		     (php-ts-mode-hook . eglot-ensure)
 		 ;;(cmake-ts-mode-hook . eglot-ensure)
 	 )
   :custom ((eldoc-echo-area-use-multiline-p . nil)
            (eglot-connect-timeout . 600)
-		   (eglot-autoshutwon . t)
-		   (eglot-sync-connect . 0)
+		       (eglot-autoshutwon . t)
+		       (eglot-sync-connect . 0)
 	   )
   )
 
