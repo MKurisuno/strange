@@ -207,7 +207,7 @@
          ("C-M-s C-s" . isearch-forward-regexp)
          ("C-M-s r" . consult-ripgrep)
          (minibuffer-local-map :package emacs
-			 ("C-r" . consult-history)))
+		 ("C-r" . consult-history)))
 )
 
 
