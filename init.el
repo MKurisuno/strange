@@ -360,8 +360,7 @@
   :ensure nil
   :config ;; MiniBuffer へのechoの文字の大きさを調節
   ;(custom-set-faces  '(markdown-header-face-3 ((t (:height 0.85)))))
-  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 1.0)) ;HoverからのEchoの一行目の文字の大きさを調節
-
+  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 1.0))
   :hook
   ((prog-mode-hook . eldoc-mode)))
 
