@@ -96,7 +96,7 @@ Version > 30.1.50.
 
 
 ## Clangd 
-   clang
+   Download from https://apt.llvm.org/#llvmsh
      ~/.config/clangd/config.yaml    
      {project}/.clangd    
      {project}/.clang-tidy    
