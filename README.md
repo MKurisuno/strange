@@ -15,8 +15,8 @@ gnu-source-highlight/
 　　　　　src-hilite-lesspipe.sh  
 　　　　　esc256.outlang  
 　　　　　src-hilite-lesspipe.sh  
-clangd/ 
-      config.yaml
+clangd/   
+      config.yaml  
       .clangd  
       .clang-tiny  
       .clang-format
