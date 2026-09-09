@@ -14,7 +14,7 @@ dot.gitconfig
 gnu-source-highlight/  
 　　　　　src-hilite-lesspipe.sh  
 　　　　　esc256.outlang  
-　　　　　src-hilite-lesspipe.sh  
+　　　　　custom.style 
 clangd/  
 &nbsp;&nbsp;&nbsp;&nbsp;config.yaml  
 &nbsp;&nbsp;&nbsp;&nbsp;.clangd  
