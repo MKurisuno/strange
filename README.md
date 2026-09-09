@@ -69,8 +69,6 @@ clangd/
 ##  Default Editor
  $ sudo update-alternatives --config editor  
 
-
-
 ## bash switch to zsh
   To change login-shell   
   $chsh -s /usr/bin/zsh  
@@ -95,17 +93,17 @@ Version > 30.1.50.
   download from 
          ftp://ftp.gnu.org/gnu/src-highlite     
     install  ~/.source-hightlight/   
-    src-hilite-lesspipe.sh   --->  ~/bin/      
-    esc256.outlang           --->  .source-highlight/  
-    custom.style             --->  .source-highlight/    
+    &nbsp;&nbsp;&nbsp;&nbsp;src-hilite-lesspipe.sh   --->  ~/bin/      
+    &nbsp;&nbsp;&nbsp;&nbsp;esc256.outlang           --->  .source-highlight/  
+    &nbsp;&nbsp;&nbsp;&nbsp;custom.style             --->  .source-highlight/    
 
 
 ## Clangd 
-   Download from https://apt.llvm.org/#llvmsh
-     ~/.config/clangd/config.yaml    
-     {project}/.clangd    
-     {project}/.clang-tidy    
-     {project}/.clang-format 
+   Download from <https://apt.llvm.org/#llvmsh >    
+     &nbsp;&nbsp;&nbsp;&nbsp;~/.config/clangd/config.yaml    
+     &nbsp;&nbsp;&nbsp;&nbsp;{project}/.clangd    
+     &nbsp;&nbsp;&nbsp;&nbsp;{project}/.clang-tidy    
+     &nbsp;&nbsp;&nbsp;&nbsp;{project}/.clang-format 
 
 ## git 
    MKurisuno/strange.git  dot.gitconfig   
