@@ -16,10 +16,10 @@ gnu-source-highlight/
 　　　　　esc256.outlang  
 　　　　　src-hilite-lesspipe.sh  
 clangd/  
-     config.yaml  
-     .clangd  
-     .clang-tiny   
-     .clang-format
+&nbsp;&nbsp;&nbsp;&nbsp;config.yaml  
+&nbsp;&nbsp;&nbsp;&nbsp;.clangd  
+&nbsp;&nbsp;&nbsp;&nbsp;.clang-tiny   
+&nbsp;&nbsp;&nbsp;&nbsp;.clang-format
 
 ## Japanese directory name exchange to English
  $ LANG=C xdg-user-dirs-gtk-update
