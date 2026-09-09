@@ -374,8 +374,8 @@
   :custom-face
   (eldoc-box-body . ' ((t (:background "#282A36" :foreground "#f8f8f2" :family "JetBrains Mono" :height 0.90 :weight normal :slant normal :alpha 70))))
   (eldoc-box-border . '((t (:background "#44475a" ))))
-  ;;:config (setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88) ;;Emacs自体を透過する設定(壁紙が透けて見える)
   :config
+  ;;(setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88) ;;Emacs自体を透過する設定(壁紙が透けて見える)
   (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.95)) ;HoverからのEchoの一行目の文字の大きさを調節
 )
 
@@ -417,8 +417,8 @@
 	      (php-ts-mode-hook . eglot-ensure))
   :custom ((eldoc-echo-area-use-multiline-p . nil)
            (eglot-connect-timeout . 600)
-		       (eglot-autoshutwon . t)
-		       (eglot-sync-connect . 0))
+		     (eglot-autoshutwon . t)
+		     (eglot-sync-connect . 0))
   )
 
 (leaf eglot-booster
