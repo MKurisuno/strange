@@ -222,7 +222,7 @@
   :ensure t
   :custom ((affe-highlight-function . 'orderless-highlight-matches)
            (affe-regexp-function . 'orderless-pattern-compiler))
-  :bind (("C-M-s r" . affe-grep)
+  :bind (("C-M-s g" . affe-grep)
          ("C-M-s f" . affe-find)))
 
 (leaf orderless
