@@ -249,7 +249,7 @@
 	       (corfu-auto-prefix . 1)
 	       (corfu-popupinfo-mode . t)
 	       (corfu-popupinfo-delay . nil)
-	       (corfu-cycle .t)
+	       (corfu-cycle . t)
 	       (corfu-quit-no-match 'separator)) ; manual
   :bind   ((corfu-map
           ("C-s" . corfu-insert-separator))))
