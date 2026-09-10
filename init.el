@@ -14,7 +14,6 @@
 
 
 
-
 ;;; Code:
 (when (version< emacs-version "30.0")
   (error "This requires Emacs 30.0 and above!"))
@@ -68,7 +67,7 @@
   (default-input-method . "japanese-mozc")
   (mozc-helper-program-name . "mozc_emacs_helper")
   (mozc-leim-title . "あ")
-  :config
+  :config  ;; after-load mozc でないと読み込まない
   (with-eval-after-load 'mozc
     (set-face-attribute 'mozc-preedit-face nil
                         :height 0.85
@@ -200,14 +199,21 @@
          ([remap goto-line] . consult-goto-line)    ; M-g g
          ([remap imenu] . consult-imenu)            ; M-g i
          ("M-g f" . consult-flymake)
-         ;; C-M-s bindings
+	 ;;
+         ;;  C-M-s bindings
+	 ;;
          ("C-s" . c/consult-line)       ; isearch-forward
          ("C-M-s" . nil)                ; isearch-forward-regexp
          ("C-M-s s" . isearch-forward)
          ("C-M-s C-s" . isearch-forward-regexp)
          ("C-M-s r" . consult-ripgrep)
-         (minibuffer-local-map :package emacs
-		 ("C-r" . consult-history)))
+         (minibuffer-local-map :package emacs ("C-r" . consult-history)))
+         ;; 
+         ;; C-x b   :consult-buffer
+         ;; C-x p b : consult-project-buffer
+         ;; M-g g   : consult-goto-line
+         ;; M-g i   : consult-imenu
+         
 )
 
 

@@ -1,25 +1,26 @@
 # 
-# Ubuntu 26.04.10 
+## Ubuntu 26.04.10 
 # 
 
 ### for kurisuno
 ### since 2024.12.02 
-### update 2026.08.21 
+### last update 2026.09.10 
 
 ## files 
 dot.early-init.el  
 dot.init.el  
 dot.zshrc  
+dot.zprofile  
 dot.gitconfig  
 gnu-source-highlight/  
 　　　　　src-hilite-lesspipe.sh  
 　　　　　esc256.outlang  
 　　　　　custom.style  
 clangd/  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;config.yaml  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.clangd  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.clang-tiny   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.clang-format
+　　　　　config.yaml  
+　　　　　.clangd  
+　　　　　.clang-tiny   
+　　　　　.clang-format  
 
 ## Japanese directory name exchange to English
  $ LANG=C xdg-user-dirs-gtk-update
@@ -97,21 +98,11 @@ Version > 30.1.50.
     &nbsp;&nbsp;&nbsp;&nbsp;esc256.outlang           --->  .source-highlight/  
     &nbsp;&nbsp;&nbsp;&nbsp;custom.style             --->  .source-highlight/    
 
-
-## Clangd 
-   Download from <https://apt.llvm.org/#llvmsh >    
-     &nbsp;&nbsp;&nbsp;&nbsp;~/.config/clangd/config.yaml    
-     &nbsp;&nbsp;&nbsp;&nbsp;{project}/.clangd    
-     &nbsp;&nbsp;&nbsp;&nbsp;{project}/.clang-tidy    
-     &nbsp;&nbsp;&nbsp;&nbsp;{project}/.clang-format 
-
 ## git 
    MKurisuno/strange.git  dot.gitconfig   
 
-
 ## gnome-terminal
   https://draculatheme.com/gnome-terminal  
-
 
 ##  Disable bluetooth service
   $ sudo systemctl disable bluetooth.service  
@@ -120,7 +111,6 @@ Version > 30.1.50.
   $ sudo systemctl stop cups.service  
   $ sudo systemctl disable cups.service  
   
-
 
 ##  Wifi pawer-save-mode off
  if wifi is unstable,  
@@ -133,7 +123,17 @@ Version > 30.1.50.
    3) (enable)   
    wifi.powersave = 2  
 
+
+## Emacd eglot LanguageServer
+### C/C++ LanguageServer : Clangd 
+   Download from <https://apt.llvm.org/#llvmsh >    
+　　　　　~/.config/clangd/config.yaml    
+　　　　　{project}/.clangd    
+　　　　　{project}/.clang-tidy    
+　　　　　{project}/.clang-format   
+
 ### python3 environment  2026.08.07
+  $midir ~/.Apliris  
   $python3 -m venv .Aprilis  
   $source .Aprilis/bin/active
 
