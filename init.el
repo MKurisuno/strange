@@ -206,7 +206,7 @@
          ("C-M-s s" . isearch-forward)
          ("C-M-s C-s" . isearch-forward-regexp)
          ("C-M-s r" . consult-ripgrep)
-         (minibuffer-local-map :package emacs ("C-r" . consult-history)))
+    ; (minibuffer-local-map :package emacs ("C-r" . consult-history)))
          ;; 
          ;; C-x b   : consult-buffer
          ;; C-x p b : consult-project-buffer
@@ -214,6 +214,8 @@
          ;; M-g i   : consult-imenu
          ;; C-u C-s : at-point iserch-forward
          
+;  :config
+;  (bind-key "C-M-s h" #'consult-history minibuffer-local-map)
 )
 
 
