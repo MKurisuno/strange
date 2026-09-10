@@ -209,7 +209,7 @@
          ("C-M-s r" . consult-ripgrep)
          (minibuffer-local-map :package emacs ("C-r" . consult-history)))
          ;; 
-         ;; C-x b   :consult-buffer
+         ;; C-x b   : consult-buffer
          ;; C-x p b : consult-project-buffer
          ;; M-g g   : consult-goto-line
          ;; M-g i   : consult-imenu
