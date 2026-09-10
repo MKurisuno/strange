@@ -213,6 +213,7 @@
          ;; C-x p b : consult-project-buffer
          ;; M-g g   : consult-goto-line
          ;; M-g i   : consult-imenu
+         ;; C-u C-s : at-point iserch-forward
          
 )
 
