@@ -417,13 +417,15 @@
   ;; C-h-. : Display-local-help
   ;; C-c i : Completion at point
   ;; C-c a : Rename
-  :hook ((c-ts-mode-hook . eglot-ensure)
-	      (c++- ts-mode-hook . eglot-ensure)
-	      (php-ts-mode-hook . eglot-ensure))
-  :custom ((eldoc-echo-area-use-multiline-p . nil)
-           (eglot-connect-timeout . 600)
-		    (eglot-autoshutwon . t)
-		    (eglot-sync-connect . 0))
+  :hook
+  ((c-ts-mode-hook . eglot-ensure)
+   (c++-ts-mode-hook . eglot-ensure)
+   (php-ts-mode-hook . eglot-ensure))
+  :custom
+  ((eldoc-echo-area-use-multiline-p . nil)
+   (eglot-connect-timeout . 600)
+   (eglot-autoshutwon . t)
+   (eglot-sync-connect . 0))
   )
 
 (leaf eglot-booster

@@ -1,141 +1,137 @@
 # 
 ## Ubuntu 26.04.10 
 # 
-
+ 
 ### for kurisuno
 ### since 2024.12.02 
 ### last update 2026.09.10 
 
 ## files 
-dot.early-init.el  
-dot.init.el  
-dot.zshrc  
-dot.zprofile  
-dot.gitconfig  
-gnu-source-highlight/  
+　dot.early-init.el  
+　dot.init.el  
+　dot.zshrc  
+　dot.zprofile  
+　dot.gitconfig  
+　gnu-source-highlight/  
 　　　　　src-hilite-lesspipe.sh  
 　　　　　esc256.outlang  
 　　　　　custom.style  
-clangd/  
+　clangd/  
 　　　　　config.yaml  
 　　　　　.clangd  
 　　　　　.clang-tiny   
 　　　　　.clang-format  
 
 ## Japanese directory name exchange to English
- $ LANG=C xdg-user-dirs-gtk-update
+　　 $ LANG=C xdg-user-dirs-gtk-update
  
 
 ## NVIDIA RTX3060
- Check the Kernel to recognize GPU.  
-  $ lspci | grep -i nvidia  
+　　 1)Check the Kernel to recognize GPU.  
+　　　  $ lspci | grep -i nvidia  
 
- Check nvidia-gpu driver avairable.  
-  $ sudo ubuntu-drivers list  
-  $ sudo apt update  
-  $ sudo apt upgrade  
-  $ sudo reboot  
+　　 2)Check nvidia-gpu driver avairable.  
+　　　  $ sudo ubuntu-drivers list  
+　　　  $ sudo apt update  
+　　　  $ sudo apt upgrade  
+　　　  $ sudo reboot  
   
- Auto install nvidia-driver.  
-  $ sudo ubuntu-drivers install  
-  $ sudo reboot  
- Check GPU driver exactly loaded.   
-  $ nvidia-smi  
+　　 3)Auto install nvidia-driver.  
+　　　  $ sudo ubuntu-drivers install  
+　　　  $ sudo reboot  
+　　 4)Check GPU driver exactly loaded.   
+　　　  $ nvidia-smi  
 
 
-## for firewall  
-  gufw for ufw  
-   $ sudo apt install -y gufw  
+## for firewall
+　　#### gufw for ufw  
+　　　$ sudo apt install -y gufw  
 
 
-## for Virus  
-   $ sudo apt install clamav clamav-daemon  
-   $ mkdir .clamav  
-   $ mkdir .clamav/history  
-   $ chmod 755 scan.sh  
-   ---.clamav/scan.sh ---   
-   	#!/bin/bash  
-       	    /usr/bin/clamscan \  
-            -i \  
-            -r $HOME \  
-            --log="$HOME/.clamav/history/$(date +\%Y\%m\%d\.%H\%M\%S).log" \  
-            2>/dev/null  
-    --- end of scan.sh ---  
+## for Virus
+　　   $ sudo apt install clamav clamav-daemon  
+　　   $ mkdir .clamav  
+　　   $ mkdir .clamav/history  
+　　   $ chmod 755 scan.sh  
+　　　   |---.clamav/scan.sh ---   
+　　　　   	#!/bin/bash  /usr/bin/clamscan  -i  -r $HOME  --log="$HOME/.clamav/history/$(date +\%Y\%m\%d\.%H\%M\%S).log"   2>/dev/null  
+　　　   |--- end of scan.sh ---  
 
-## crontab   
-  $ crontab -e  
-  0 10 * * * $HOME/.clamav/scan.sh  
+## crontab
+　　  $ crontab -e  
+　　  0 10 * * * $HOME/.clamav/scan.sh  
 
 
 ##  Default Editor
- $ sudo update-alternatives --config editor  
+　　 $ sudo update-alternatives --config editor  
 
 ## bash switch to zsh
-  To change login-shell   
-  $chsh -s /usr/bin/zsh  
-  To change terminal shell  
-  Instead of SHELL to load custum command    
-     custum command is  /usr/bin/zsh   
-  ---dot.zshrc---  
-      zinit  
-	zsh-syntax-hightlight  
-	zsh-autosuggestions  
-	zsh-completion  
-   	dracula/zsh   
+　To change login-shell   
+　　$chsh -s /usr/bin/zsh  
+　　To change terminal shell  
+　　Instead of SHELL to load custum command    
+　　　custum command is  /usr/bin/zsh   
+　　　---dot.zshrc auto install nect package ---  
+　　　　　zinit  
+　　　　　zsh-syntax-hightlight  
+　　　　　zsh-autosuggestions  
+　　　　　zsh-completion  
+　　　　　dracula/zsh   
 
-## emacs 
-Version > 30.1.50.  
-   init.el    
-   eraly-init.el  
-   For drucura-theme  
-       $ ln -s dracura-theme-**/dracura-theme.el  .emacs.d/themes/dracura-theme.el 
+
+## emacs  
+　　Version > 30.1.50.  
+　　　   init.el    
+　　　  eraly-init.el  
+　　　   For drucura-theme  
+　　　   $ln -s dracura-theme-**/dracura-theme.el  .emacs.d/themes/dracura-theme.el 
 
 ## gnu-source-highlight
-  download from 
-         ftp://ftp.gnu.org/gnu/src-highlite     
-    install  ~/.source-hightlight/   
+　  download from   ftp://ftp.gnu.org/gnu/src-highlite     
+　    install  ~/.source-hightlight/   
     &nbsp;&nbsp;&nbsp;&nbsp;src-hilite-lesspipe.sh   --->  ~/bin/      
     &nbsp;&nbsp;&nbsp;&nbsp;esc256.outlang           --->  .source-highlight/  
     &nbsp;&nbsp;&nbsp;&nbsp;custom.style             --->  .source-highlight/    
 
 ## git 
-   MKurisuno/strange.git  dot.gitconfig   
+　   MKurisuno/strange.git  dot.gitconfig   
 
 ## gnome-terminal
-  https://draculatheme.com/gnome-terminal  
+　  https://draculatheme.com/gnome-terminal  
 
 ##  Disable bluetooth service
-  $ sudo systemctl disable bluetooth.service  
+　  $ sudo systemctl disable bluetooth.service  
   
 ##  Disable printer service  
-  $ sudo systemctl stop cups.service  
-  $ sudo systemctl disable cups.service  
+　  $ sudo systemctl stop cups.service  
+　  $ sudo systemctl disable cups.service  
   
 
 ##  Wifi pawer-save-mode off
- if wifi is unstable,  
- $ sudo emacs /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf  
-   File to be place under /etc/NetworkManager/conf.d   
-   [connection]  
-   Values are 0 (use default),  
-   1) (ignore/don't touch)    
-   2) (disable)   
-   3) (enable)   
-   wifi.powersave = 2  
+####　 if wifi is unstable,  
+ 　$ sudo emacs /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf  
+　   File to be place under /etc/NetworkManager/conf.d   
+　   [connection]  
+　   Values are 0 (use default),  
+　   1) (ignore/don't touch)    
+　   2) (disable)   
+　   3) (enable)   
+　　   wifi.powersave = 2  
 
 
 ## Emacd eglot LanguageServer
 ### C/C++ LanguageServer : Clangd 
-   Download from <https://apt.llvm.org/#llvmsh >    
+   Download clang and clangd from <https://apt.llvm.org/#llvmsh > .   
 　　　　　~/.config/clangd/config.yaml    
 　　　　　{project}/.clangd    
 　　　　　{project}/.clang-tidy    
 　　　　　{project}/.clang-format   
 
 ### python3 environment  2026.08.07
-  $midir ~/.Apliris  
-  $python3 -m venv .Aprilis  
-  $source .Aprilis/bin/active
+　　Activate virtual environment.  
+　　 $ mkdir ~/.Apliris  
+　　 $ python3 -m venv .Aprilis  
+　　 $ source .Aprilis/bin/active
 
 ### PHP_LanguageServer:Intelephense   
   1) Install Node.js  
