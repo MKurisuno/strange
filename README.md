@@ -122,10 +122,10 @@
 ## Emacd eglot LanguageServer
 ### C/C++ LanguageServer : Clangd 
    Download clang and clangd from <https://apt.llvm.org/#llvmsh > .   
-　　　　　~/.config/clangd/config.yaml    
-　　　　　{project}/.clangd    
-　　　　　{project}/.clang-tidy    
-　　　　　{project}/.clang-format   
+　　~/.config/clangd/config.yaml    
+　　{project}/.clangd    
+　　{project}/.clang-tidy    
+　　{project}/.clang-format   
 
 ### python3 environment  2026.08.07
 　　Activate virtual environment.  

@@ -1,8 +1,9 @@
 ;;; package --- Summary  -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; ---
-;; ---  20241116 
+;; ---  20241116
 
+;;; Code:
 (setq package-enable-at-startup nil)
 
 (toggle-scroll-bar nil)           ;; For making scroll bar invisible
@@ -13,7 +14,7 @@
 (setq inhibit-startup-message t)	   ;Spulash off
 (setq initial-scratch-message nil)
 (setq initial-major-mode 'fundamental-mode)
-;;(setq inhibit-startup-echo-area-message t) ;Erase strings on initial *scratch* buffer 
+;;(setq inhibit-startup-echo-area-message t) ;Erase strings on initial *scratch* buffer
 ;;(setq initial-scratch-message "")
 
 (setq make-backup-files nil)
@@ -70,7 +71,7 @@
 ;; スクロール開始のマージンの行数
 (setq scroll-margin 3)
 ;; 1 画面スクロール時に重複させる行数
-(setq next-screen-context-lines 5) 
+(setq next-screen-context-lines 5)
 ;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
 (setq scroll-preserve-screen-position t)
 
@@ -80,7 +81,7 @@
 
 
 ;; 
-;; Dracula theme  
+;; Dracula theme
 ;;               github dracula/emacs
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (load-theme 'dracula t)
@@ -100,4 +101,11 @@
 ;; Use normal weight for syntax faces like keywords, functions, and variables (default t)
 (setq dracula-bolder-keywords t)
 
+
+(with-eval-after-load 'dracula-theme
+  (set-face-attribute 'font-lock-comment-face nil
+                      :foreground "#9aa8c7"))
+
 (setq resize-mini-windows nil)
+(provide 'early-init)
+;;; early-init.el ends here
