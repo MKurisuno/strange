@@ -198,11 +198,10 @@
          ;; M-g bindings (goto-map)
          ([remap goto-line] . consult-goto-line)    ; M-g g
          ([remap imenu] . consult-imenu)            ; M-g i
-         ("M-g f" . consult-flymake)
-	 ;;
-         ;;  C-M-s bindings
-	 ;;
+         ("M-g f" . consult-flymake)  
+
          ("C-s" . c/consult-line)       ; isearch-forward
+         ;;  C-M-s bindings
          ("C-M-s" . nil)                ; isearch-forward-regexp
          ("C-M-s s" . isearch-forward)
          ("C-M-s C-s" . isearch-forward-regexp)
