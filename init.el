@@ -200,13 +200,15 @@
          ([remap imenu] . consult-imenu)            ; M-g i
          ("M-g f" . consult-flymake)
          ("C-s"   . c/consult-line)       ; isearch-forward
+	 (minibuffer-local-map :package emacs ("C-r" . consult-history))
          ;;  C-M-s bindings
          ("C-M-s"   . nil)                ; isearch-forward-regexp
          ("C-M-s s" . isearch-forward)
          ("C-M-s C-s" . isearch-forward-regexp)
          ("C-M-s r" . consult-ripgrep))
-         ;;(minibuffer-local-map :package emacs ("C-r" . consult-history))
-  :config (bind-key "C-M-s h" #'consult-history minibuffer-local-map)
+         ;;
+         ;; C-r     : consult-history  minibuffer-mode-map
+         ;; C-s     : consult-line     c/consult-line
          ;; C-x b   : consult-buffer
          ;; C-x p b : consult-project-buffer
          ;; M-g g   : consult-goto-line
@@ -216,7 +218,6 @@
          ;; C-M-s s   : iserch-forward
          ;; C-M-s C-s : iserch-forward-regexp
          ;; C-M-s r   : consult-ripgrep
-         ;; C-M-s h   : consult-history  minibuffer-mode-map
          ;; C-M-s g   : affe-grep
          ;; C-M-s f   : affe-find
   )
@@ -237,6 +238,16 @@
            (completion-category-defaults . nil)
            (completion-category-overrides . '((file (styles partial-completion))))))
 
+
+
+(leaf embark
+  :ensure t
+  :bind
+  (("C-."   . embark-act)
+   ("C-;"   . embark-dwim)
+   ("C-h B" . embark-bindings)))
+
+
 (leaf embark-consult
   :doc "Consult integration for Embark"
   :ensure t
@@ -256,12 +267,12 @@
 	       (corfu-popupinfo-delay . nil)
 	       (corfu-cycle . t)
 	       (corfu-quit-no-match 'separator)
-               ;; 補完ソースの順序を指定
-               (corfu-sources . '(corfu-lsp
-				  corfu-dabbrev
-				  corfu-dict
-				  corfu-yasnippet))
-          )
+           ;; 補完ソースの順序を指定
+           (corfu-sources . '(
+			   corfu-lsp 
+			   corfu-dabbrev 
+			   corfu-dict 
+			   corfu-yasnippet)))
   :bind   ((corfu-map
           ("C-s" . corfu-insert-separator))))
 
@@ -375,8 +386,9 @@
 
 (leaf eldoc
   :ensure nil
-  :config ;; MiniBuffer へのechoの文字の大きさを調節
-  ;(custom-set-faces  '(markdown-header-face-3 ((t (:height 0.85)))))
+  :config 
+  ;; MiniBuffer へのechoの文字の大きさを調節 下の設定は間違ってないけど読み込まない。
+  ;;(custom-set-faces  '(markdown-header-face-3 ((t (:height 0.85)))))
   (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 1.0))
   :hook
   ((prog-mode-hook . eldoc-mode)))
@@ -391,8 +403,10 @@
   (eldoc-box-body . ' ((t (:background "#282A36" :foreground "#f8f8f2" :family "JetBrains Mono" :height 0.90 :weight normal :slant normal :alpha 70))))
   (eldoc-box-border . '((t (:background "#44475a" ))))
   :config
-  ;;(setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88) ;;Emacs自体を透過する設定(壁紙が透けて見える)
-  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.95)) ;HoverからのEchoの一行目の文字の大きさを調節
+  ;;次の設定は結果としてEmacsを透過して壁紙が見える
+  ;;(setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88)
+  ;HoverからのEchoの一行目の文字の大きさを調節
+  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.95)) 
 )
 
 
