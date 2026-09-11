@@ -267,12 +267,11 @@
 	       (corfu-popupinfo-delay . nil)
 	       (corfu-cycle . t)
 	       (corfu-quit-no-match 'separator)
-           ;; 補完ソースの順序を指定
-           (corfu-sources . '(
-			   corfu-lsp
-			   corfu-dabbrev
-			   corfu-dict
-			   corfu-yasnippet)))
+	       ;; 補完ソースの順序を指定
+	       (corfu-sources . '(corfu-lsp
+				  corfu-dabbrev
+				  corfu-dict
+				  corfu-yasnippet)))
   :bind   ((corfu-map
           ("C-s" . corfu-insert-separator))))
 
