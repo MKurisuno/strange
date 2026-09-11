@@ -198,25 +198,28 @@
          ;; M-g bindings (goto-map)
          ([remap goto-line] . consult-goto-line)    ; M-g g
          ([remap imenu] . consult-imenu)            ; M-g i
-         ("M-g f" . consult-flymake)  
-
-         ("C-s" . c/consult-line)       ; isearch-forward
+         ("M-g f" . consult-flymake)
+         ("C-s"   . c/consult-line)       ; isearch-forward
          ;;  C-M-s bindings
-         ("C-M-s" . nil)                ; isearch-forward-regexp
+         ("C-M-s"   . nil)                ; isearch-forward-regexp
          ("C-M-s s" . isearch-forward)
          ("C-M-s C-s" . isearch-forward-regexp)
-         ("C-M-s r" . consult-ripgrep)
-    ; (minibuffer-local-map :package emacs ("C-r" . consult-history)))
-         ;; 
+         ("C-M-s r" . consult-ripgrep))
+	 ;;(minibuffer-local-map :package emacs ("C-r" . consult-history))
+  :config (bind-key "C-M-s h" #'consult-history minibuffer-local-map)
          ;; C-x b   : consult-buffer
          ;; C-x p b : consult-project-buffer
          ;; M-g g   : consult-goto-line
          ;; M-g i   : consult-imenu
+	 ;; M-g f   : consult-flymake
          ;; C-u C-s : at-point iserch-forward
-         
-;  :config
-;  (bind-key "C-M-s h" #'consult-history minibuffer-local-map)
-)
+         ;; C-M-s s   : iserch-forward
+         ;; C-M-s C-s : iserch-forward-regexp
+         ;; C-M-s r   : consult-ripgrep
+         ;; C-M-s h   : consult-history  minibuffer-mode-map
+         ;; C-M-s g   : affe-grep
+         ;; C-M-s f   : affe-find
+  )
 
 
 (leaf affe
@@ -253,12 +256,12 @@
 	       (corfu-popupinfo-delay . nil)
 	       (corfu-cycle . t)
 	       (corfu-quit-no-match 'separator)
-         ;; 補完ソースの順序を指定
-         (corfu-sources . '(corfu-lsp
-                            corfu-dabbrev
-                            corfu-dict
-                            corfu-yasnippet))
-          ) 
+               ;; 補完ソースの順序を指定
+               (corfu-sources . '(corfu-lsp
+				  corfu-dabbrev
+				  corfu-dict
+				  corfu-yasnippet))
+          )
   :bind   ((corfu-map
           ("C-s" . corfu-insert-separator))))
 
