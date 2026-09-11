@@ -269,9 +269,9 @@
 	       (corfu-quit-no-match 'separator)
            ;; 補完ソースの順序を指定
            (corfu-sources . '(
-			   corfu-lsp 
-			   corfu-dabbrev 
-			   corfu-dict 
+			   corfu-lsp
+			   corfu-dabbrev
+			   corfu-dict
 			   corfu-yasnippet)))
   :bind   ((corfu-map
           ("C-s" . corfu-insert-separator))))
@@ -296,15 +296,24 @@
          ;; ("C-M-a" . puni-beginning-of-sexp)
          ;; ("C-M-e" . puni-end-of-sexp)
          ;; ("M-)"   . puni-syntactic-forward-punct)
+         ;; ("M-("   . puni-syntactic-backward-punct)
+	 ;; (global-map) M-f or ESC<right>  forward-word
+	 ;; (global-map) M-b or ESC<left>   backward-word
          ;; ("C-M-u" . backward-up-list)
          ;; ("C-M-d" . backward-down-list)
-         ("C-)" . puni-slurp-forward)
-         ("C-}" . puni-barf-forward)
-         ("M-(" . puni-wrap-round)
-         ("M-s" . puni-splice)
-         ("M-r" . puni-raise)
+	 ;; ("M-{")  . backword-paragraph)  ;;次のパラグラフ先頭へ  Ctrl+<up>
+	 ;; ("M-}")  . forward-paragraph)   ;;前のパラグラフ先頭へ  Ctrl+<down>
+         ("C-c }" . puni-slurp-forward)   ;; (a) b  -> (a  b)   ; slurp = 括弧内へ取り込む
+	 ("C-c {" . puni-slurp-backward)  ;;  a (b) -> (a  b)   ;
+         ("C-c <" . puni-barf-forward)    ;; (a  b) -> (a) b    ; barf  = 括弧外へ出す
+	 ("C-c >" . puni-barf-backward)   ;; (a  b) ->  a (b)   ;
+         ("C-c )" . puni-wrap-round)      ;;   a    ->  (a)     ; wrap  = 括弧を付ける
+         ("C-c (" . puni-splice)          ;;  (a)   ->   a      ; splice = 括弧を外す
+         ("M-r" . puni-raise)             ;; A(b(x),y) -> b(x)  ; raise = 親のS式を現在のS式で置き換える
          ("M-U" . puni-splice-killing-backward)
-         ("M-z" . puni-squeeze))
+         ("M-z" . puni-squeeze)           ;; foo (bar) baz -> { + C-y + } -> foo {bar} baz
+                                          ;; squeeze = 中身を一時退避して括弧を付け替える
+	 )
   :config
   (leaf elec-pair
     :doc "Automatic parenthesis pairing"
@@ -349,22 +358,18 @@
   (defvar treesit-language-source-alist)
   ;;  (add-to-list 'auto-mode-alist '("\\.clj[sc]?\\'" . clojure-mode))
   ;;  (add-to-list 'auto-mode-alist '("\\.edn\\'" . clojure-mode))
-  (add-to-list 'treesit-language-source-alist
-	       '(yaml "https://github.com/ikatyang/tree-sitter-yaml"))
-   ;; 
-  (add-to-list 'auto-mode-alist '( "CMakeLists\\.txt\\'" . cmake-ts-mode))
-  (add-to-list 'auto-mode-alist '( "\\.cmake\\'" . cmake-ts-mode))
-  (add-to-list 'auto-mode-alist '( "\\.py\\'" . python-mode))
-  (add-to-list 'auto-mode-alist '( "\\.json\\'" . js-json-mode))
-  (add-to-list 'auto-mode-alist '( "\\.php\\'". php-ts-mode))
-  (add-to-list 'auto-mode-alist '( "\\.y?ml\\'". yaml-ts-mode))
-;  (dolist (file '("\\.clangd\\'" "\\.clang-tidy\\'" "\\.clang-format\\'"))
-;    (add-to-list 'auto-mode-alist (cons file 'yaml-ts-mode)))
-  (add-to-list 'auto-mode-alist '("\\.clang\\(?:d\\|-tidy\\|-format\\)\\'" . yaml-ts-mode))
+  (add-to-list 'treesit-language-source-alist '(yaml "https://github.com/ikatyang/tree-sitter-yaml"))
+  (add-to-list 'auto-mode-alist '("CMakeLists\\.txt\\'" . cmake-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.cmake\\'" . cmake-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.json\\'" . js-json-mode))
+  (add-to-list 'auto-mode-alist '("\\.php\\'". php-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.y?ml\\'". yaml-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.c\\'" . c-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.clang\\(?:d\\|-tidy\\|-format\\)\\'" . yaml-ts-mode)) ;;Clangd の設定file
   )
 
 (add-hook 'c++-ts-mode-hook
@@ -386,7 +391,7 @@
 
 (leaf eldoc
   :ensure nil
-  :config 
+  :config
   ;; MiniBuffer へのechoの文字の大きさを調節 下の設定は間違ってないけど読み込まない。
   ;;(custom-set-faces  '(markdown-header-face-3 ((t (:height 0.85)))))
   (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 1.0))
@@ -406,7 +411,7 @@
   ;;次の設定は結果としてEmacsを透過して壁紙が見える
   ;;(setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88)
   ;HoverからのEchoの一行目の文字の大きさを調節
-  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.95)) 
+  (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.95))
 )
 
 
@@ -425,8 +430,8 @@
 
   (add-to-list 'eglot-server-programs '((c++-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '((c-ts-mode) "clangd"))
-  (add-to-list 'eglot-server-programs '(php-mode . ("intelephense" "--stdio")))
-  (add-to-list 'eglot-server-programs   '(python-mode . ("pyright-langserver" "--stdio")))
+  (add-to-list 'eglot-server-programs '((php-ts-mode) . ("intelephense" "--stdio")))
+  (add-to-list 'eglot-server-programs '((python-ts-mode) . ("pyright-langserver" "--stdio")))
   ;; eglotとclangd のインデント設定を無効化する
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider)
@@ -445,7 +450,8 @@
   :hook
   ((c-ts-mode-hook . eglot-ensure)
    (c++-ts-mode-hook . eglot-ensure)
-   (php-ts-mode-hook . eglot-ensure))
+   (php-ts-mode-hook . eglot-ensure)
+   (python-ts-mode-hook . eglot-ensure))
   :custom
   ((eldoc-echo-area-use-multiline-p . nil)
    (eglot-connect-timeout . 600)
