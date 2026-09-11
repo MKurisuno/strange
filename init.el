@@ -297,16 +297,16 @@
          ;; ("C-M-e" . puni-end-of-sexp)
          ;; ("M-)"   . puni-syntactic-forward-punct)
          ;; ("M-("   . puni-syntactic-backward-punct)
-	 ;; (global-map) M-f or ESC<right>  forward-word
-	 ;; (global-map) M-b or ESC<left>   backward-word
+         ;; (global-map) M-f or ESC<right>  forward-word
+         ;; (global-map) M-b or ESC<left>   backward-word
          ;; ("C-M-u" . backward-up-list)
          ;; ("C-M-d" . backward-down-list)
-	 ;; ("M-{")  . backword-paragraph)  ;;次のパラグラフ先頭へ  Ctrl+<up>
-	 ;; ("M-}")  . forward-paragraph)   ;;前のパラグラフ先頭へ  Ctrl+<down>
+         ;; ("M-{")  . backword-paragraph)  ;;次のパラグラフ先頭へ  Ctrl+<up>
+         ;; ("M-}")  . forward-paragraph)   ;;前のパラグラフ先頭へ  Ctrl+<down>
          ("C-c }" . puni-slurp-forward)   ;; (a) b  -> (a  b)   ; slurp = 括弧内へ取り込む
-	 ("C-c {" . puni-slurp-backward)  ;;  a (b) -> (a  b)   ;
+         ("C-c {" . puni-slurp-backward)  ;;  a (b) -> (a  b)   ;
          ("C-c <" . puni-barf-forward)    ;; (a  b) -> (a) b    ; barf  = 括弧外へ出す
-	 ("C-c >" . puni-barf-backward)   ;; (a  b) ->  a (b)   ;
+         ("C-c >" . puni-barf-backward)   ;; (a  b) ->  a (b)   ;
          ("C-c )" . puni-wrap-round)      ;;   a    ->  (a)     ; wrap  = 括弧を付ける
          ("C-c (" . puni-splice)          ;;  (a)   ->   a      ; splice = 括弧を外す
          ("M-r" . puni-raise)             ;; A(b(x),y) -> b(x)  ; raise = 親のS式を現在のS式で置き換える
