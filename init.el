@@ -205,13 +205,13 @@
          ("C-M-s s" . isearch-forward)
          ("C-M-s C-s" . isearch-forward-regexp)
          ("C-M-s r" . consult-ripgrep))
-	 ;;(minibuffer-local-map :package emacs ("C-r" . consult-history))
+         ;;(minibuffer-local-map :package emacs ("C-r" . consult-history))
   :config (bind-key "C-M-s h" #'consult-history minibuffer-local-map)
          ;; C-x b   : consult-buffer
          ;; C-x p b : consult-project-buffer
          ;; M-g g   : consult-goto-line
          ;; M-g i   : consult-imenu
-	 ;; M-g f   : consult-flymake
+         ;; M-g f   : consult-flymake
          ;; C-u C-s : at-point iserch-forward
          ;; C-M-s s   : iserch-forward
          ;; C-M-s C-s : iserch-forward-regexp
