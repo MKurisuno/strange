@@ -259,18 +259,35 @@
 (leaf corfu
   :doc "Completion in Region FUnction"
   :ensure t
-  :global-minor-mode global-corfu-mode corfu-popupinfo-mode
+  :require t
+  :global-minor-mode (global-corfu-mode corfu-popupinfo-mode)
   :custom ((corfu-auto . t)
-	       (corfu-auto-delay . 0)
-	       (corfu-auto-prefix . 1)
-	       (corfu-popupinfo-mode . t)
-	       (corfu-popupinfo-delay . nil)
-	       (corfu-cycle . t)
-	       (corfu-quit-no-match 'separator)
-	       ;; 補完ソースの順序を指定
-	       (corfu-sources . '(corfu-lsp corfu-dabbrev corfu-dict corfu-yasnippet)))
+	   (corfu-auto-delay . 0)
+	   (corfu-auto-prefix . 1)
+	   (corfu-popupinfo-delay . nil)
+	   (corfu-cycle . t)
+	   (corfu-quit-no-match 'separator)
+	   (corfu-sources . '(corfu-lsp corfu-dabbrev corfu-dict corfu-yasnippet)))
   :bind   ((corfu-map
           ("C-s" . corfu-insert-separator))))
+
+(leaf svg-lib
+  :ensure t)
+
+(defvar corfu-margin-formatters nil)
+(leaf kind-icon
+  :ensure t
+  :after corfu
+  :require t
+  :custom
+  (kind-icon-use-icons . t)
+  (kind-icon-default-face . 'corfu-default)
+  (kind-icon-blend-background . nil)
+  (kind-icon-blend-frac . 0.08)
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
+  )
+
 
 (leaf cape
   :doc "Completion At Point Extensions"
@@ -286,17 +303,17 @@
   :ensure t
   :global-minor-mode puni-global-mode
   :bind (:puni-mode-map
-         ;; default mapping
-         ;; ("C-M-f" . puni-forward-sexp)
-         ;; ("C-M-b" . puni-backward-sexp)
-         ;; ("C-M-a" . puni-beginning-of-sexp)
-         ;; ("C-M-e" . puni-end-of-sexp)
-         ;; ("M-)"   . puni-syntactic-forward-punct)
-         ;; ("M-("   . puni-syntactic-backward-punct)
+         ;; default mapping  sexp = Symbolic-Expression
+         ;; ("C-M-f" . puni-forward-sexp)      ;次のSexpの末尾まで進む
+         ;; ("C-M-b" . puni-backward-sexp)     ;前のSexpのまで戻る
+         ;; ("C-M-a" . puni-beginning-of-sexp) ;(S式)の先頭まで移動
+         ;; ("C-M-e" . puni-end-of-sexp)       ;(S式)の末尾まで移動
+		 ;; ("C-M-u" . backward-up-list)       ;( )内にあるとき( )の先頭に移動
+         ;; ("C-M-d" . backward-down-list)     ;次の( )内に移動
+         ;; ("M-)"   . puni-syntactic-forward-punct)  ;次の句読点(punctuation)までJamp
+         ;; ("M-("   . puni-syntactic-backward-punct) ;前の句読点(punctuation)までJamp
          ;; (global-map) M-f or ESC<right>  forward-word
          ;; (global-map) M-b or ESC<left>   backward-word
-         ;; ("C-M-u" . backward-up-list)
-         ;; ("C-M-d" . backward-down-list)
          ;; ("M-{")  . backword-paragraph)  ;;次のパラグラフ先頭へ  Ctrl+<up>
          ;; ("M-}")  . forward-paragraph)   ;;前のパラグラフ先頭へ  Ctrl+<down>
          ("C-c }" . puni-slurp-forward)   ;; (a) b  -> (a  b)   ; slurp = 括弧内へ取り込む

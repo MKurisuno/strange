@@ -9,7 +9,6 @@ CompileFlags:
 
 Diagnostics:
   ClangTidy:
-    CheckOptions:
     Add:
       - modernize-use-auto
       - modernize-use-nullptr
@@ -19,6 +18,7 @@ Diagnostics:
       - modernize-use-nodiscard
       - readability-magic-numbers
       - readability-else-after-return
+#    CheckOptions:
 
 Completion:
   AllScopes: Yes
@@ -41,7 +41,7 @@ Hover:
 
 SemanticTokens:
   DisabledKinds:
-  - commnet
+  - comment
   DisabledModifiers:
   - deprecated
 
