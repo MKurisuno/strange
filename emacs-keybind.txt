@@ -26,7 +26,7 @@
   
 ## puni  
 ### default mapping  sexp = Symbolic-Expression  
- ;; C-M-f    :  puni-forward-sexp       ;次のSexpの末尾まで進む
+ ;; C-M-f    : puni-forward-sexp       ;次のSexpの末尾まで進む
  ;; C-M-b    : puni-backward-sexp       ;前のSexpのまで戻る  
  ;; C-M-a    : puni-beginning-of-sexp   ;(S式)の先頭まで移動
  ;; C-M-e    : puni-end-of-sexp         ;(S式)の末尾まで移動  
