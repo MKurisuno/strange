@@ -308,7 +308,7 @@
          ;; ("C-M-b" . puni-backward-sexp)     ;前のSexpのまで戻る
          ;; ("C-M-a" . puni-beginning-of-sexp) ;(S式)の先頭まで移動
          ;; ("C-M-e" . puni-end-of-sexp)       ;(S式)の末尾まで移動
-		 ;; ("C-M-u" . backward-up-list)       ;( )内にあるとき( )の先頭に移動
+         ;; ("C-M-u" . backward-up-list)       ;( )内にあるとき( )の先頭に移動
          ;; ("C-M-d" . backward-down-list)     ;次の( )内に移動
          ;; ("M-)"   . puni-syntactic-forward-punct)  ;次の句読点(punctuation)までJamp
          ;; ("M-("   . puni-syntactic-backward-punct) ;前の句読点(punctuation)までJamp
