@@ -1,0 +1,11 @@
+{
+    "clangd.arguments": [
+        "--background-index",
+        "--clang-tidy",
+        "--completion-style=detailed",
+        "--header-insertion=iwyu",
+        "--compile-commands-dir=${workspaceFolder}/build"
+    ],
+    "C_Cpp.intelliSenseEngine": "disabled"
+}
+

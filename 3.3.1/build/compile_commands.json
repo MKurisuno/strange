@@ -1,0 +1,74 @@
+[
+{
+  "directory": "/home/kurisuno/GameProgrammingInC++/3.3.1/build",
+  "command": "/usr/bin/clang++-22 -isystem /usr/include/SDL2 -std=c++23 -Wall -O2 -g -o CMakeFiles/game331.dir/Actor.cpp.o -c /home/kurisuno/GameProgrammingInC++/3.3.1/Actor.cpp",
+  "file": "/home/kurisuno/GameProgrammingInC++/3.3.1/Actor.cpp",
+  "output": "/home/kurisuno/GameProgrammingInC++/3.3.1/build/CMakeFiles/game331.dir/Actor.cpp.o"
+},
+{
+  "directory": "/home/kurisuno/GameProgrammingInC++/3.3.1/build",
+  "command": "/usr/bin/clang++-22 -isystem /usr/include/SDL2 -std=c++23 -Wall -O2 -g -o CMakeFiles/game331.dir/Component.cpp.o -c /home/kurisuno/GameProgrammingInC++/3.3.1/Component.cpp",
+  "file": "/home/kurisuno/GameProgrammingInC++/3.3.1/Component.cpp",
+  "output": "/home/kurisuno/GameProgrammingInC++/3.3.1/build/CMakeFiles/game331.dir/Component.cpp.o"
+},
+{
+  "directory": "/home/kurisuno/GameProgrammingInC++/3.3.1/build",
+  "command": "/usr/bin/clang++-22 -isystem /usr/include/SDL2 -std=c++23 -Wall -O2 -g -o CMakeFiles/game331.dir/Game.cpp.o -c /home/kurisuno/GameProgrammingInC++/3.3.1/Game.cpp",
+  "file": "/home/kurisuno/GameProgrammingInC++/3.3.1/Game.cpp",
+  "output": "/home/kurisuno/GameProgrammingInC++/3.3.1/build/CMakeFiles/game331.dir/Game.cpp.o"
+},
+{
+  "directory": "/home/kurisuno/GameProgrammingInC++/3.3.1/build",
+  "command": "/usr/bin/clang++-22 -isystem /usr/include/SDL2 -std=c++23 -Wall -O2 -g -o CMakeFiles/game331.dir/InputComponent.cpp.o -c /home/kurisuno/GameProgrammingInC++/3.3.1/InputComponent.cpp",
+  "file": "/home/kurisuno/GameProgrammingInC++/3.3.1/InputComponent.cpp",
+  "output": "/home/kurisuno/GameProgrammingInC++/3.3.1/build/CMakeFiles/game331.dir/InputComponent.cpp.o"
+},
+{
+  "directory": "/home/kurisuno/GameProgrammingInC++/3.3.1/build",
+  "command": "/usr/bin/clang++-22 -isystem /usr/include/SDL2 -std=c++23 -Wall -O2 -g -o CMakeFiles/game331.dir/Main.cpp.o -c /home/kurisuno/GameProgrammingInC++/3.3.1/Main.cpp",
+  "file": "/home/kurisuno/GameProgrammingInC++/3.3.1/Main.cpp",
+  "output": "/home/kurisuno/GameProgrammingInC++/3.3.1/build/CMakeFiles/game331.dir/Main.cpp.o"
+},
+{
+  "directory": "/home/kurisuno/GameProgrammingInC++/3.3.1/build",
+  "command": "/usr/bin/clang++-22 -isystem /usr/include/SDL2 -std=c++23 -Wall -O2 -g -o CMakeFiles/game331.dir/Math.cpp.o -c /home/kurisuno/GameProgrammingInC++/3.3.1/Math.cpp",
+  "file": "/home/kurisuno/GameProgrammingInC++/3.3.1/Math.cpp",
+  "output": "/home/kurisuno/GameProgrammingInC++/3.3.1/build/CMakeFiles/game331.dir/Math.cpp.o"
+},
+{
+  "directory": "/home/kurisuno/GameProgrammingInC++/3.3.1/build",
+  "command": "/usr/bin/clang++-22 -isystem /usr/include/SDL2 -std=c++23 -Wall -O2 -g -o CMakeFiles/game331.dir/MoveComponent.cpp.o -c /home/kurisuno/GameProgrammingInC++/3.3.1/MoveComponent.cpp",
+  "file": "/home/kurisuno/GameProgrammingInC++/3.3.1/MoveComponent.cpp",
+  "output": "/home/kurisuno/GameProgrammingInC++/3.3.1/build/CMakeFiles/game331.dir/MoveComponent.cpp.o"
+},
+{
+  "directory": "/home/kurisuno/GameProgrammingInC++/3.3.1/build",
+  "command": "/usr/bin/clang++-22 -isystem /usr/include/SDL2 -std=c++23 -Wall -O2 -g -o CMakeFiles/game331.dir/Ship.cpp.o -c /home/kurisuno/GameProgrammingInC++/3.3.1/Ship.cpp",
+  "file": "/home/kurisuno/GameProgrammingInC++/3.3.1/Ship.cpp",
+  "output": "/home/kurisuno/GameProgrammingInC++/3.3.1/build/CMakeFiles/game331.dir/Ship.cpp.o"
+},
+{
+  "directory": "/home/kurisuno/GameProgrammingInC++/3.3.1/build",
+  "command": "/usr/bin/clang++-22 -isystem /usr/include/SDL2 -std=c++23 -Wall -O2 -g -o CMakeFiles/game331.dir/SpriteComponent.cpp.o -c /home/kurisuno/GameProgrammingInC++/3.3.1/SpriteComponent.cpp",
+  "file": "/home/kurisuno/GameProgrammingInC++/3.3.1/SpriteComponent.cpp",
+  "output": "/home/kurisuno/GameProgrammingInC++/3.3.1/build/CMakeFiles/game331.dir/SpriteComponent.cpp.o"
+},
+{
+  "directory": "/home/kurisuno/GameProgrammingInC++/3.3.1/build",
+  "command": "/usr/bin/clang++-22 -isystem /usr/include/SDL2 -std=c++23 -Wall -O2 -g -o CMakeFiles/game331.dir/CircleComponent.cpp.o -c /home/kurisuno/GameProgrammingInC++/3.3.1/CircleComponent.cpp",
+  "file": "/home/kurisuno/GameProgrammingInC++/3.3.1/CircleComponent.cpp",
+  "output": "/home/kurisuno/GameProgrammingInC++/3.3.1/build/CMakeFiles/game331.dir/CircleComponent.cpp.o"
+},
+{
+  "directory": "/home/kurisuno/GameProgrammingInC++/3.3.1/build",
+  "command": "/usr/bin/clang++-22 -isystem /usr/include/SDL2 -std=c++23 -Wall -O2 -g -o CMakeFiles/game331.dir/Asteroid.cpp.o -c /home/kurisuno/GameProgrammingInC++/3.3.1/Asteroid.cpp",
+  "file": "/home/kurisuno/GameProgrammingInC++/3.3.1/Asteroid.cpp",
+  "output": "/home/kurisuno/GameProgrammingInC++/3.3.1/build/CMakeFiles/game331.dir/Asteroid.cpp.o"
+},
+{
+  "directory": "/home/kurisuno/GameProgrammingInC++/3.3.1/build",
+  "command": "/usr/bin/clang++-22 -isystem /usr/include/SDL2 -std=c++23 -Wall -O2 -g -o CMakeFiles/game331.dir/Random.cpp.o -c /home/kurisuno/GameProgrammingInC++/3.3.1/Random.cpp",
+  "file": "/home/kurisuno/GameProgrammingInC++/3.3.1/Random.cpp",
+  "output": "/home/kurisuno/GameProgrammingInC++/3.3.1/build/CMakeFiles/game331.dir/Random.cpp.o"
+}
+]
