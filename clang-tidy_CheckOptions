@@ -17,5 +17,41 @@ CheckOptions:
   modernize-use-nullptr.NullMacros: 'NULL'
 
 #performance — パフォーマンス関連
+CheckOptions: 
+  performance-inefficient-string-concatenation. Abs oluteValueInRangeCheck: false
+
+# .clangd  サンプルコード
+Diagnostics:
+  ClangTidy:
+    CheckOptions:
+      readability-identifier-naming.TypeNameLength: '0'
+      readability-identifier-naming.VariableNameLength: '0'
+      readability-identifier-naming.FunctionNameLength: '0'
+      readability-identifier-naming.ClassNameLength: '0'
+    Add:
+      - modernize-use-auto
+      - modernize-use-nullptr
+      - readability-*
+    Remove:
+      - modernize-use-trailing-return-type
+      - modernize-use-nodiscard
+      - readability-magic-numbers
+      - readability-else-after-return
+
+
+#.clang-tidy のサンプル
+---
+Checks: >
+  modernize-*,
+  readability-*,
+  -modernize-use-trailing-return-type,
+  -modernize-use-nodiscard,
+  -readability-magic-numbers,
+  -readability-else-after-return
+
 CheckOptions:
-  performance-inefficient-string-concatenation.AbsoluteValueInRangeCheck: false
+  readability-identifier-naming.TypeNameLength: '0'
+  readability-identifier-naming.VariableNameLength: '0'
+  readability-identifier-naming.FunctionNameLength: '0'
+  readability-identifier-naming.ClassNameLength: '0'
+
