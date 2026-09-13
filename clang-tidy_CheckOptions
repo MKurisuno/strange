@@ -1,0 +1,21 @@
+#readability 
+#-identifier-naming 
+#— 変数や関数の命名規則を設定
+CheckOptions:
+  readability-identifier-naming.VariableCase: lower_case
+  readability-identifier-naming.FunctionCase: camelCase
+  readability-identifier-naming.ClassCase: PascalCase
+
+#cppcoreguidelines — C++ コア ガイドラインの有効化
+CheckOptions:
+  cppcoreguidelines-pro-bounds-pointer-arithmetic.Enabled: true
+  cppcoreguidelines-init-variables.VariableDeclarations: 'true'
+
+#modernize — C++ 標準の最新化
+CheckOptions:
+  modernize-use-auto.MinTypeNameLength: 5
+  modernize-use-nullptr.NullMacros: 'NULL'
+
+#performance — パフォーマンス関連
+CheckOptions:
+  performance-inefficient-string-concatenation.AbsoluteValueInRangeCheck: false
