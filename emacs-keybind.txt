@@ -7,7 +7,10 @@
  ;; C-h-.  : Display-local-help  
  ;; C-c i  : Completion at point  
  ;; C-c a  : Eglot-Rename
-  
+
+## Eldoc-box 
+ ;; C-c d   : eldoc-box-help-at-point  
+
 ## consult  
  ;; C-r       : consult-history  (minibuffer-mode-map)  
  ;; C-s       : consult-line     c/consult-line
@@ -48,3 +51,4 @@
  ;; M-U      : puni-splice-killing-backward  
  ;; M-z      : puni-squeeze            ; foo (bar) baz -> { + C-y + } -> foo {bar} baz  
   
+
