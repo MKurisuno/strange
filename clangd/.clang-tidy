@@ -1,13 +1,20 @@
 ---
 Checks: >
   modernize-*,
-  #  readability-*,
-  performance-*,
-  bugprone-*,
+  readability-*,
   -modernize-use-trailing-return-type,
   -modernize-use-nodiscard,
-  #  -readability-magic-numbers,
-  # -readability-else-after-return
+  -readability-magic-numbers,
+  -readability-else-after-return
+
+CheckOptions:
+  readability-identifier-length.MinimumVariableNameLength: '2'
+  readability-identifier-length.MinimumParameterNameLength: '2'
+  readability-identifier-length.MinimumLoopCounterNameLength: '1'
+  #readability-identifier-naming.TypeCase: CamelCase
+  #readability-identifier-naming.ClassCase: CamelCase
+  #readability-identifier-naming.VariableCase: lower_case
+  #readability-identifier-naming.FunctionCase: lower_case  
 WarningsAsErrors: ''
 #WarningsAsErrors: 'bugprone-*,performance-*'
 #HeaderFilterRegex: '(src|include)/.*'

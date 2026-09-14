@@ -18,8 +18,15 @@ Diagnostics:
       - modernize-use-nodiscard
       - readability-magic-numbers
       - readability-else-after-return
-#    CheckOptions:
-
+      - readability-identifier-length
+    CheckOptions:
+      readability-identifier-length.MinimumVariableNameLength: '2'
+      readability-identifier-length.MinimumParameterNameLength: '2'
+      readability-identifier-length.MinimumLoopCounterNameLength: '1'
+      #readability-identifier-naming.TypeCase: CamelCase
+      #readability-identifier-naming.ClassCase: CamelCase
+      #readability-identifier-naming.VariableCase: lower_case
+      #readability-identifier-naming.FunctionCase: lower_case
 Completion:
   AllScopes: Yes
   ArgumentLists: FullPlaceholders
