@@ -12,8 +12,6 @@
 ;;
 ;;
 
-
-
 ;;; Code:
 (when (version< emacs-version "30.0")
   (error "This requires Emacs 30.0 and above!"))
@@ -45,8 +43,7 @@
   
   (leaf leaf-keywords
     :ensure t
-    :init
-    (leaf hydra :ensure t)
+    :init    (leaf hydra :ensure t)
     (leaf el-get :ensure t)
     (leaf blackout :ensure t)
     :config
@@ -61,6 +58,15 @@
   :doc "tools for customizing Emacs and Lisp packages"
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
 
+
+
+;;
+;;   early-init.el
+;;;20 ;(setq make-backup-files nil)
+;;;21 ;(setq auto-save-default nil)
+;;;22 ;(setq auto-save-list-file-prefix nil)
+;;;23 (setq create-lockfiles nil)
+;;
 (leaf files
   :doc "file input and output commands for Emacs"
   :global-minor-mode auto-save-visited-mode
@@ -70,10 +76,11 @@
             (version-control . t)
             (delete-old-versions . t)
             (auto-save-visited-interval . 1)))
-
 (leaf startup
   :doc "process Emacs shell arguments"
   :custom `((auto-save-list-file-prefix . ,(locate-user-emacs-file "backup/.saves-"))))
+
+
 
 (leaf savehist
   :doc "Save minibuffer history"
@@ -241,7 +248,6 @@
          ;; C-M-s f   : affe-find
   )
 
-
 (leaf affe
   :doc "Asynchronous Fuzzy Finder for Emacs"
   :ensure t
@@ -256,8 +262,6 @@
   :custom ((completion-styles . '(orderless))
            (completion-category-defaults . nil)
            (completion-category-overrides . '((file (styles partial-completion))))))
-
-
 
 (leaf embark
   :ensure t
@@ -378,7 +382,6 @@
           ("d" magit-diff-working-tree)
           ("M-=" c/git-commit-a)))
 
-
 (leaf *treesit
   :custom ((treesit-font-lock-level . 4)
 	   )
@@ -443,8 +446,6 @@
   (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.95))
 )
 
-
-
 ;;
 ;; eglot
 ;;
@@ -506,9 +507,6 @@
 (leaf rg
   :ensure t)
 
-
-
-
 (leaf markdown-mode
   :ensure t
   :mode
@@ -533,7 +531,6 @@
    ("C-c C-t" . markdown-toc-generate-toc)
    ("C-c C-p" . markdown-preview))
   )
-
 
 ;;
 ;;
@@ -632,24 +629,18 @@
 			  (display-line-numbers-mode 0)))
   )
 
-
 (leaf treemacs-evil
   :after (treemacs evil)
   :ensure t)
-
 (leaf treemacs-projectile
   :after (treemacs projectile)
   :ensure t)
-
 (leaf treemacs-icons-dired
   :hook (dired-mode . treemacs-icons-dired-enable-once)
   :ensure t)
-
 (leaf treemacs-magit
   :after (treemacs magit)
   :ensure t)
-
-
 
 (defun my/treemacs-layout ()
   "左側にウィンドウがなければ左右分割し、右側を上下に分割する."
@@ -668,14 +659,12 @@
 (defun my/treemacs-before (&rest _args)
   "Treemacs の起動前にウィンドウレイアウトを設定する."
   (my/treemacs-layout))
-
 (with-eval-after-load 'treemacs
   (advice-add #'treemacs :before #'my/treemacs-before))
 
-
-
-;; リガチャを有効にする
-
+;;
+;;  リガチャを有効にする   require Jetbrains Mono
+;;
 (let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
                (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
                (36 . ".\\(?:>\\)")
@@ -705,14 +694,6 @@
   (dolist (char-regexp alist)
     (set-char-table-range composition-function-table (car char-regexp)
                           `([,(cdr char-regexp) 0 font-shape-gstring]))))
-
-
-
-
-
-
-
-
 
 
 ;;;

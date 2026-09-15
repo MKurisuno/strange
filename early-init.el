@@ -17,9 +17,9 @@
 ;;(setq inhibit-startup-echo-area-message t) ;Erase strings on initial *scratch* buffer
 ;;(setq initial-scratch-message "")
 
-(setq make-backup-files nil)
-(setq auto-save-default nil)
-(setq auto-save-list-file-prefix nil)
+;;(setq make-backup-files nil)
+;;(setq auto-save-default nil)
+;;(setq auto-save-list-file-prefix nil)
 (setq create-lockfiles nil)
 
 ;;(setq gc-cons-threshold (* 10 128 1024 1024))
