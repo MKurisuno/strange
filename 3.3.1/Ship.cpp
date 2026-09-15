@@ -1,12 +1,13 @@
 #include "Ship.h"
 #include "Game.h"
+#include "Laser.h"
 #include "SpriteComponent.h"
 #include "InputComponent.h"
 #include <SDL2/SDL_scancode.h>
 
 Ship::Ship(Game* game )
 :Actor(game)
-//,mLaserCooldown(0.0f)
+,mLaserCooldown(0.0F)
 {
 
 	//Create Sprite Component
@@ -19,7 +20,7 @@ Ship::Ship(Game* game )
 	ic->SetBackKey(SDL_SCANCODE_S);
 	ic->SetClockwiseKey(SDL_SCANCODE_A);
 	ic->SetCounterClockwiseKey(SDL_SCANCODE_D);
-	ic->SetMaxForwardSpeed(300.0f);
+	ic->SetMaxForwardSpeed(300.0F);
 	ic->SetMaxAngularSpeed(Math::TwoPi);
 }
 
@@ -29,10 +30,12 @@ void Ship::UpdateActor(float deltatime)
 }
 
 void Ship::ActorInput( const uint8_t* keyState){
-	if(keyState[SDL_SCANCODE_SPACE] && mLaserCooldown <= 0.0f)	{
-	
-
-		mLaserCooldown = 0.5f;
+	if((keyState[SDL_SCANCODE_SPACE] != 0) && (mLaserCooldown <= 0.0F) )	{
+		auto* laser = new Laser(GetGame());
+		laser->SetPosition(GetPosition());
+		laser->SetRotation(GetRotation());
+		mLaserCooldown = 0.5F;
 	}
 
 }
+

@@ -233,13 +233,13 @@ SDL_Texture* Game::GetTexture(const std::string &filename) {
   } else {
     // Load from file.
     SDL_Surface *surf = IMG_Load(filename.c_str());
-    if (surf != nullptr) {
+    if (surf == nullptr) {
       SDL_Log("Failed to Load texture file %s", filename.c_str());
       return nullptr;
     }
     tex = SDL_CreateTextureFromSurface(mRenderer, surf);
     SDL_FreeSurface(surf);
-    if (tex != nullptr) {
+    if (tex == nullptr) {
       SDL_Log("Faild to convert surface to texture for %s", filename.c_str());
       return nullptr;
     }

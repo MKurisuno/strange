@@ -21,7 +21,7 @@ void Random::Seed(unsigned int seed)
 
 float Random::GetFloat()
 {
-	return GetFloatRange(0.0f, 1.0f);
+	return GetFloatRange(0.0F, 1.0F);
 }
 
 float Random::GetFloatRange(float min, float max)

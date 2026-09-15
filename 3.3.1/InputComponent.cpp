@@ -2,7 +2,6 @@
 #include "Actor.h"
 #include "MoveComponent.h"
 #include <SDL2/SDL_scancode.h>
-#include <cstddef>
 #include <cstdint>
 
 // InputComponent(Actor* owner)
@@ -27,20 +26,20 @@ InputComponent::InputComponent(class Actor *owner)
 
 void InputComponent::ProcessInput(const uint8_t *keyState) {
 
-  float forwordSpeed = 0.0f;
-  if (keyState[mForwardKey]) {
+  float forwordSpeed = 0.0F;
+  if (keyState[mForwardKey] != 0) {
       forwordSpeed += mMaxForwardSpeed;
-  }if (keyState[mBackKey]) {
+  }if (keyState[mBackKey] != 0) {
        forwordSpeed -= mMaxForwardSpeed;
    }
   // Declared in class MoveComponent.
   // SetForwardSpeed(float speed) { mForwardSpeed = speed; }
   SetForwardSpeed(forwordSpeed); 
   
-  float angularSpeed = 0.0f;
-  if (keyState[mClockwiseKey]) {
+  float angularSpeed = 0.0F;
+  if (keyState[mClockwiseKey] != 0) {
       angularSpeed += mMaxAngularSpeed;
-  }if (keyState[mCounterClockwiseKey]) {
+  }if (keyState[mCounterClockwiseKey] != 0) {
        angularSpeed -= mMaxAngularSpeed;
    }
   // Declared in class MoveComponent.

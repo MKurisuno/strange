@@ -30,6 +30,7 @@ set (SOURCES
   CircleComponent.cpp
   Asteroid.cpp
   Random.cpp
+  Laser.cpp
 )
 
 

@@ -8,7 +8,8 @@
 
 #include "Game.h"
 
-int main(int argc, char** argv)
+//int main(int argc, char** argv)
+auto main() -> int 
 {
 	Game game;
 	bool success = game.Initialize();

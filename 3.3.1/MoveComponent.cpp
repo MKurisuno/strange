@@ -11,8 +11,8 @@
 
 MoveComponent::MoveComponent(class Actor* owner, int updateOrder)
 :Component(owner, updateOrder)
-,mAngularSpeed(0.0f)
-,mForwardSpeed(0.0f)
+,mAngularSpeed(0.0F)
+,mForwardSpeed(0.0F)
 {
 	
 }
@@ -32,11 +32,11 @@ void MoveComponent::Update(float deltaTime)
 		pos += mOwner->GetForward() * mForwardSpeed * deltaTime;
 		
 		// (Screen wrapping code only for asteroids)
-		if (pos.x < 0.0f) { pos.x = 1022.0f; }
-		else if (pos.x > 1024.0f) { pos.x = 2.0f; }
+		if (pos.x < 0.0F) { pos.x = 1022.0F; }
+		else if (pos.x > 1024.0F) { pos.x = 2.0F; }
 
-		if (pos.y < 0.0f) { pos.y = 766.0f; }
-		else if (pos.y > 768.0f) { pos.y = 2.0f; }
+		if (pos.y < 0.0F) { pos.y = 766.0F; }
+		else if (pos.y > 768.0F) { pos.y = 2.0F; }
 
 		mOwner->SetPosition(pos);
 	}
