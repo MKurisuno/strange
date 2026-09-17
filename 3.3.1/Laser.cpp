@@ -26,15 +26,16 @@ void Laser::UpdateActor(float deltatime){
 	if(mDeathtimer <= 0.0F){
 		SetState(EDead);
 	}
-	else { // collision 
-		for(auto* ast : GetGame()->GetAsteroids()){
-			if(Intersect(*mCircle,*(ast->GetCircle()) ))
-				{
-					SetState(EDead);
-					ast->SetState(EDead);
-					break;
-				}
-		}
+	else{ // collision 
+		for(auto* ast : GetGame()->GetAsteroids())
+			{
+				if(Intersect(*this->mCircle, *ast->GetCircle() ))
+					{
+						this->SetState(EDead);
+						ast->SetState(EDead);
+						break;
+					}
+			}
+		
 	}
-
 }

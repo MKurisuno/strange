@@ -1,143 +1,225 @@
+// ----------------------------------------------------------------
+// From Game Programming in C++ by Sanjay Madhav
+// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
+// 
+// Released under the BSD License
+// See LICENSE in root directory for full details.
+// ----------------------------------------------------------------
+
 #include "Game.h"
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_surface.h>
-#include <SDL2/SDL_timer.h>
-#include <SDL_audio.h>
-#include <SDL_video.h>
+#include "SDL2/SDL_image.h"
 #include <algorithm>
 #include "Actor.h"
-#include "Asteroid.h"
-#include "Math.h"
 #include "SpriteComponent.h"
 #include "Ship.h"
+#include "Asteroid.h"
+#include "Random.h"
 
 Game::Game()
-: mWindow(nullptr), mRenderer(nullptr), mIsRunning(true),mUpdatingActors(false)
+    : mWindow(nullptr), mRenderer(nullptr), mIsRunning(true),mUpdatingActors(false)
+ {}
+
+
+bool Game::Initialize()
 {
-	
-}
-
-
-bool Game::Initialize() {
-	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    mWindow = SDL_CreateWindow("GameProgramingC++ 3.3.1",
-                               100, 100, 1024, 768, 0);
-    mRenderer = SDL_CreateRenderer(mWindow, -1,
-								   SDL_RENDERER_ACCELERATED |
-									   SDL_RENDERER_PRESENTVSYNC);
-
-    IMG_Init(IMG_INIT_PNG);
-    // Error
-    if (SDL_GetError() != nullptr) {
-		SDL_Log("SDL_Error: %s.", SDL_GetError());
+	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) != 0)
+	{
+        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+        return false;
 	}
-    //Romdom::Init();
-    LoadData();
-    mTicksCount = SDL_GetTicks64();
-    SDL_Log("Game::Initialize mTickCount = %ld.", mTicksCount);
-    return true;
+
+        mWindow = SDL_CreateWindow("GameProgramminginC++ (Chap.3)",
+                                   100, 100, 1024, 768, 0);
+	if (mWindow == nullptr)
+	{
+		SDL_Log("Failed to create window: %s", SDL_GetError());
+		return false;
+	}
+
+	mRenderer = SDL_CreateRenderer(mWindow, -1,
+				       SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	if (mRenderer == nullptr)
+	{
+		SDL_Log("Failed to create renderer: %s", SDL_GetError());
+		return false;
+	}
+	
+	if (IMG_Init(IMG_INIT_PNG) == 0)
+	{
+		SDL_Log("Unable to initialize SDL_image: %s", SDL_GetError());
+		return false;
+	}
+
+	Random::Init();
+
+	LoadData();
+
+	mTicksCount = SDL_GetTicks();
+	
+	return true;
 }
 
-
-void Game::RunLoop() {
-  //mIsRunning is initialize to be true at Game::Game()
-  while (mIsRunning) {
-	ProcessInput();
-    UpdateGame();
-    GenerateOutput();
-  }
+void Game::RunLoop()
+{
+	while (mIsRunning)
+	{
+		ProcessInput();
+		UpdateGame();
+		GenerateOutput();
+	}
 }
 
-void Game::Shutdown() {
-	//	UnloadData();
-    IMG_Quit();
-    SDL_DestroyRenderer(mRenderer);
-    SDL_DestroyWindow(mWindow);
-    SDL_Quit();
-
-}
-
-void Game::ProcessInput() {
+void Game::ProcessInput()
+{
 	SDL_Event event;
-    while (SDL_PollEvent(&event) != 0) {
-		switch (event.type) {
-		case SDL_QUIT:
-			mIsRunning = false;
-			break;
-		default:
-			break;
+	while (SDL_PollEvent(&event) != 0)
+	{
+		switch (event.type)
+		{
+			case SDL_QUIT:
+				mIsRunning = false;
+				break;
 		}
-    }
+	}
 	
-    const Uint8* keyState = SDL_GetKeyboardState(nullptr);
-    if (keyState[SDL_SCANCODE_ESCAPE] != 0) {
+	const Uint8* keyState = SDL_GetKeyboardState(nullptr);
+	if (keyState[SDL_SCANCODE_ESCAPE] != 0)
+	{
 		mIsRunning = false;
-    }
-	
-    //Actor ProcessInput
-    mUpdatingActors = true;
-    for (auto* actor : mActors) {
-		actor->ProcessInput(keyState);
-		// Actor::ProcessInput(float deltatime)
-		//   for( auto comp : mComponents){ comp->ProcessInput()}
-		//   ActorInput()
-    }
-    mUpdatingActors = false;
-    
-}
-
-
-void Game::AddActor(Actor* actor) {
-  // If we're updating actors, need to add to pending
-  //mUpdatingActors is initialized to be false at Game::Game()
-  if (mUpdatingActors)
-	  {
-		  mPendingActors.emplace_back(actor);
-	  }
-  else
-	  {
-          mActors.emplace_back(actor);
-	  }
-}
-
-void Game::RemoveActor(Actor *actor) {
-	// Is it in pending Actor
-	//    auto iter = std::find(mPendingActors.begin(),
-	//                          mPendingActors.end(),
-	//                          actor);
-	auto iter = std::ranges::find(mPendingActors, actor);
-	// Swap to end of vector and pop off (avoid erase copies)
-	if (iter != mPendingActors.end()) {
-		std::iter_swap(iter, mPendingActors.end() - 1);
-		mPendingActors.pop_back();
 	}
-    // Is it in actors
-    //iter = std::find(mActors.begin(), mActors.end(), actor);
-	iter = std::ranges::find(mActors, actor);
-	// Swap to end of vector and pop off (avoid erase copies)
-    if (iter != mActors.end()) {
-		std::iter_swap(iter, mActors.end());
-		mActors.pop_back();
-    }
+
+	mUpdatingActors = true;
+	for (auto* actor : mActors)
+	{
+		actor->ProcessInput(keyState);
+	}
+	mUpdatingActors = false;
 }
 
-void Game::AddSprite(SpriteComponent *sprite) {
-	int myDrawOrder = sprite->GetUpdateOrder();
+void Game::UpdateGame()
+{
+	// Compute delta time
+	// Wait until 16ms has elapsed since last frame
+	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
+		{
+			SDL_Delay(1);
+		}
 
-	auto iter = mSprites.begin();
-	for (; iter != mSprites.end(); ++iter) {
-		if (myDrawOrder < (*iter)->GetDrawOrder()) {
-			break;
+	float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0F;
+	//if (deltaTime > 0.05F) { deltaTime = 0.05F;}
+	deltaTime = std::min(deltaTime, 0.05F);
+	mTicksCount = SDL_GetTicks();
+
+	// Update all actors
+	mUpdatingActors = true;
+	for (auto* actor : mActors)
+	{
+		actor->Update(deltaTime);
+	}
+	mUpdatingActors = false;
+
+	// Move any pending actors to mActors
+	for (auto* pending : mPendingActors)
+	{
+		mActors.emplace_back(pending);
+	}
+	mPendingActors.clear();
+
+	// Add any dead actors to a temp vector
+	std::vector<Actor*> deadActors;
+	for (auto* actor : mActors)
+	{
+		if (actor->GetState() == Actor::EDead)
+		{
+			deadActors.emplace_back(actor);
 		}
 	}
-	mSprites.insert(iter,sprite);
+
+	// Delete dead actors (which removes them from mActors)
+	for (auto* actor : deadActors)
+	{
+		delete actor;
+	}
 }
 
-void Game::RemoveSprite(SpriteComponent *sprite ) {
-	//auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
-	auto iter = std::ranges::find(mSprites, sprite);
-	mSprites.erase(iter);
+void Game::GenerateOutput()
+{
+	SDL_SetRenderDrawColor(mRenderer, 220, 220, 220, 255);
+	SDL_RenderClear(mRenderer);
+	
+	// Draw all sprite components
+	for (auto* sprite : mSprites)
+	{
+		sprite->Draw(mRenderer);
+	}
+
+	SDL_RenderPresent(mRenderer);
+}
+
+void Game::LoadData()
+{
+	// Create player's ship
+	mShip = new Ship(this);
+	mShip->SetPosition(Vector2(512.0F, 384.0F));
+	mShip->SetRotation(Math::PiOver2);
+
+	// Create asteroids
+	const int numAsteroids = 20;
+	for (int i = 0; i < numAsteroids; i++)
+	{
+		new Asteroid(this);
+	}
+}
+
+void Game::UnloadData()
+{
+	// Delete actors
+	// Because ~Actor calls RemoveActor, have to use a different style loop
+	while (!mActors.empty())
+	{
+		delete mActors.back();
+	}
+
+	// Destroy textures
+	for (auto i : mTextures)
+	{
+		SDL_DestroyTexture(i.second);
+	}
+	mTextures.clear();
+}
+
+SDL_Texture* Game::GetTexture(const std::string& fileName)
+{
+	SDL_Texture* tex = nullptr;
+    // Is the texture already in the map?
+    // In Game.h,  std::unordered_map<std::string, SDL_Texture*> mTextures;  
+	auto iter = mTextures.find(fileName);
+	if (iter != mTextures.end())
+	{
+		tex = iter->second;
+	}
+	else
+	{
+		// Load from file
+		SDL_Surface* surf = IMG_Load(fileName.c_str());
+		if (surf == nullptr)
+		{
+			SDL_Log("Failed to load texture file %s", fileName.c_str());
+			return nullptr;
+		}
+
+		// Create texture from surface
+		tex = SDL_CreateTextureFromSurface(mRenderer, surf);
+		SDL_FreeSurface(surf);
+		if (tex == nullptr)
+		{
+			SDL_Log("Failed to convert surface to texture for %s", fileName.c_str());
+			return nullptr;
+		}
+
+		mTextures.emplace(fileName.c_str(), tex);
+	}
+	return tex;
 }
 
 void Game::AddAsteroid(Asteroid* ast)
@@ -147,104 +229,83 @@ void Game::AddAsteroid(Asteroid* ast)
 
 void Game::RemoveAsteroid(Asteroid* ast)
 {
+	//auto iter = std::find(mAsteroids.begin(),mAsteroids.end(), ast);
 	auto iter = std::ranges::find(mAsteroids, ast);
-	if(iter != mAsteroids.end())
-		{
-			mAsteroids.erase(iter);
-		}
+	if (iter != mAsteroids.end())
+	{
+		mAsteroids.erase(iter);
+	}
 }
 
-void Game::UpdateGame() {
-	while (!SDL_TICKS_PASSED(SDL_GetTicks64(), mTicksCount + 16)) {
-		SDL_Delay(1);
-	}
-
-	//float  deltatime = static_cast<float>( (SDL_GetTicks64() - mTicksCount) / 1000.0f );
-	const Uint64 elapsedMilliseconds = SDL_GetTicks64() - mTicksCount;
-	float deltatime = static_cast<float>(elapsedMilliseconds) / 1000.0F;
-
-	//	if (deltatime >  0.05F) { deltatime = 0.05F;}
-	deltatime = std::min(deltatime, 0.05F);
-
-	mTicksCount = SDL_GetTicks64();
-	
-	mUpdatingActors = true;
-	for (auto* actor : mActors) {
-		//Actor::Update(){ UpdateComponent(); UpDateActor();}
-		actor->Update(deltatime);
-	}
-	mUpdatingActors = false;
-	
-	for (auto* pending : mPendingActors) {
-		mActors.emplace_back(pending)  ;
-	}
-	mPendingActors.clear();
-	
-	std::vector<Actor*> deadActors;
-	for (auto* actor : mActors) {
-		if (actor->GetState() == Actor::EDead) {
-			deadActors.emplace_back(actor)  ;
-		}
-	}
-	for (auto* actor : deadActors) {
-		delete actor;
-	}
-
-}
-
-
-
-void Game::GenerateOutput() 
+void Game::Shutdown()
 {
-	SDL_SetRenderDrawColor(mRenderer, 220,220,220,255);
-	SDL_RenderClear(mRenderer);
-	for(auto* sprite : mSprites){
-		sprite->Draw(mRenderer);
+	UnloadData();
+	IMG_Quit();
+	SDL_DestroyRenderer(mRenderer);
+	SDL_DestroyWindow(mWindow);
+	SDL_Quit();
+}
+
+void Game::AddActor(Actor* actor)
+{
+	// If we're updating actors, need to add to pending
+	if (mUpdatingActors)
+	{	// Update中のとき　ActorをｍPendingActorsへ一時待機
+		mPendingActors.emplace_back(actor);
 	}
-	SDL_RenderPresent(mRenderer);
+	else
+	{
+		mActors.emplace_back(actor);
+	}
 }
 
+void Game::RemoveActor(Actor* actor)
+{
+	// Is it in pending actors?
+	//auto iter = std::find(mPendingActors.begin(), mPendingActors.end(), actor);
+	auto iter = std::ranges::find(mPendingActors,actor);
+	if (iter != mPendingActors.end())
+	{
+		// Swap to end of vector and pop off (avoid erase copies)
+		std::iter_swap(iter, mPendingActors.end() - 1);
+		mPendingActors.pop_back();
+	}
 
+	// Is it in actors?
+	//iter = std::find(mActors.begin(), mActors.end(), actor);
+	iter = std::ranges::find(mActors, actor);
+	if (iter != mActors.end())
+	{
+		// Swap to end of vector and pop off (avoid erase copies)
+		std::iter_swap(iter, mActors.end() - 1);
+		mActors.pop_back();
+	}
+}
 
-void Game::LoadData() {
-	// Create player's ship
-	mShip = new Ship(this);
-	mShip->SetPosition(Vector2(512.0F, 384.0F));
-	mShip->SetRotation(Math::PiOver2);
-	
-	//Create asteroids
-	const int numAsteriods = 20;
-	for(int i = 0; i < numAsteriods; i++)
+void Game::AddSprite(SpriteComponent* sprite)
+{
+	// Find the insertion point in the sorted vector
+	// (The first element with a higher draw order than me)
+	int myDrawOrder = sprite->GetDrawOrder();
+	auto iter = mSprites.begin();
+	for ( ;
+		iter != mSprites.end();
+		++iter)
+	{
+		if (myDrawOrder < (*iter)->GetDrawOrder())
 		{
-			new Asteroid(this);
+			break;
 		}
+	}
+
+	// Inserts element before position of iterator
+	mSprites.insert(iter, sprite);
 }
 
-
-
-
-// mTextures is decleared in Game.h which is
-//                    std:unordered_map<std::string,SDL_Texture>
-SDL_Texture* Game::GetTexture(const std::string &filename) {
-	SDL_Texture *tex = nullptr;
-  auto iter = mTextures.find(filename);
-  if (iter != mTextures.end()) {
-      return iter->second;
-  } else {
-    // Load from file.
-    SDL_Surface *surf = IMG_Load(filename.c_str());
-    if (surf == nullptr) {
-      SDL_Log("Failed to Load texture file %s", filename.c_str());
-      return nullptr;
-    }
-    tex = SDL_CreateTextureFromSurface(mRenderer, surf);
-    SDL_FreeSurface(surf);
-    if (tex == nullptr) {
-      SDL_Log("Faild to convert surface to texture for %s", filename.c_str());
-      return nullptr;
-    }
-      mTextures.emplace(filename.c_str(),tex);
-  }
-  return tex;
+void Game::RemoveSprite(SpriteComponent* sprite)
+{
+	// (We can't swap because it ruins ordering)
+	//auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
+	auto iter = std::ranges::find(mSprites, sprite);
+	mSprites.erase(iter);
 }
-

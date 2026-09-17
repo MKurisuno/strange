@@ -1,13 +1,14 @@
 #include "Actor.h"
 #include "Component.h"
 #include "Game.h"
+#include "Math.h"
 #include <algorithm>
 #include <cstdint>
 #include <sys/types.h>
 
 
 Actor::Actor(Game *game)
-    : mState(EActive), mPosition(Vector2::Zero), mScale(1.0f), mRotation(0.0f),
+    : mState(EActive), mPosition(Vector2::Zero), mScale(1.0F), mRotation(0.0F),
 		mGame(game)
 {
 	mGame->AddActor(this);
@@ -27,13 +28,12 @@ void Actor::Update(float deltatime) {
 }
 
 void Actor::UpdateComponents(float deltatime) {
-	for(auto comp :mComponents){
+	for(auto* comp :mComponents){
 		comp->Update(deltatime);
 	}
 }
 
 void Actor::UpdateActor(float deltatime) {
-	
   
 }
 
@@ -57,7 +57,7 @@ void Actor::AddComponent(Component *component) {
 }
 
 void Actor::RemoveComponent(Component *component) {
-	auto iter = std::find(mComponents.begin(), mComponents.end(), component);
+	auto iter = std::ranges::find(mComponents, component);
     if (iter != mComponents.end()) {
 		mComponents.erase(iter);
     }
@@ -68,15 +68,16 @@ void Actor::RemoveComponent(Component *component) {
 //    const Uint8* keyState = SDL_GetKeyboardState(NULL);
 // Game::ProcessInput call actor->ProcessInput
 //    for( auto actor : mActor ){ actor->ProcessInput(keyState);}
+
 void Actor::ProcessInput(const uint8_t *keyState) {
-	if (mState == EActive) {
-		for (auto comp : mComponents) {
+	if (this->mState == EActive) {
+		for (auto* comp : mComponents) {
 			comp->ProcessInput(keyState);
 		}
 		ActorInput(keyState);
 	}
 }
 
-void Actor::ActorInput(const uint8_t *keyState) {
+void Actor::ActorInput(const uint8_t* keyState) {
   
 }

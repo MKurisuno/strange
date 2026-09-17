@@ -2,7 +2,8 @@
 #include <vector>
 #include "Math.h"
 #include <cstdint>
-#include "Component.h"
+#include <memory>
+
 
 class Actor
 {

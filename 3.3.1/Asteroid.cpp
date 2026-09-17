@@ -29,7 +29,7 @@ mCircle = new CircleComponent(this);
 mCircle->SetRadius(40.0F);
 
 //Addto mAsteroids 
-game->AddAsteroid(this);
+GetGame()->AddAsteroid(this);
 
 }
 

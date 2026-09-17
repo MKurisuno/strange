@@ -11,6 +11,8 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
+#include <memory>
+#include "Actor.h"
 
 class Game
 	{
@@ -44,6 +46,7 @@ class Game
 		//	
 		// All the actors in the game
 		std::vector<class Actor*> mActors;
+		//std::vector<std::unique_ptr<Actor>>  mActors;
 		// Any pending actors
 		std::vector<class Actor*> mPendingActors;
 		//	
