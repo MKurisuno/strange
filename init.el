@@ -43,7 +43,8 @@
   
   (leaf leaf-keywords
     :ensure t
-    :init    (leaf hydra :ensure t)
+    :init
+    (leaf hydra :ensure t)
     (leaf el-get :ensure t)
     (leaf blackout :ensure t)
     :config
@@ -355,6 +356,9 @@
 (leaf yasnippet
   :ensure t
   :global-minor-mode   yas-global-mode )
+(leaf yasnippet-snippets
+  :ensure t
+  :after yasnippet)
 
 (leaf magit
   :when (version<= "25.1" emacs-version)
@@ -435,7 +439,7 @@
   :ensure t
   :bind  (("C-c d" . eldoc-box-help-at-point))
 ;;  :hook  ((eglot-managed-mode-hook . (lambda () (eldoc-box-hover-at-point-mode 1) )))
-  :custom ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 120))
+;;  :custom ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 120))
   :custom-face
   (eldoc-box-body . ' ((t (:background "#282A36" :foreground "#f8f8f2" :family "JetBrains Mono" :height 0.90 :weight normal :slant normal :alpha 70))))
   (eldoc-box-border . '((t (:background "#44475a" ))))
@@ -444,6 +448,8 @@
   ;;(setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88)
   ;HoverからのEchoの一行目の文字の大きさを調節
   (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.95))
+  (with-eval-after-load 'eldoc-box (setq eldoc-box-max-pixel-width 600 eldoc-box-max-pixel-height 120)
+  (setf (alist-get 'min-width eldoc-box-frame-parameters) 40 (alist-get 'min-height eldoc-box-frame-parameters) 5))
 )
 
 ;;
