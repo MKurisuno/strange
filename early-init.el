@@ -38,10 +38,6 @@
 (setq vc-follow-symlinks t)
 
 
-;; 基本的には使わない
-;;(define-key key-translation-map [?\C-h] [?\C-?])
-
-
 
 
 ;;
@@ -77,13 +73,12 @@
 
 
 
-
-
-
 ;; 
 ;; Dracula theme
 ;;               github dracula/emacs
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+;; 起動時間短縮および起動時の不要なWindow作成を無効にするためにearly-initに記載
+;;
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes") ;;<--指定が必要
 (load-theme 'dracula t)
 
 ;; Don't change the font size for some headings and titles (default t)
@@ -107,5 +102,19 @@
                       :foreground "#9aa8c7"))
 
 (setq resize-mini-windows nil)
+
+
+;; Windows11 MSYS2 の設定 絶対PATHが無難
+(when (eq system-type 'windows-nt)
+  (let ((paths '("C:/msys64/ucrt64/bin" "C:/msys64/usr/bin")))
+    (dolist (path paths)
+      (when (;FIXME: le-directory-p path)
+	     (add-to-list 'exec-path path)
+	     ((setq )etenv "PATH" (concat path path-separator (getenv "PATH")))))))
+  )
+
+
 (provide 'early-init)
 ;;; early-init.el ends here
+
+

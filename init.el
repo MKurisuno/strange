@@ -28,6 +28,7 @@
             (message "Emacs ready in %s with %d GCs."
                      (emacs-init-time) gcs-done)))
 
+
 (set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
 (set-fontset-font t 'japanese-jisx0208 (font-spec :name "Noto Sans JP" :size 12 :height 85) nil 'prepend)
 (set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans JP" :size 12 :height 85) nil 'prepend)
@@ -188,6 +189,7 @@
 (leaf exec-path-from-shell
   :doc "Get environment variables such as $PATH from the shell"
   :ensure t
+  :if (eq system-type 'gnu/linux)
   :defun (exec-path-from-shell-initialize)
   :custom ((exec-path-from-shell-check-startup-files)
            (exec-path-from-shell-variables . '("PATH" "GOPATH" "JAVA_HOME")))
@@ -448,8 +450,11 @@
   ;;(setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88)
   ;HoverからのEchoの一行目の文字の大きさを調節
   (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.95))
-  (with-eval-after-load 'eldoc-box (setq eldoc-box-max-pixel-width 600 eldoc-box-max-pixel-height 120)
-  (setf (alist-get 'min-width eldoc-box-frame-parameters) 40 (alist-get 'min-height eldoc-box-frame-parameters) 5))
+  (defvar eldoc-box-max-pixel-width) (defvar eldoc-box-max-pixel-height) (defvar eldoc-box-frame-parameters)
+  (with-eval-after-load 'eldoc-box
+    (setq eldoc-box-max-pixel-width 600 eldoc-box-max-pixel-height 120)
+    (setf (alist-get 'min-width eldoc-box-frame-parameters) 40 (alist-get 'min-height eldoc-box-frame-parameters) 5)
+    )
 )
 
 ;;
