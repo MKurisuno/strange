@@ -34,7 +34,6 @@ Completion:
   HeaderInsertion: IWYU
   CodePatterns: All
 
-
 InlayHints:
   BlockEnd: false
   Designators: true
