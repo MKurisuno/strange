@@ -273,7 +273,9 @@
 
 (leaf embark
   :ensure t
-  :bind (("C-."   . embark-act) ("C-;"   . embark-dwim) ("C-h B" . embark-bindings)))
+  :bind (("C-."   . embark-act)
+         ("C-;"   . embark-dwim)
+         ("C-h B" . embark-bindings)))
 
 
 (leaf embark-consult
