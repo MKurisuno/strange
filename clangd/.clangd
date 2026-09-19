@@ -27,6 +27,7 @@ Diagnostics:
       #readability-identifier-naming.ClassCase: CamelCase
       #readability-identifier-naming.VariableCase: lower_case
       #readability-identifier-naming.FunctionCase: lower_case
+
 Completion:
   AllScopes: Yes
   ArgumentLists: FullPlaceholders
