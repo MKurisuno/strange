@@ -234,7 +234,7 @@
          ([remap imenu] . consult-imenu)            ; M-g i
          ("M-g f" . consult-flymake)
          ("C-s"   . c/consult-line)       ; isearch-forward
-	 (minibuffer-local-map :package emacs ("C-r" . consult-history))
+         (minibuffer-local-map :package emacs ("C-r" . consult-history))
          ;;  C-M-s bindings
          ("C-M-s"   . nil)                ; isearch-forward-regexp
          ("C-M-s s" . isearch-forward)
