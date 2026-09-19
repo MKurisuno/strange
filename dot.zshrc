@@ -1,12 +1,7 @@
 # Set up the prompt
-#autoload -Uz promptinit
-#promptinit
-#prompt adam1
 #
-#
-#
-# zshrc Nuc6i5 20241116
-#
+# zshrc Nuc6i5  since 20241116
+#               lastupdate 20260918
 
 
 setopt histignorealldups sharehistory
@@ -24,7 +19,6 @@ SAVEHIST=1000
 HISTFILE=~/.zsh_history
 
 
-
 # Use modern completion system
 autoload -Uz compinit
 compinit
@@ -35,19 +29,20 @@ compinit
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' menu true
 zstyle ':completion:*:*:rm:*:*' menu false
-zstyle ':completion:*:(cd|less):*' maticher 'm:{a-z}={A-Z}'
+zstyle ':completion:*:warnings' format ' %F{#50fa7b}-- no matches found --%f'
+zstyle ':completion:*' auto-description 'specify: %d'
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+#zstyle ':completion:*:(cd|less):*' maticher 'm:{a-z}={A-Z}'
 
 #zstyle ':completion:*:setopt:*' menu true select 
 #zstyle ':completion:*' file-list all
-#zstyle ':completion:*' verbose true
 #zstyle ':completion:*:*:*:*:descriptions' format '%F{green}-- %d --%f'
 #zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
 #zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
-#zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
 #zstyle ':completion:*:descriptions' format '%U%K{yellow} %F{green}-- %F{red} %BNICE!1! %b%f %d --%f%k%u'
+#zstyle ':completion:*:descriptions' format '%U%K{#282a36} %F{#bd93f9}-- %F{#ff79c6} %B ooooo  %b%f %F{#f8f8f2}%d --%f%k%u'
 #zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 #zstyle ':completion:*' squeeze-slashes true
-#zstyle ':completion:*' auto-description 'specify: %d'
 #zstyle ':completion:*' completer _expand _complete _correct _approximate
 #zstyle ':completion:*' format 'Completing %d'
 #zstyle ':completion:*' group-name ''
@@ -55,7 +50,6 @@ zstyle ':completion:*:(cd|less):*' maticher 'm:{a-z}={A-Z}'
 #zstyle ':completion:*' list-colors ''
 #zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
 #zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
-#zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
 #zstyle ':completion:*' use-compctl false
 #zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 #zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
@@ -68,19 +62,23 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
 alias ls='ls --color=auto'
+export LS_COLORS="${LS_COLORS}:di=01;38;5;141"
+alias e='emacs'
 
+alias psa='grc ps aux'
+alias psx='grc ps ax'
+alias ps='grc ps'
 alias l='ls -lF'
 alias la='ls -a'
 alias ll='ls -alF'
 alias lx='ls -aF'
 alias vdir='vdir --color=auto'
 
-
+alias e='emacs'
 
 #less highloght opotion
 # sudo apt install source-highlight
 export LESSOPEN="| $HOME/bin/src-hilite-lesspipe.sh %s"
-#export LESSOPEN="| $HOME/bin/src-hilite-lesspipe.sh %s"
 export LESS="-R"
 
 
@@ -113,8 +111,9 @@ zinit light dracula/zsh
 
  
 # Dracula-zsh-syntax-highlighting
-# ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets cursor)
+#ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+#ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets cursor)
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main cursor)
 typeset -gA ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[comment]='fg=#6272A4'
 ZSH_HIGHLIGHT_STYLES[alias]='fg=#50FA7B'
