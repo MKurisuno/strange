@@ -241,7 +241,7 @@
          ("C-M-s C-s" . isearch-forward-regexp)
          ("C-M-s r" . consult-ripgrep))
          ;;
-         ;; C-r     : consult-history  minibuffer-mode-map
+         ;; C-r     : consult-history  in MiniBuffer-mode-map
          ;; C-s     : consult-line     c/consult-line
          ;; C-x b   : consult-buffer
          ;; C-x p b : consult-project-buffer
