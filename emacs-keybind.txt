@@ -28,7 +28,7 @@
  ;; C-M-s f   : affe-find
   
 ## puni  
-### default mapping  sexp = Symbolic-Expression  
+### sexp = Symbolic-Expression  
  ;; C-M-f    : puni-forward-sexp       ;次のSexpの末尾まで進む
  ;; C-M-b    : puni-backward-sexp       ;前のSexpのまで戻る  
  ;; C-M-a    : puni-beginning-of-sexp   ;(S式)の先頭まで移動
@@ -50,5 +50,5 @@
  ;; M-r      : puni-raise              ; A(b(x),y) -> b(x)  ; raise = 親のS式を現在のS式で変換
  ;; M-U      : puni-splice-killing-backward  
  ;; M-z      : puni-squeeze            ; foo (bar) baz -> { + C-y + } -> foo {bar} baz  
-  
+                                       ; with elec-pair. 
 
