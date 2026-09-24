@@ -404,15 +404,18 @@
   ;;  (add-to-list 'auto-mode-alist '("\\.edn\\'" . clojure-mode))
   (add-to-list 'treesit-language-source-alist '(yaml "https://github.com/ikatyang/tree-sitter-yaml"))
   (add-to-list 'auto-mode-alist '("CMakeLists\\.txt\\'" . cmake-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.cmake\\'" . cmake-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.cmake\\'"         . cmake-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.py\\'"   . python-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.json\\'" . js-json-mode))
-  (add-to-list 'auto-mode-alist '("\\.php\\'". php-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.y?ml\\'". yaml-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.c\\'" . c-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.php\\'"  . php-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.y?ml\\'" . yaml-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.\\(?:m\\|c\\)?js\\'"  . js-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.ts\\'"   . typescript-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'"  . tsx-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.c\\'"    . c-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.h\\'"    . c++-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.cpp\\'"  . c++-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.hpp\\'"  . c++-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.clang\\(?:d\\|-tidy\\|-format\\)\\'" . yaml-ts-mode)) ;;Clangd の設定file
   )
 
@@ -476,15 +479,15 @@
   :doc "The Emacs Client for LSP servers"
   :ensure t
   :config
-  ;;(add-to-list 'eglot-server-programs '(cmake-ts-mode "cmake-language-server"))
-  ;;(add-to-list 'eglot-server-programs '((c++-ts-mode c-ts-mode) "ccls"))
   (defvar eglot-server-programs)
   (defvar eglot-ignored-server-capabilities)
-
+  ;; 
   (add-to-list 'eglot-server-programs '((c++-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '((c-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '((php-ts-mode) . ("intelephense" "--stdio")))
   (add-to-list 'eglot-server-programs '((python-ts-mode) . ("pyright-langserver" "--stdio")))
+  (add-to-list 'eglot-server-programs '((typescript-ts-mode) . ("typescript-language-server" "--stdio")))
+  (add-to-list 'eglot-server-programs '((js-ts-mode tsx-ts-mode) . ("typescript-language-server" "--stdio")))
   ;; eglotとclangd のインデント設定を無効化する
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider)
@@ -501,10 +504,14 @@
   ;; C-c i : Completion at point
   ;; C-c a : Rename
   :hook
-  ((c-ts-mode-hook . eglot-ensure)
+  ((c-ts-mode-hook   . eglot-ensure)
    (c++-ts-mode-hook . eglot-ensure)
    (php-ts-mode-hook . eglot-ensure)
-   (python-ts-mode-hook . eglot-ensure))
+   (python-ts-mode-hook     . eglot-ensure)
+   (typescript-ts-mode-hook . eglot-ensure)
+   (tsx-ts-mode-hook  . eglot-ensure)
+   (js-ts-mode-hook   . eglot-ensure)
+   )
   :custom
   ((eldoc-echo-area-use-multiline-p . nil)
    (eglot-connect-timeout . 600)

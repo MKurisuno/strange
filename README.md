@@ -109,7 +109,7 @@
 
 ##  Wifi pawer-save-mode off
 ####　 if wifi is unstable,  
- 　$ sudo emacs /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf  
+　　$ sudo emacs /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf  
 　   File to be place under /etc/NetworkManager/conf.d   
 　   [connection]  
 　   Values are 0 (use default),  
@@ -133,21 +133,31 @@
 　　 $ python3 -m venv .Aprilis  
 　　 $ source .Aprilis/bin/active
 
-### PHP_LanguageServer:Intelephense   
-  1) Install Node.js  
-    $sudo apt update  
-    $sudo apt install -y curl ca-certificates  
-    $curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -  
-    $sudo apt install -y nodejs  
-  2) Install Intelephense  
-    $sudo npm install -g intelephense  
-  3) Insert in init.el  
-      (add-to-list 'eglot-server-programs '(php-mode . ("intelephense" "--stdio")))
+### Node.js to install 
+　　Install Node.js  
+　　 $sudo apt update  
+　　 $sudo apt install -y curl ca-certificates  
+　　 $curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -  
+　　 $sudo apt install -y nodejs  
 
-### Python_LanguageServer:Pyright   
-   1) Install pyright  
-      $sudo npm install -g pyright    
-   2) Insert in init.el    
-      (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))  
 
+### PHP_LanguageServer:Intelephense
+　　1) Install Intelephense  
+　　　$sudo npm install -g intelephense  
+　　2) Insert those in initi.el  
+　　　(add-to-list 'eglot-server-programs '(php-ts-mode .("intelephense" "--stdio")))  
+		
+### Python_LanguageServer:Pyright
+　　1) Install pyright  
+　　　$sudo npm install -g pyright  
+　　2) Insert in init.el  
+　　　(add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))  
+
+### TypeScript_JavaScript_LanguageServer
+　　1) install  
+　　　$sudo npm install -g typescript-language-server typescript@6  
+　　2) Insert those in init.el  
+　　　(add-to-list 'eglot-server-programs '((typescript-ts-mode) . ("typescript-language-server" "--stdio")))  
+　　　(add-to-list 'eglot-server-programs '((tsx-ts-mode) . ("typescript-language-server" "--stdio")))  
+　　　(add-to-list 'eglot-server-programs '((js-ts-mode) . ("typescript-language-server" "--stdio")))  
 
