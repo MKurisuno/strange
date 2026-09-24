@@ -67,7 +67,7 @@
 ;; スクロール開始のマージンの行数
 (setq scroll-margin 3)
 ;; 1 画面スクロール時に重複させる行数
-(setq next-screen-context-lines 5)
+(setq next-screen-context-lines 4)
 ;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
 (setq scroll-preserve-screen-position t)
 
@@ -106,12 +106,13 @@
 
 ;; Windows11 MSYS2 の設定 絶対PATHが無難
 (when (eq system-type 'windows-nt)
-  (let ((paths '("C:/msys64/ucrt64/bin" "C:/msys64/usr/bin")))
-    (dolist (path paths)
-      (when (;FIXME: le-directory-p path)
-	     (add-to-list 'exec-path path)
-	     ((setq )etenv "PATH" (concat path path-separator (getenv "PATH")))))))
-  )
+  (dolist (path '("C:/msys64/ucrt64/bin"
+                  "C:/msys64/usr/bin"))
+    (when (file-directory-p path)
+      (add-to-list 'exec-path path)
+      (setenv "PATH"
+              (concat path path-separator (getenv "PATH"))))))
+
 
 
 (provide 'early-init)
