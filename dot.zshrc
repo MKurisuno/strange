@@ -77,7 +77,7 @@ alias vdir='vdir --color=auto'
 
 alias e='emacs'
 
-#less highloght opotion
+#less highlight option
 # sudo apt install source-highlight
 export LESSOPEN="| $HOME/bin/src-hilite-lesspipe.sh %s"
 export LESS="-R"
