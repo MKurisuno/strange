@@ -33,9 +33,6 @@
 (set-fontset-font t 'japanese-jisx0208 (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
 (set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
 
-;; xref-find-reference の時の強調背景が明るすぎるため
-(with-eval-after-load 'xref
-  (set-face-attribute 'xref-match nil :foreground "#1f2328" :background "#44475a" :weight 'bold))
 
 
 
@@ -463,9 +460,16 @@
     )
 )
 
+
 ;;
 ;; eglot
 ;;
+;; xref-find-reference の時の強調背景が明るすぎるため
+(with-eval-after-load 'xref
+ ;; (set-face-attribute 'xref-match nil :foreground "#1f2328" :background "#44475a" :weight 'bold)
+  (set-face-attribute 'xref-match nil :foreground "#FFFFFF" :background "#44475a" :weight 'bold)
+  )
+
 (leaf eglot
   :doc "The Emacs Client for LSP servers"
   :ensure t

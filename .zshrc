@@ -61,6 +61,8 @@ alias dir='dir --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
+#export GREP_COLORS='ms=38;5;212:mc=38;5;212:sl=38;5;141:cx=38;5;111:fn=38;5;141:ln=38;5;84:bn=38;5;84:se=38;5;59'
+export GREP_COLORS='ms=1;3;38;2;255;135;190:mc=1;3;38;2;255;135;190:sl=38;2;189;147;249:cx=38;2;135;175;255:fn=38;2;189;147;249:ln=38;2;80;250;123:bn=38;2;80;250;123:se=38;2;98;114;164'
 alias ls='ls --color=auto'
 export LS_COLORS="${LS_COLORS}:di=01;38;5;141"
 alias e='emacs'
