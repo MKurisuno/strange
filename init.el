@@ -183,6 +183,27 @@
           ("M-n" . flymake-goto-next-error)
           ("M-p" . flymake-goto-prev-error))))
 
+
+;;flyspell の日本語除外のための設定
+(defun my-flyspell-check-word-p ()
+  "日本語を含む単語はFlyspellのチェック対象から除外する。"
+  (let ((word (thing-at-point 'word t)))
+    (and word (not (string-match-p "[ぁ-んァ-ヶ一-龯々〆〃ー]" word)))))
+(leaf flyspell
+  :ensure t
+  :custom
+  ((ispell-program-name . "aspell")
+   (ispell-dictionary . "en_US"))
+  ;;:hook
+  ;;((text-mode-hook . flyspell-mode)
+  ;; (prog-mode-hook . flyspell-prog-mode))
+  :config
+  (add-hook 'flyspell-mode-hook
+            (lambda ()
+              (setq-local
+               flyspell-generic-check-word-predicate
+               #'my-flyspell-check-word-p))))
+
 (leaf which-key
   :doc "Display available keybindings in popup"
   :ensure t
@@ -327,6 +348,7 @@
   (add-to-list 'completion-at-point-functions #'cape-file)
   )
 
+
 (leaf puni
   :doc "Parentheses Universalistic"
   :ensure t
@@ -337,7 +359,7 @@
          ;; ("C-M-b" . puni-backward-sexp)     ;前のSexpのまで戻る
          ;; ("C-M-a" . puni-beginning-of-sexp) ;(S式)の先頭まで移動
          ;; ("C-M-e" . puni-end-of-sexp)       ;(S式)の末尾まで移動
-		 ;; ("C-M-u" . backward-up-list)       ;( )内にあるとき( )の先頭に移動
+         ;; ("C-M-u" . backward-up-list)       ;( )内にあるとき( )の先頭に移動
          ;; ("C-M-d" . backward-down-list)     ;次の( )内に移動
          ;; ("M-)"   . puni-syntactic-forward-punct)  ;次の句読点(punctuation)までJamp
          ;; ("M-("   . puni-syntactic-backward-punct) ;前の句読点(punctuation)までJamp
@@ -360,6 +382,8 @@
   (leaf elec-pair
     :doc "Automatic parenthesis pairing"
     :global-minor-mode electric-pair-mode))
+
+
 
 (leaf yasnippet
   :ensure t
@@ -406,6 +430,7 @@
   (add-to-list 'auto-mode-alist '("CMakeLists\\.txt\\'" . cmake-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.cmake\\'"         . cmake-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.py\\'"   . python-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . html-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.json\\'" . js-json-mode))
   (add-to-list 'auto-mode-alist '("\\.php\\'"  . php-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.y?ml\\'" . yaml-ts-mode))
@@ -435,6 +460,17 @@
 	    (setq-local indent-tabs-mode t)
 	    (setq-local c-ts-mode-indent-offset 4)
 	    (setq-local c-basic-offset 4)))
+
+(leaf web-mode
+  :ensure t
+  :mode ("\\.html\\.twig\\'" "\\.html\\'")
+  :custom
+  (web-mode-markup-indent-offset  . 4)  ; HTMLインデント
+  (web-mode-css-indent-offset     . 2)  ; CSSインデント
+  (web-mode-code-indent-offset    . 4)  ; PHP/JSインデント
+  (web-mode-enable-auto-closing   . t)  ; 自動閉じタグ
+  (web-mode-enable-auto-pairing   . t)) ; 自動ペア
+
 
 (leaf eldoc
   :ensure nil
@@ -488,6 +524,8 @@
   (add-to-list 'eglot-server-programs '((python-ts-mode) . ("pyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs '((typescript-ts-mode) . ("typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((js-ts-mode tsx-ts-mode) . ("typescript-language-server" "--stdio")))
+  (add-to-list 'eglot-server-programs '((web-mode) . ("vscode-html-language-server" "--stdio")))
+
   ;; eglotとclangd のインデント設定を無効化する
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider)
@@ -499,7 +537,7 @@
   ;; M-.   : xref-find-definitions
   ;; M-,   : xref-go-back
   ;; M-?   : xref-find-reference
-  ;; C-M-. : xref-apropros
+  ;; C-M-. : xref-apropos
   ;; C-h-. : Display-local-help
   ;; C-c i : Completion at point
   ;; C-c a : Rename
@@ -511,6 +549,7 @@
    (typescript-ts-mode-hook . eglot-ensure)
    (tsx-ts-mode-hook  . eglot-ensure)
    (js-ts-mode-hook   . eglot-ensure)
+   (web-mode-hook     . eglot-ensure)
    )
   :custom
   ((eldoc-echo-area-use-multiline-p . nil)
@@ -518,6 +557,15 @@
    (eglot-autoshutwon . t)
    (eglot-sync-connect . 0))
   )
+
+;;(with-eval-after-load 'eglot
+;;  (add-to-list 'eglot-server-programs '((web-mode) .
+;;                                       ("rass"
+;;                                        "--" "vscode-html-language-server" "--stdio"
+;;                                        "--" "intelephense" "--stdio")))
+;; )
+
+
 
 (leaf eglot-booster
   :when (executable-find "emacs-lsp-booster")
@@ -547,7 +595,10 @@
    (markdown-fontify-code-blocks-natively . t)
    (markdown-header-scaling . t)
    (markdown-enable-math . t)
-   (markdown-url-compose-char . nil))
+   (markdown-url-compose-char . nil)
+   (markdown-list-indent-width . 2)
+   (markdown-indent-on-enter . t)
+   (indent-tabs-mode . nil))
   :custom-face
   (markdown-header-face-1 . '((t (:weight bold :height 1.3))))
   (markdown-header-face-2 . '((t (:weight bold :height 1.2))))
@@ -724,7 +775,6 @@
   (dolist (char-regexp alist)
     (set-char-table-range composition-function-table (car char-regexp)
                           `([,(cdr char-regexp) 0 font-shape-gstring]))))
-
 
 ;;;
 ;;; This will enable emacs to compile a simple cpp single file without any makefile by just pressing [f9] key
