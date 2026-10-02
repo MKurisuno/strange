@@ -1,0 +1,14 @@
+[user]
+	name = M.Kurisuno
+	email = makoto.kurisuno@gmail.com
+
+[alias]
+	st = status
+	stt = status -uno	
+	b  = branch
+	cm = commit -m 
+	co = checkout
+	mr = merge
+	log = log --online
+	lograph = log --oneline --graph
+	
