@@ -163,7 +163,7 @@
 
 ### For HTML LanguageServer:vscode-langservers-extracted
 　　1) install  
-　　　$sudo npm install -g vscode-langservers-extracted
+　　　$sudo npm install -g vscode-langservers-extracted  
 　　2) Insert those in init.el  
 　　　(add-to-list 'eglot-server-programs '((web-mode) . ("vscode-html-language-server" "--stdio")))  
 
