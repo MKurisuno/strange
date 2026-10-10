@@ -96,7 +96,7 @@
   :custom
   (default-input-method . "japanese-mozc")
   (mozc-helper-program-name . "mozc_emacs_helper")
-  (mozc-leim-title . "あ")
+  (mozc-leim-title . "かな")
   :config  ;; after-load mozc でないと読み込まない
   (with-eval-after-load 'mozc
     (set-face-attribute 'mozc-preedit-face nil
@@ -574,11 +574,11 @@
 
 (leaf projectile
   :ensure t
-  :config
+  :init
   (projectile-mode +1)
   ;; Recommended keymap prefix on Windows/Linux
-  :bind (:projectile-mode-map
-	("C-c p" . 'projectile-command-map)))
+  :bind-keymap (("C-c p" . 'projectile-command-map))
+  )
 
 (leaf ag
   :ensure t)
@@ -775,6 +775,7 @@
   (dolist (char-regexp alist)
     (set-char-table-range composition-function-table (car char-regexp)
                           `([,(cdr char-regexp) 0 font-shape-gstring]))))
+
 
 ;;;
 ;;; This will enable emacs to compile a simple cpp single file without any makefile by just pressing [f9] key
