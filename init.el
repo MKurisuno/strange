@@ -1,4 +1,4 @@
-;;; init --- Personal Emacs configuration -*- lexical-binding: t; -*-
+;; init --- Personal Emacs configuration -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; Personal Emacs configuration.
 ;; M.Kurisuno .emacs/init.el
@@ -418,9 +418,9 @@
           ("d" magit-diff-working-tree)
           ("M-=" c/git-commit-a)))
 
+
 (leaf *treesit
-  :custom ((treesit-font-lock-level . 4)
-	   )
+  :custom ((treesit-font-lock-level . 4))
   :config
   (require 'treesit)
   (defvar treesit-language-source-alist)
@@ -429,11 +429,11 @@
   (add-to-list 'treesit-language-source-alist '(yaml "https://github.com/ikatyang/tree-sitter-yaml"))
   (add-to-list 'auto-mode-alist '("CMakeLists\\.txt\\'" . cmake-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.cmake\\'"         . cmake-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.py\\'"   . python-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.py\\'"    . python-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . html-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.json\\'" . js-json-mode))
-  (add-to-list 'auto-mode-alist '("\\.php\\'"  . php-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.y?ml\\'" . yaml-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.json\\'"  . js-json-mode))
+  (add-to-list 'auto-mode-alist '("\\.php\\'"   . php-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.y?ml\\'"  . yaml-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.\\(?:m\\|c\\)?js\\'"  . js-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.ts\\'"   . typescript-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx\\'"  . tsx-ts-mode))
@@ -463,13 +463,16 @@
 
 (leaf web-mode
   :ensure t
-  :mode ("\\.html\\.twig\\'" "\\.html\\'")
+  :mode ("\\.html\\'")
   :custom
   (web-mode-markup-indent-offset  . 4)  ; HTMLインデント
   (web-mode-css-indent-offset     . 2)  ; CSSインデント
   (web-mode-code-indent-offset    . 4)  ; PHP/JSインデント
   (web-mode-enable-auto-closing   . t)  ; 自動閉じタグ
-  (web-mode-enable-auto-pairing   . t)) ; 自動ペア
+  (web-mode-enable-auto-pairing   . t)  ; 自動ペア
+  :hook
+  ;;(web-mode-hook . (lambda () (electric-pair-local-mode -1)))
+  )
 
 
 (leaf eldoc
@@ -487,7 +490,7 @@
 ;;  :hook  ((eglot-managed-mode-hook . (lambda () (eldoc-box-hover-at-point-mode 1) )))
 ;;  :custom ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 120))
   :custom-face
-  (eldoc-box-body . ' ((t (:background "#282A36" :foreground "#f8f8f2" :family "JetBrains Mono" :height 0.90 :weight normal :slant normal :alpha 70))))
+  (eldoc-box-body . ' ((t (:background "#282A36" :foreground "#f8f8f2" :family "JetBrains Mono" :height 0.95 :weight normal :slant normal :alpha 70))))
   (eldoc-box-border . '((t (:background "#44475a" ))))
   :config
   ;;次の設定は結果としてEmacsを透過して壁紙が見える
@@ -525,7 +528,13 @@
   (add-to-list 'eglot-server-programs '((typescript-ts-mode) . ("typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((js-ts-mode tsx-ts-mode) . ("typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((web-mode) . ("vscode-html-language-server" "--stdio")))
-
+  ;;for install "sudo npm install -g twiggy-language-server"
+  ;;(add-to-list 'eglot-server-programs `(twig-mode . ("twiggy-language-server" "--stdio"
+  ;;                                                   :initializationOptions
+  ;;                                                   (:twiggy
+  ;;                                                    (:framework "symfony"
+  ;;                                                                :phpExecutable "php"
+  ;;                                                                :symfonyConsolePath "bin/console")))))
   ;; eglotとclangd のインデント設定を無効化する
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider)
@@ -550,6 +559,7 @@
    (tsx-ts-mode-hook  . eglot-ensure)
    (js-ts-mode-hook   . eglot-ensure)
    (web-mode-hook     . eglot-ensure)
+   ;;(twig-mode-hook     . eglot-ensure)
    )
   :custom
   ((eldoc-echo-area-use-multiline-p . nil)
@@ -558,6 +568,8 @@
    (eglot-sync-connect . 0))
   )
 
+
+;; 2個のLanguage-Serverを起動する方法　Rassが必要
 ;;(with-eval-after-load 'eglot
 ;;  (add-to-list 'eglot-server-programs '((web-mode) .
 ;;                                       ("rass"
