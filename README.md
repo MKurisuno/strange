@@ -87,11 +87,11 @@
 　　　   $ln -s dracura-theme-**/dracura-theme.el  .emacs.d/themes/dracura-theme.el 
 
 ## ~~gnu-source-highlight~~
-　 ~~ download from   ftp://ftp.gnu.org/gnu/src-highlite     ~~
-　 ~~   install  ~/.source-hightlight/   ~~
-   ~~ &nbsp;&nbsp;&nbsp;&nbsp;src-hilite-lesspipe.sh   --->  ~/bin/      ~~
-   ~~ &nbsp;&nbsp;&nbsp;&nbsp;esc256.outlang           --->  .source-highlight/  ~~
-   ~~ &nbsp;&nbsp;&nbsp;&nbsp;custom.style             --->  .source-highlight/    ~~
+　~~download from  ftp://ftp.gnu.org/gnu/src-highlite~~　  
+　~~src-hilite-lesspipe.sh~~　  
+　~~esc256.outlang~~　  
+　~~&nbsp;custom.style~~　  
+### ---> apt install bat (which will be installed as /usr/bin/batcat) 
 
 ## git 
 　   MKurisuno/strange.git  dot.gitconfig   
