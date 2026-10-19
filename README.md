@@ -86,12 +86,12 @@
 　　　   For drucura-theme  
 　　　   $ln -s dracura-theme-**/dracura-theme.el  .emacs.d/themes/dracura-theme.el 
 
-## gnu-source-highlight
-　  download from   ftp://ftp.gnu.org/gnu/src-highlite     
-　    install  ~/.source-hightlight/   
-    &nbsp;&nbsp;&nbsp;&nbsp;src-hilite-lesspipe.sh   --->  ~/bin/      
-    &nbsp;&nbsp;&nbsp;&nbsp;esc256.outlang           --->  .source-highlight/  
-    &nbsp;&nbsp;&nbsp;&nbsp;custom.style             --->  .source-highlight/    
+## ~~gnu-source-highlight~~
+　 ~~ download from   ftp://ftp.gnu.org/gnu/src-highlite     ~~
+　 ~~   install  ~/.source-hightlight/   ~~
+   ~~ &nbsp;&nbsp;&nbsp;&nbsp;src-hilite-lesspipe.sh   --->  ~/bin/      ~~
+   ~~ &nbsp;&nbsp;&nbsp;&nbsp;esc256.outlang           --->  .source-highlight/  ~~
+   ~~ &nbsp;&nbsp;&nbsp;&nbsp;custom.style             --->  .source-highlight/    ~~
 
 ## git 
 　   MKurisuno/strange.git  dot.gitconfig   
