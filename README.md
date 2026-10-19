@@ -87,10 +87,10 @@
 　　　   $ln -s dracura-theme-**/dracura-theme.el  .emacs.d/themes/dracura-theme.el 
 
 ## ~~gnu-source-highlight~~
-　~~download from  ftp://ftp.gnu.org/gnu/src-highlite~~　  
+　~~download from ftp://ftp.gnu.org/gnu/src-highlite~~　  
 　~~src-hilite-lesspipe.sh~~　  
 　~~esc256.outlang~~　  
-　~~&nbsp;custom.style~~　  
+　~~custom.style~~　  
 ### ---> apt install bat (which will be installed as /usr/bin/batcat) 
 
 ## git 
