@@ -306,20 +306,41 @@
           ("M-." . embark-dwim)
           ("C-." . embark-act))))
 
+;(leaf corfu
+;  :doc "Completion in Region Function"
+;  :ensure t
+;  :require t
+;  :global-minor-mode (global-corfu-mode corfu-popupinfo-mode)
+;  :custom ((corfu-auto . t)
+;	   (corfu-auto-delay . 0)
+;	   (corfu-auto-prefix . 1)
+;	   (corfu-popupinfo-delay . nil)
+;	   (corfu-cycle . t)
+;	   (corfu-quit-no-match 'separator)
+;	   (corfu-sources . '(corfu-lsp corfu-dabbrev corfu-dict corfu-yasnippet)))
+;  :bind   ((corfu-map
+;          ("C-s" . corfu-insert-separator))))
+
 (leaf corfu
   :doc "Completion in Region Function"
   :ensure t
   :require t
   :global-minor-mode (global-corfu-mode corfu-popupinfo-mode)
   :custom ((corfu-auto . t)
-	   (corfu-auto-delay . 0)
-	   (corfu-auto-prefix . 1)
-	   (corfu-popupinfo-delay . nil)
-	   (corfu-cycle . t)
-	   (corfu-quit-no-match 'separator)
-	   (corfu-sources . '(corfu-lsp corfu-dabbrev corfu-dict corfu-yasnippet)))
-  :bind   ((corfu-map
-          ("C-s" . corfu-insert-separator))))
+           (corfu-auto-delay . 0)         ; お好みで 0.1 ~ 0.2 にしても快適です
+           (corfu-auto-prefix . 1)
+           (corfu-popupinfo-delay . nil)  ; 自動ポップアップを抑制する場合
+           (corfu-cycle . t)
+           (corfu-quit-no-match . 'separator))
+  :bind ((corfu-map
+          ("C-s" . corfu-insert-separator)))
+  :init
+  ;; 各種補完ソースを Capf に追加するフック
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+              (add-to-list 'completion-at-point-functions #'cape-file)))
+  )
 
 (leaf svg-lib
   :ensure t)
