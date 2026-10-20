@@ -336,11 +336,12 @@
           ("C-s" . corfu-insert-separator)))
   :init
   ;; 各種補完ソースを Capf に追加するフック
-  (add-hook 'prog-mode-hook
+    (add-hook 'prog-mode-hook
             (lambda ()
+              (add-to-list 'completion-at-point-functions #'cape-file)
               (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-              (add-to-list 'completion-at-point-functions #'cape-file)))
-  )
+              (add-to-list 'completion-at-point-functions #'yasnippet-capf 'append)))
+   )
 
 (leaf svg-lib
   :ensure t)
