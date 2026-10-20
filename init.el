@@ -307,7 +307,7 @@
           ("C-." . embark-act))))
 
 (leaf corfu
-  :doc "Completion in Region FUnction"
+  :doc "Completion in Region Function"
   :ensure t
   :require t
   :global-minor-mode (global-corfu-mode corfu-popupinfo-mode)
@@ -339,15 +339,31 @@
   )
 
 
+;(leaf cape
+;  :doc "Completion At Point Extensions"
+;  :ensure t
+;  :config
+;  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+;  (add-to-list 'completion-at-point-functions #'cape-keyword)
+;  (add-to-list 'completion-at-point-functions #'cape-file)
+;   )
+
 (leaf cape
   :doc "Completion At Point Extensions"
   :ensure t
-  :config
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-keyword)
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  )
+  :init
+  ;; プログラミングモード全体で有効にする
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+              (add-to-list 'completion-at-point-functions #'cape-file)
+              (add-to-list 'completion-at-point-functions #'cape-keyword)))
 
+  ;; Emacs Lispを書くとき（設定ファイル編集時など）にシンボル補完を追加
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda ()
+              (add-to-list 'completion-at-point-functions #'cape-symbol)))
+  )
 
 (leaf puni
   :doc "Parentheses Universalistic"
