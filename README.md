@@ -91,10 +91,7 @@
 　~~src-hilite-lesspipe.sh~~　  
 　~~esc256.outlang~~　  
 　~~custom.style~~　  
-### ---> apt install bat (which will be installed as /usr/bin/batcat) 
-
-## git 
-　   MKurisuno/strange.git  dot.gitconfig   
+### ---> apt install bat (which will be installed as /usr/bin/batcat
 
 ## gnome-terminal
 　  https://draculatheme.com/gnome-terminal  
