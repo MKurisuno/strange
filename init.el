@@ -186,7 +186,7 @@
 
 ;;flyspell の日本語除外のための設定
 (defun my-flyspell-check-word-p ()
-  "日本語を含む単語はFlyspellのチェック対象から除外する。"
+  "日本語を含む単語はFlyspellのチェック対象から除外する."
   (let ((word (thing-at-point 'word t)))
     (and word (not (string-match-p "[ぁ-んァ-ヶ一-龯々〆〃ー]" word)))))
 (leaf flyspell
@@ -306,20 +306,24 @@
           ("M-." . embark-dwim)
           ("C-." . embark-act))))
 
-;(leaf corfu
-;  :doc "Completion in Region Function"
-;  :ensure t
-;  :require t
-;  :global-minor-mode (global-corfu-mode corfu-popupinfo-mode)
-;  :custom ((corfu-auto . t)
-;	   (corfu-auto-delay . 0)
-;	   (corfu-auto-prefix . 1)
-;	   (corfu-popupinfo-delay . nil)
-;	   (corfu-cycle . t)
-;	   (corfu-quit-no-match 'separator)
-;	   (corfu-sources . '(corfu-lsp corfu-dabbrev corfu-dict corfu-yasnippet)))
-;  :bind   ((corfu-map
-;          ("C-s" . corfu-insert-separator))))
+
+
+(leaf cape
+  :doc "Completion At Point Extensions"
+  :ensure t
+  :init
+  ;; プログラミングモード全体で有効にする
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+              (add-to-list 'completion-at-point-functions #'cape-file)
+              (add-to-list 'completion-at-point-functions #'cape-keyword)))
+
+  ;; Emacs Lispを書くとき（設定ファイル編集時など）にシンボル補完を追加
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda ()
+              (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)))
+  )
 
 (leaf corfu
   :doc "Completion in Region Function"
@@ -343,6 +347,7 @@
               (add-to-list 'completion-at-point-functions #'yasnippet-capf 'append)))
    )
 
+
 (leaf svg-lib
   :ensure t)
 
@@ -360,32 +365,6 @@
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
   )
 
-
-;(leaf cape
-;  :doc "Completion At Point Extensions"
-;  :ensure t
-;  :config
-;  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-;  (add-to-list 'completion-at-point-functions #'cape-keyword)
-;  (add-to-list 'completion-at-point-functions #'cape-file)
-;   )
-
-(leaf cape
-  :doc "Completion At Point Extensions"
-  :ensure t
-  :init
-  ;; プログラミングモード全体で有効にする
-  (add-hook 'prog-mode-hook
-            (lambda ()
-              (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-              (add-to-list 'completion-at-point-functions #'cape-file)
-              (add-to-list 'completion-at-point-functions #'cape-keyword)))
-
-  ;; Emacs Lispを書くとき（設定ファイル編集時など）にシンボル補完を追加
-  (add-hook 'emacs-lisp-mode-hook
-            (lambda ()
-              (add-to-list 'completion-at-point-functions #'cape-symbol)))
-  )
 
 (leaf puni
   :doc "Parentheses Universalistic"
@@ -429,6 +408,16 @@
 (leaf yasnippet-snippets
   :ensure t
   :after yasnippet)
+(leaf yasnippet-capf
+  :doc "Yasnippet Completion-At-Point-Function."
+  :ensure t
+  :after (yasnippet cape)
+  ;;Yasnippetの優先順位をCompletionより下げておく.
+  :hook (prog-mode-hook . (lambda ()
+                            (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+                            (add-to-list 'completion-at-point-functions #'cape-file)
+                            (add-to-list 'completion-at-point-functions #'yasnippet-capf 'append))))
+
 
 (leaf magit
   :when (version<= "25.1" emacs-version)
@@ -546,11 +535,6 @@
 ;;
 ;; eglot
 ;;
-;; xref-find-reference の時の強調背景が明るすぎるため
-(with-eval-after-load 'xref
- ;; (set-face-attribute 'xref-match nil :foreground "#1f2328" :background "#44475a" :weight 'bold)
-  (set-face-attribute 'xref-match nil :foreground "#FFFFFF" :background "#44475a" :weight 'bold)
-  )
 
 (leaf eglot
   :doc "The Emacs Client for LSP servers"
@@ -573,11 +557,15 @@
   ;;                                                    (:framework "symfony"
   ;;                                                                :phpExecutable "php"
   ;;                                                                :symfonyConsolePath "bin/console")))))
-  ;; eglotとclangd のインデント設定を無効化する
+  ;;--- eglotとclangd のインデント設定を無効化する
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider)
     (add-to-list 'eglot-ignored-server-capabilities :documentRangeFormattingProvider)
     (add-to-list 'eglot-ignored-server-capabilities :documentOnTypeFormattingProvider))
+  ;;--- xref-find-reference の時の強調背景が明るすぎるため
+  (with-eval-after-load 'xref
+  ;; (set-face-attribute 'xref-match nil :foreground "#1f2328" :background "#44475a" :weight 'bold)
+    (set-face-attribute 'xref-match nil :foreground "#FFFFFF" :background "#44475a" :weight 'bold))
   :bind (("C-c i" . completion-at-point)
          ("C-c r" . eglot-rename)
          ("C-c o" . eglot-code-action-organize-imports))
