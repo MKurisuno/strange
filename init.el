@@ -13,20 +13,57 @@
 ;;
 
 ;;; Code:
+
 (when (version< emacs-version "30.0")
   (error "This requires Emacs 30.0 and above!"))
 
+(set-language-environment "Japanese")
+(prefer-coding-system 'utf-8)
+(setq inhibit-compacting-font-caches t)
+(setq history-delete-duplicates t)
+(setq vc-follow-symlinks t)
+(setq column-number-mode t)
+(global-display-line-numbers-mode t)
+(defalias 'yes-or-no-p 'y-or-n-p)
 
-(defvar default-handlers file-name-handler-alist)
-(setq file-name-handler-alist nil)
+;; スクロールした際のカーソルの移動行数
+(setq scroll-conservatively 1)
+;; スクロール開始のマージンの行数
+(setq scroll-margin 3)
+;; 1 画面スクロール時に重複させる行数
+(setq next-screen-context-lines 4)
+;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
+(setq scroll-preserve-screen-position t)
 
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq file-name-handler-alist default-handlers)
-            (setq gc-cons-threshold (* 16 1024 1024))
-            (setq inhibit-message nil)
-            (message "Emacs ready in %s with %d GCs."
-                     (emacs-init-time) gcs-done)))
+
+
+;; 
+;; Dracula theme
+;;               github dracula/emacs
+;; 起動時間短縮および起動時の不要なWindow作成を無効にするためにearly-initに記載
+;;
+;;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes") ;;<--指定が必要
+(load-theme 'dracula t)
+
+;; Don't change the font size for some headings and titles (default t)
+(setq dracula-enlarge-headings nil)
+;; Adjust font size of titles level 1 (default 1.3)
+(setq dracula-height-title-1 1.2)
+;; Adjust font size of titles level 2 (default 1.1)
+(setq dracula-height-title-2 1.0)
+;; Adjust font size of titles level 3 (default 1.0)
+(setq dracula-height-title-3 1.0)
+;; Adjust font size of document titles (default 1.44)
+(setq dracula-height-doc-title 1.44)
+;; Use less pink and bold on the mode-line and minibuffer (default nil)
+(setq dracula-alternate-mode-line-and-minibuffer t)
+;; Use normal weight for syntax faces like keywords, functions, and variables (default t)
+(setq dracula-bolder-keywords t)
+
+
+(with-eval-after-load 'dracula-theme
+  (set-face-attribute 'font-lock-comment-face nil
+                      :foreground "#9aa8c7"))
 
 
 (set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
@@ -331,7 +368,7 @@
   :require t
   :global-minor-mode (global-corfu-mode corfu-popupinfo-mode)
   :custom ((corfu-auto . t)
-           (corfu-auto-delay . 0)         ; お好みで 0.1 ~ 0.2 にしても快適です
+           (corfu-auto-delay . 0.1)         ; お好みで 0.1 ~ 0.2 にしても快適です
            (corfu-auto-prefix . 1)
            (corfu-popupinfo-delay . nil)  ; 自動ポップアップを抑制する場合
            (corfu-cycle . t)
@@ -531,7 +568,6 @@
     )
 )
 
-
 ;;
 ;; eglot
 ;;
@@ -550,6 +586,7 @@
   (add-to-list 'eglot-server-programs '((typescript-ts-mode) . ("typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((js-ts-mode tsx-ts-mode) . ("typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((web-mode) . ("vscode-html-language-server" "--stdio")))
+
   ;;for install "sudo npm install -g twiggy-language-server"
   ;;(add-to-list 'eglot-server-programs `(twig-mode . ("twiggy-language-server" "--stdio"
   ;;                                                   :initializationOptions
@@ -585,7 +622,6 @@
    (tsx-ts-mode-hook  . eglot-ensure)
    (js-ts-mode-hook   . eglot-ensure)
    (web-mode-hook     . eglot-ensure)
-   ;;(twig-mode-hook     . eglot-ensure)
    )
   :custom
   ((eldoc-echo-area-use-multiline-p . nil)
