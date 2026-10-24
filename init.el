@@ -13,7 +13,6 @@
 ;;
 
 ;;; Code:
-
 (when (version< emacs-version "30.0")
   (error "This requires Emacs 30.0 and above!"))
 
@@ -36,34 +35,22 @@
 (setq scroll-preserve-screen-position t)
 
 
-
-;; 
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- 
 ;; Dracula theme
 ;;               github dracula/emacs
-;; 起動時間短縮および起動時の不要なWindow作成を無効にするためにearly-initに記載
-;;
-;;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes") ;;<--指定が必要
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- 
 (load-theme 'dracula t)
-
-;; Don't change the font size for some headings and titles (default t)
-(setq dracula-enlarge-headings nil)
-;; Adjust font size of titles level 1 (default 1.3)
-(setq dracula-height-title-1 1.2)
-;; Adjust font size of titles level 2 (default 1.1)
-(setq dracula-height-title-2 1.0)
-;; Adjust font size of titles level 3 (default 1.0)
-(setq dracula-height-title-3 1.0)
-;; Adjust font size of document titles (default 1.44)
-(setq dracula-height-doc-title 1.44)
-;; Use less pink and bold on the mode-line and minibuffer (default nil)
-(setq dracula-alternate-mode-line-and-minibuffer t)
-;; Use normal weight for syntax faces like keywords, functions, and variables (default t)
-(setq dracula-bolder-keywords t)
-
-
+(with-eval-after-load 'dracula-theme
+  (setopt dracula-enlarge-headings nil )
+  (setopt dracula-height-title-1 1.2)
+  (setopt dracula-height-title-2 1.1)
+  (setopt dracula-height-title-3 1.0)
+  (setopt dracula-height-doc-title 1.1)
+  (setopt dracula-alternate-mode-line-and-minibuffer t)
+  (setopt dracula-bolder-keywords t))
 (with-eval-after-load 'dracula-theme
   (set-face-attribute 'font-lock-comment-face nil
-                      :foreground "#9aa8c7"))
+                      :foreground "#9aa8c7")) ;;コメントのカラーを明るめに変更
 
 
 (set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
@@ -851,6 +838,8 @@
                           `([,(cdr char-regexp) 0 font-shape-gstring]))))
 
 
+
+
 ;;;
 ;;; This will enable emacs to compile a simple cpp single file without any makefile by just pressing [f9] key
 ;;;
@@ -865,6 +854,8 @@
 ;;		   file)))
 ;;    (compile compile-command)))
 ;;(global-set-key [f9] 'code-compile)
+
+
 
 (provide 'init)
 ;;; init.el ends here
