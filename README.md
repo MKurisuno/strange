@@ -99,7 +99,7 @@
 　　   wifi.powersave = 2  
 
 
-## Emacd eglot LanguageServer
+## Emacs eglot LanguageServer
 ### C/C++ LanguageServer : Clangd 
    Download clang and clangd from <https://apt.llvm.org/#llvmsh > .   
    clangd/files to be installed 
