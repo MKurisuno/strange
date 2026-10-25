@@ -245,7 +245,10 @@
   (exec-path-from-shell-initialize))
   )
 
- (leaf vertico
+;;
+;;  vertico+marginalia+consult+corfu+cape
+;;
+(leaf vertico
   :doc "VERTical Interactive Completion"
   :ensure t
   :global-minor-mode t)
