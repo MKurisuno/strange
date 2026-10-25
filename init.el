@@ -444,7 +444,6 @@
 
 
 (leaf magit
-  :when (version<= "25.1" emacs-version)
   :ensure t
   :preface
   (defun c/git-commit-a ()
