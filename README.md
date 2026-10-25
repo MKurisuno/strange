@@ -4,23 +4,8 @@
  
 ### for kurisuno
 ### since 2024.12.02 
-### last update 2026.09.10 
+### last update 2026.10.25
 
-## files 
-　dot.early-init.el  
-　dot.init.el  
-　dot.zshrc  
-　dot.zprofile  
-　dot.gitconfig  
-　gnu-source-highlight/  
-　　　　　src-hilite-lesspipe.sh  
-　　　　　esc256.outlang  
-　　　　　custom.style  
-　clangd/  
-　　　　　config.yaml  
-　　　　　.clangd  
-　　　　　.clang-tiny   
-　　　　　.clang-format  
 
 ## Japanese directory name exchange to English
 　　 $ LANG=C xdg-user-dirs-gtk-update
@@ -71,7 +56,7 @@
 　　To change terminal shell  
 　　Instead of SHELL to load custum command    
 　　　custum command is  /usr/bin/zsh   
-　　　---dot.zshrc auto install nect package ---  
+　　　-dot.zshrc auto install next package-
 　　　　　zinit  
 　　　　　zsh-syntax-hightlight  
 　　　　　zsh-autosuggestions  
@@ -81,17 +66,15 @@
 
 ## emacs  
 　　Version > 30.1.50.  
-　　　   init.el    
+　　　  init.el    
 　　　  eraly-init.el  
-　　　   For drucura-theme  
-　　　   $ln -s dracura-theme-**/dracura-theme.el  .emacs.d/themes/dracura-theme.el 
 
 ## ~~gnu-source-highlight~~
 　~~download~~ ~~from~~ ~~ftp:~~//ftp.gnu.org/gnu/src-highlite.    
 　~~src-hilite-lesspipe.sh~~　  
 　~~esc256.outlang~~　  
 　~~custom.style~~　  
-### ---> apt install bat (which will be installed as /usr/bin/batcat)
+#### ---> apt install bat (which will be installed as /usr/bin/batcat)
 
 ## gnome-terminal
 　  https://draculatheme.com/gnome-terminal  
@@ -119,6 +102,7 @@
 ## Emacd eglot LanguageServer
 ### C/C++ LanguageServer : Clangd 
    Download clang and clangd from <https://apt.llvm.org/#llvmsh > .   
+   clangd/files to be installed 
 　　~/.config/clangd/config.yaml    
 　　{project}/.clangd    
 　　{project}/.clang-tidy    
