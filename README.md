@@ -66,6 +66,7 @@
 
 ## emacs  
 　　Version > 30.1.50.  
+    -Set up used by EMACS-build.txt.-  
 　　　  init.el    
 　　　  eraly-init.el  
 
