@@ -376,6 +376,7 @@
 
 
 (leaf svg-lib
+  :doc "svg-lib is an Emacs library that allows to create and display various SVG objects."
   :ensure t)
 
 (defvar corfu-margin-formatters nil)
