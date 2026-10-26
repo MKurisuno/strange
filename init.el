@@ -47,18 +47,17 @@
   (setopt dracula-height-title-3 1.0)
   (setopt dracula-height-doc-title 1.1)
   (setopt dracula-alternate-mode-line-and-minibuffer t)
-  (setopt dracula-bolder-keywords t))
-(with-eval-after-load 'dracula-theme
-  (set-face-attribute 'font-lock-comment-face nil
-                      :foreground "#9aa8c7")) ;;コメントのカラーを明るめに変更
+  (setopt dracula-bolder-keywords t)
+  ;;コメントのカラーを明るめに変更
+  (set-face-attribute 'font-lock-comment-face nil :foreground "#9aa8c7")
+  )
 
-
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Set up Fonts set
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
 (set-fontset-font t 'japanese-jisx0208 (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
 (set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
-
-
-
 
 
 (eval-and-compile
@@ -88,13 +87,6 @@
 
 
 
-;;
-;;   early-init.el
-;;;20 ;(setq make-backup-files nil)
-;;;21 ;(setq auto-save-default nil)
-;;;22 ;(setq auto-save-list-file-prefix nil)
-;;;23 (setq create-lockfiles nil)
-;;
 (leaf files
   :doc "file input and output commands for Emacs"
   :global-minor-mode auto-save-visited-mode
@@ -107,13 +99,11 @@
 (leaf startup
   :doc "process Emacs shell arguments"
   :custom `((auto-save-list-file-prefix . ,(locate-user-emacs-file "backup/.saves-"))))
-
-
-
 (leaf savehist
   :doc "Save minibuffer history"
   :custom `((savehist-file . ,(locate-user-emacs-file "savehist")))
   :global-minor-mode t)
+
 
 (leaf mozc
   :ensure t
@@ -207,6 +197,18 @@
           ("M-n" . flymake-goto-next-error)
           ("M-p" . flymake-goto-prev-error))))
 
+;; -- Spell Checker --
+(leaf jinx
+  :doc "Enchanted Spell Checker. Ubuntu needs libenchant-2-dev, pkgconf."
+  :ensure t
+  :hook (emacs-startup-mode-hook . global-jinx-mode)
+  :bind (("M-$" . jinx-correct)
+         ("C-M-$" . jinx-languages))
+  :custom
+  ;; チェック対象の言語（デフォルトは "en" や OS の言語設定依存）
+  (jinx-languages . "en"))
+
+
 (leaf which-key
   :doc "Display available keybindings in popup"
   :ensure t
@@ -224,6 +226,10 @@
   (exec-path-from-shell-initialize))
   )
 
+
+;;
+;; -- vertico marginalia corfu cape jinx --
+;;
  (leaf vertico
   :doc "VERTical Interactive Completion"
   :ensure t
@@ -350,17 +356,6 @@
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
   )
-
-(leaf jinx
-  :doc "Enchanted Spell Checker. Ubuntu needs libenchant-2-dev, pkgconf."
-  :ensure t
-  :hook (emacs-startup-mode-hook . global-jinx-mode)
-  :bind (("M-$" . jinx-correct)
-         ("C-M-$" . jinx-languages))
-  :custom
-  ;; チェック対象の言語（デフォルトは "en" や OS の言語設定依存）
-  (jinx-languages . "en"))
-
 
 (leaf embark
   :ensure t
@@ -770,22 +765,6 @@
   (advice-add #'treemacs :before #'my/treemacs-before))
 
 
-
-;;;
-;;; This will enable emacs to compile a simple cpp single file without any makefile by just pressing [f9] key
-;;;
-;;(defun code-compile()
-;;  (interactive)
-;;  (unless (file-exists-p "Makefile")
-;;    (set (make-local-variable 'compile-command)
-;;	 (let ((file (file-name-nondirectory buffer-file-name)))
-;;	   (format "%s -std=c++20 -o %s %s"
-;;		   (if (equal (file-name-extension file) "cpp") "g++" "gcc")
-;;		   (file-name-sans-extension file)
-;;		   file)))
-;;    (compile compile-command)))
-;;(global-set-key [f9] 'code-compile)
-
 (leaf ligature
   :config
   (ligature-set-ligatures 'prog-mode '("--" "---" "==" "===" "!=" "!==" "=!="
@@ -803,6 +782,23 @@
                               "<:<" ";;;"))
   (global-ligature-mode t))
 
+
+
+
+;;;
+;;; This will enable emacs to compile a simple cpp single file without any makefile by just pressing [f9] key
+;;;
+;;(defun code-compile()
+;;  (interactive)
+;;  (unless (file-exists-p "Makefile")
+;;    (set (make-local-variable 'compile-command)
+;;	 (let ((file (file-name-nondirectory buffer-file-name)))
+;;	   (format "%s -std=c++20 -o %s %s"
+;;		   (if (equal (file-name-extension file) "cpp") "g++" "gcc")
+;;		   (file-name-sans-extension file)
+;;		   file)))
+;;    (compile compile-command)))
+;;(global-set-key [f9] 'code-compile)
 
 
 (provide 'init)
