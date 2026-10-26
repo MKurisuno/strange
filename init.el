@@ -35,10 +35,10 @@
 (setq scroll-preserve-screen-position t)
 
 
-;;--- --- --- --- --- --- --- --- --- --- --- --- --- 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Dracula theme
 ;;               github dracula/emacs
-;;--- --- --- --- --- --- --- --- --- --- --- --- --- 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (load-theme 'dracula t)
 (with-eval-after-load 'dracula-theme
   (setopt dracula-enlarge-headings nil )
@@ -207,17 +207,6 @@
           ("M-n" . flymake-goto-next-error)
           ("M-p" . flymake-goto-prev-error))))
 
-(leaf jinx
-  :ensure t
-  :hook (emacs-startup-mode-hook . global-jinx-mode)
-  :bind (("M-$" . jinx-correct)
-         ("C-M-$" . jinx-languages))
-  :custom
-  ;; チェック対象の言語（デフォルトは "en" や OS の言語設定依存）
-  (jinx-languages . "en"))
-
-
-
 (leaf which-key
   :doc "Display available keybindings in popup"
   :ensure t
@@ -330,7 +319,7 @@
   :custom ((corfu-auto . t)
            (corfu-auto-delay . 0.1)         ; お好みで 0.1 ~ 0.2 にしても快適です
            (corfu-auto-prefix . 1)
-           (corfu-popupinfo-delay . nil)  ; 自動ポップアップを抑制する場合
+           (corfu-popupinfo-delay . nil)   ; 自動ポップアップを抑制する場合
            (corfu-cycle . t)
            (corfu-quit-no-match . 'separator))
   :bind ((corfu-map
@@ -344,10 +333,12 @@
    )
 
 (leaf svg-lib
+  :doc "Emacs library that allows to create and display various SVG objects."
   :ensure t)
 
 (defvar corfu-margin-formatters nil)
 (leaf kind-icon
+  :doc "Colorful icons for completion in Emacs. corfu-popupinfo needs."
   :ensure t
   :after corfu
   :require t
@@ -359,6 +350,16 @@
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
   )
+
+(leaf jinx
+  :doc "Enchanted Spell Checker. Ubuntu needs libenchant-2-dev, pkgconf."
+  :ensure t
+  :hook (emacs-startup-mode-hook . global-jinx-mode)
+  :bind (("M-$" . jinx-correct)
+         ("C-M-$" . jinx-languages))
+  :custom
+  ;; チェック対象の言語（デフォルトは "en" や OS の言語設定依存）
+  (jinx-languages . "en"))
 
 
 (leaf embark
@@ -768,40 +769,6 @@
 (with-eval-after-load 'treemacs
   (advice-add #'treemacs :before #'my/treemacs-before))
 
-;;
-;;  リガチャを有効にする   require Jetbrains Mono
-;;
-(let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
-               (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
-               (36 . ".\\(?:>\\)")
-               (37 . ".\\(?:\\(?:%%\\)\\|%\\)")
-               (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
-               (42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
-               (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
-               (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
-               (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
-               (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
-               (48 . ".\\(?:x[a-zA-Z]\\)")
-               (58 . ".\\(?:::\\|[:=]\\)")
-               (59 . ".\\(?:;;\\|;\\)")
-               (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
-               (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
-               (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
-               (63 . ".\\(?:\\(\\?\\?\\)\\|[:=?]\\)")
-               (91 . ".\\(?:]\\)")
-               (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
-               (94 . ".\\(?:=\\)")
-               (119 . ".\\(?:ww\\)")
-               (123 . ".\\(?:-\\)")
-               (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
-               (126 . ".\\(?:~>\\|~~\\|[>=@~-]\\)")
-               )
-             ))
-  (dolist (char-regexp alist)
-    (set-char-table-range composition-function-table (car char-regexp)
-                          `([,(cdr char-regexp) 0 font-shape-gstring]))))
-
-
 
 
 ;;;
@@ -818,6 +785,23 @@
 ;;		   file)))
 ;;    (compile compile-command)))
 ;;(global-set-key [f9] 'code-compile)
+
+(leaf ligature
+  :config
+  (ligature-set-ligatures 'prog-mode '("--" "---" "==" "===" "!=" "!==" "=!="
+                              "=:=" "=/=" "<=" ">=" "&&" "&&&" "&=" "++" "+++" "***" ";;" "!!"
+                              "??" "???" "?:" "?." "?=" "<:" ":<" ":>" ">:" "<:<" "<>" "<<<" ">>>"
+                              "<<" ">>" "||" "-|" "_|_" "|-" "||-" "|=" "||=" "##" "###" "####"
+                              "#{" "#[" "]#" "#(" "#?" "#_" "#_(" "#:" "#!" "#=" "^=" "<$>" "<$"
+                              "$>" "<+>" "<+" "+>" "<*>" "<*" "*>" "</" "</>" "/>" "<!--" "<#--"
+                              "-->" "->" "->>" "<<-" "<-" "<=<" "=<<" "<<=" "<==" "<=>" "<==>"
+                              "==>" "=>" "=>>" ">=>" ">>=" ">>-" ">-" "-<" "-<<" ">->" "<-<" "<-|"
+                              "<=|" "|=>" "|->" "<->" "<~~" "<~" "<~>" "~~" "~~>" "~>" "~-" "-~"
+                              "~@" "[||]" "|]" "[|" "|}" "{|" "[<" ">]" "|>" "<|" "||>" "<||"
+                              "|||>" "<|||" "<|>" "..." ".." ".=" "..<" ".?" "::" ":::" ":=" "::="
+                              ":?" ":?>" "//" "///" "/*" "*/" "/=" "//=" "/==" "@_" "__" "???"
+                              "<:<" ";;;"))
+  (global-ligature-mode t))
 
 
 
