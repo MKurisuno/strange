@@ -207,26 +207,16 @@
           ("M-n" . flymake-goto-next-error)
           ("M-p" . flymake-goto-prev-error))))
 
-
-;;flyspell の日本語除外のための設定
-(defun my-flyspell-check-word-p ()
-  "日本語を含む単語はFlyspellのチェック対象から除外する."
-  (let ((word (thing-at-point 'word t)))
-    (and word (not (string-match-p "[ぁ-んァ-ヶ一-龯々〆〃ー]" word)))))
-(leaf flyspell
+(leaf jinx
   :ensure t
+  :hook (emacs-startup-mode-hook . global-jinx-mode)
+  :bind (("M-$" . jinx-correct)
+         ("C-M-$" . jinx-languages))
   :custom
-  ((ispell-program-name . "aspell")
-   (ispell-dictionary . "en_US"))
-  ;;:hook
-  ;;((text-mode-hook . flyspell-mode)
-  ;; (prog-mode-hook . flyspell-prog-mode))
-  :config
-  (add-hook 'flyspell-mode-hook
-            (lambda ()
-              (setq-local
-               flyspell-generic-check-word-predicate
-               #'my-flyspell-check-word-p))))
+  ;; チェック対象の言語（デフォルトは "en" や OS の言語設定依存）
+  (jinx-languages . "en"))
+
+
 
 (leaf which-key
   :doc "Display available keybindings in popup"
@@ -315,23 +305,6 @@
            (completion-category-defaults . nil)
            (completion-category-overrides . '((file (styles partial-completion))))))
 
-(leaf embark
-  :ensure t
-  :bind (("C-."   . embark-act)
-         ("C-;"   . embark-dwim)
-         ("C-h B" . embark-bindings)))
-
-
-(leaf embark-consult
-  :doc "Consult integration for Embark"
-  :ensure t
-  :bind ((minibuffer-mode-map
-          :package emacs
-          ("M-." . embark-dwim)
-          ("C-." . embark-act))))
-
-
-
 (leaf cape
   :doc "Completion At Point Extensions"
   :ensure t
@@ -362,15 +335,13 @@
            (corfu-quit-no-match . 'separator))
   :bind ((corfu-map
           ("C-s" . corfu-insert-separator)))
-  :init
-  ;; 各種補完ソースを Capf に追加するフック
+  :init   ;; 各種補完ソースを Capf に追加するフック
     (add-hook 'prog-mode-hook
             (lambda ()
               (add-to-list 'completion-at-point-functions #'cape-file)
               (add-to-list 'completion-at-point-functions #'cape-dabbrev)
               (add-to-list 'completion-at-point-functions #'yasnippet-capf 'append)))
    )
-
 
 (leaf svg-lib
   :ensure t)
@@ -389,6 +360,21 @@
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
   )
 
+
+(leaf embark
+  :ensure t
+  :bind (("C-."   . embark-act)
+         ("C-;"   . embark-dwim)
+         ("C-h B" . embark-bindings)))
+
+
+(leaf embark-consult
+  :doc "Consult integration for Embark"
+  :ensure t
+  :bind ((minibuffer-mode-map
+          :package emacs
+          ("M-." . embark-dwim)
+          ("C-." . embark-act))))
 
 (leaf puni
   :doc "Parentheses Universalistic"
