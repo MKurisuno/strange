@@ -350,8 +350,8 @@
   :hook (emacs-startup . global-jinx-mode)
   :bind (("M-$" . jinx-correct)
          ("C-M-$" . jinx-languages))
-  :init
-  (setq jinx-languages
+  :custom
+  (jinx-languages
         (if (eq system-type 'windows-nt)
             "en_US"
             "en")))
