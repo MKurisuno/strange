@@ -87,14 +87,6 @@
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
 
 
-
-;;
-;;   early-init.el
-;;;20 ;(setq make-backup-files nil)
-;;;21 ;(setq auto-save-default nil)
-;;;22 ;(setq auto-save-list-file-prefix nil)
-;;;23 (setq create-lockfiles nil)
-;;
 (leaf files
   :doc "file input and output commands for Emacs"
   :global-minor-mode auto-save-visited-mode
@@ -107,8 +99,6 @@
 (leaf startup
   :doc "process Emacs shell arguments"
   :custom `((auto-save-list-file-prefix . ,(locate-user-emacs-file "backup/.saves-"))))
-
-
 
 (leaf savehist
   :doc "Save minibuffer history"
@@ -224,8 +214,11 @@
   (exec-path-from-shell-initialize))
   )
 
- (leaf vertico
-  :doc "VERTical Interactive Completion"
+;;
+;;  vertico+marginalia+consult+corfu+cape
+;;
+(leaf vertico
+  :doc "VERTical Interactive COmpletion"
   :ensure t
   :global-minor-mode t)
 
