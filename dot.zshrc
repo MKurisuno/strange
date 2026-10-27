@@ -14,6 +14,10 @@ export EDITOR='emacs '
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
 
+export HISTCONTROL=ignorespace
+export HISTIGNORE="*password*:*token*:*secret*"
+
+
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 # 履歴ファイルの保存先
 export HISTFILE=~/.zsh_history
@@ -30,7 +34,6 @@ setopt hist_ignore_all_dups
 setopt hist_ignore_space
 setopt hist_no_functions
 setopt hist_no_store
-setopt hist_reduce_blanks
 setopt hist_reduce_blanks
 
 # Use modern completion system
@@ -110,6 +113,17 @@ zinit light zsh-users/zsh-completions
 zinit light zdharma/history-search-multi-word
 zinit light dracula/zsh
 
+#
+#    fzfの設定
+#          if which fzf is exist, then ...
+#
+if [[ -e $(which fzf) ]] then 
+   eval "$(fzf --zsh)"
+   #export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
+   export FZF_DEFAULT_OPTS='--height 50% --reverse --border --preview-window=:hidden'
+   # 色をカスタマイズ
+   export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
+fi
 
 
 # Dracula zsh
@@ -193,3 +207,4 @@ ZSH_HIGHLIGHT_STYLES[bracket-level-5]='fg=cyan,bold'
 # カーソルがある場所の括弧にマッチする括弧
 ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]='standout'
 
+   
