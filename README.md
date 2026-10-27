@@ -81,9 +81,15 @@
 　  https://draculatheme.com/gnome-terminal  
 
 ## alacritty
-　  Dracua theme Download using the GitHub .zip download option.
-　 and install to  ~/.config/alacrity/themes/dracula
-　 echo  general.import = ["/path/to/dracula.toml"]  > ~/.config/alacritty/alacritty.toml  
+　  Dracua theme Download https://github.com/dracula/alacritty/archive/master.zip   
+　 Iinstall to  ~/.config/alacrity/themes/dracula
+　 echo  "general.import = ["/path/to/dracula.toml"]"  > ~/.config/alacritty/alacritty.toml  
+
+## python3 environment
+　　Activate virtual environment.  
+　　 $ mkdir ~/.Apliris  
+　　 $ python3 -m venv .Aprilis  
+　　 $ source .Aprilis/bin/active
 
 ##  Disable bluetooth service
 　  $ sudo systemctl disable bluetooth.service  
@@ -91,7 +97,6 @@
 ##  Disable printer service  
 　  $ sudo systemctl stop cups.service  
 　  $ sudo systemctl disable cups.service  
-  
 
 ##  Wifi pawer-save-mode off
 ####　 if wifi is unstable,  
@@ -104,7 +109,6 @@
 　   3) (enable)   
 　　   wifi.powersave = 2  
 
-
 ## Emacs eglot LanguageServer
 ### C/C++ LanguageServer : Clangd 
    Download clang and clangd from <https://apt.llvm.org/#llvmsh > .   
@@ -114,19 +118,12 @@
 　　{project}/.clang-tidy    
 　　{project}/.clang-format   
 
-### python3 environment  2026.08.07
-　　Activate virtual environment.  
-　　 $ mkdir ~/.Apliris  
-　　 $ python3 -m venv .Aprilis  
-　　 $ source .Aprilis/bin/active
-
 ### Node.js to install 
 　　Install Node.js  
 　　 $sudo apt update  
 　　 $sudo apt install -y curl ca-certificates  
 　　 $curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -  
 　　 $sudo apt install -y nodejs  
-
 
 ### PHP_LanguageServer:Intelephense
 　　1) Install Intelephense  
@@ -153,4 +150,5 @@
 　　　$sudo npm install -g vscode-langservers-extracted  
 　　2) Insert those in init.el  
 　　　(add-to-list 'eglot-server-programs '((web-mode) . ("vscode-html-language-server" "--stdio")))  
+
 
