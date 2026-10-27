@@ -13,8 +13,7 @@
 ;;
 
 ;;; Code:
-(when (version< emacs-version "30.0")
-  (error "This requires Emacs 30.0 and above!"))
+(when (version< emacs-version "30.0")  (error "This requires Emacs 30.0 and above!"))
 
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
@@ -34,12 +33,10 @@
 ;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
 (setq scroll-preserve-screen-position t)
 
-
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Dracula theme
 ;;               github dracula/emacs
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-(load-theme 'dracula t)
 (with-eval-after-load 'dracula-theme
   (setopt dracula-enlarge-headings nil )
   (setopt dracula-height-title-1 1.2)
@@ -51,6 +48,7 @@
   ;;コメントのカラーを明るめに変更
   (set-face-attribute 'font-lock-comment-face nil :foreground "#9aa8c7")
   )
+
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Set up Fonts set
@@ -114,7 +112,7 @@
   :config  ;; after-load mozc でないと読み込まない
   (with-eval-after-load 'mozc
     (set-face-attribute 'mozc-preedit-face nil
-                        :height 0.85
+                        :height 0.95
                         :foreground "#8BE9FD"
                         :background "#282A36"
                         :weight 'bold)
@@ -781,8 +779,6 @@
                               ":?" ":?>" "//" "///" "/*" "*/" "/=" "//=" "/==" "@_" "__" "???"
                               "<:<" ";;;"))
   (global-ligature-mode t))
-
-
 
 
 ;;;

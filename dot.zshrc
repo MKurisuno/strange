@@ -4,20 +4,34 @@
 #               lastupdate 20260918
 
 
+# PATH 
+[[ -f ~/.zprofile ]] && source ~/.zprofile
+
+
 setopt histignorealldups sharehistory
-
-
-export EDITOR='emacs -nw'
-
+export EDITOR='emacs '
 
 # Use emacs keybindings even if our EDITOR is set to vi
-#bindkey -e
+bindkey -e
 
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
-HISTSIZE=1000
-SAVEHIST=1000
-HISTFILE=~/.zsh_history
+# 履歴ファイルの保存先
+export HISTFILE=~/.zsh_history
+# 履歴の保存件数
+export HISTSIZE=10000
+export SAVEHIST=10000
 
+setopt extended_history
+setopt hist_allow_clobber
+setopt hist_fcntl_lock
+setopt hist_find_no_dups 
+setopt hist_ignore_dups
+setopt hist_ignore_all_dups
+setopt hist_ignore_space
+setopt hist_no_functions
+setopt hist_no_store
+setopt hist_reduce_blanks
+setopt hist_reduce_blanks
 
 # Use modern completion system
 autoload -Uz compinit
@@ -29,7 +43,7 @@ compinit
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' menu true
 zstyle ':completion:*:*:rm:*:*' menu false
-zstyle ':completion:*:warnings' format ' %F{#50fa7b}-- no matches found --%f'
+#zstyle ':completion:*:warnings' format ' %F{#50fa7b}-- no matches found --%f'
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
 #zstyle ':completion:*:(cd|less):*' maticher 'm:{a-z}={A-Z}'
@@ -75,17 +89,12 @@ alias vdir='vdir --color=auto'
 #lessをbatに変更
 alias bat='/usr/bin/batcat'
 alias less='bat'
+export LESS="-R"
 
 # man のPAGERをbatに変更
 man() {
   /usr/bin/man "$@" | col -b |  batcat -p --language=man --theme=Dracula --style=full
 }
-
-#less ---> bat へ変更したので gnu-source-highlight は不使用
-# sudo apt install source-highlight
-#export LESSOPEN="| $HOME/bin/src-hilite-lesspipe.sh %s"
-export LESS="-R"
-
 
 #
 # ZINIT 

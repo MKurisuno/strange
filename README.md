@@ -80,6 +80,11 @@
 ## gnome-terminal
 　  https://draculatheme.com/gnome-terminal  
 
+## alacritty
+　  Dracua theme Download using the GitHub .zip download option.
+　 and install to  ~/.config/alacrity/themes/dracula
+　 echo  general.import = ["/path/to/dracula.toml"]  > ~/.config/alacritty/alacritty.toml  
+
 ##  Disable bluetooth service
 　  $ sudo systemctl disable bluetooth.service  
   
