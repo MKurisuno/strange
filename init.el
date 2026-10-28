@@ -647,7 +647,7 @@
   (markdown-header-face-4 . '((t (:weight bold :height 1.0))))
   :hook
   ((markdown-mode-hook . visual-line-mode)
-   (markdown-mode-hook . flyspell-mode))
+   (markdown-mode-hook . jinx-mode))
   :bind
   (:markdown-mode-map
    ("C-c C-t" . markdown-toc-generate-toc)
