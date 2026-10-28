@@ -97,6 +97,7 @@
             (auto-save-visited-interval . 1)))
 (leaf startup
   :doc "process Emacs shell arguments"
+  ;; to recover session,  M-x recover-session .save-xxx
   :custom `((auto-save-list-file-prefix . ,(locate-user-emacs-file "backup/.saves-"))))
 (leaf savehist
   :doc "Save minibuffer history"
