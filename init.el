@@ -141,9 +141,6 @@
                         :foreground "#50FA7B"
                         :background "#282A36")))
 
-;;((leaf autorevert
-;;  :doc "revert buffers when files on disk change"
-;;  :global-minor-mode global-auto-revert-mode)
 
 (leaf autorevert
   :doc "Revert buffers automatically when underlying files change"
