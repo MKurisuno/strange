@@ -183,17 +183,7 @@
            (show-paren-when-point-inside-paren . t)
            (show-paren-when-point-in-periphery . t)))
 
-;;(leaf  highlight-indent-guides
-;;  :ensure t
-;;  :custom
-;;  (highlight-indent-guides-method  . 'column)
-;;  (highlight-indent-guides-auto-enabled . t)
-;;  (highlight-indent-guides-responsive . 'top)
-;;  (highlight-indent-guides-delay . 0)
-;;  :hook
-;;  (prog-mode-hook . highlight-indent-guides-mode)
-;;  :config
-;;  )
+
 (leaf highlight-indent-guides
   :ensure t
   :hook (prog-mode-hook . highlight-indent-guides-mode)
