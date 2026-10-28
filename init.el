@@ -180,6 +180,28 @@
 ;;  (prog-mode-hook . highlight-indent-guides-mode)
 ;;  :config
 ;;  )
+(leaf highlight-indent-guides
+  :ensure t
+  :hook (prog-mode-hook . highlight-indent-guides-mode)
+  :custom
+  (highlight-indent-guides-method . 'column)
+  (highlight-indent-guides-auto-enabled . nil) ; 自動色計算をオフにしてカスタムカラーを使用
+  (highlight-indent-guides-responsive . 'top)   ; カーソル位置のガイドをアクティブ強調
+  :config
+  ;; --- Dracula風 4色カラーパレット設定 ---
+  ;; レベル 1 (Cyan / シアン)
+  (set-face-background 'highlight-indent-guides-odd-face "#8be9fd")
+  ;; レベル 2 (Pink / ピンク)
+  (set-face-background 'highlight-indent-guides-even-face "#ff79c6")
+  ;; レベル 3 (Purple / パープル)
+  (set-face-background 'highlight-indent-guides-character-face "#bd93f9")
+  ;; レベル 4 (Green / グリーン)
+  (set-face-background 'highlight-indent-guides-top-face "#50fa7b"))
+
+
+
+
+
 
 (leaf simple
   :doc "basic editing commands for Emacs"
