@@ -239,7 +239,6 @@
   (leaf exec-path-from-shell
     :doc "Get environment variables such as $PATH from the shell"
     :ensure t
-    ;; :if (eq system-type 'gnu/linux)
     :defun (exec-path-from-shell-initialize)
     :custom ((exec-path-from-shell-check-startup-files)
              (exec-path-from-shell-variables . '("PATH" "GOPATH" "JAVA_HOME")))
