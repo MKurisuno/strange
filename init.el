@@ -139,9 +139,21 @@
                         :foreground "#50FA7B"
                         :background "#282A36")))
 
+;;((leaf autorevert
+;;  :doc "revert buffers when files on disk change"
+;;  :global-minor-mode global-auto-revert-mode)
+
 (leaf autorevert
-  :doc "revert buffers when files on disk change"
+  :doc "Revert buffers automatically when underlying files change"
+  :tag "builtin"
+  :require t
+  :custom
+  (auto-revert-check-vc-info . t)
+  (global-auto-revert-non-file-buffers . t)
+  (auto-revert-interval . 1)
+  (auto-revert-verbose . nil)
   :global-minor-mode global-auto-revert-mode)
+
 
 (leaf delsel
   :doc "delete selection if you insert"
