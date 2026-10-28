@@ -786,6 +786,7 @@
 
 
 (leaf ligature
+  :doc " リガチャして見た．Setting for JetBrains Mono. "
   :config
   (ligature-set-ligatures 'prog-mode '("--" "---" "==" "===" "!=" "!==" "=!="
                               "=:=" "=/=" "<=" ">=" "&&" "&&&" "&=" "++" "+++" "***" ";;" "!!"
