@@ -57,7 +57,7 @@
 ;; Dracula theme
 ;;               github dracula/emacs
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(add-to-list 'custom-theme-load-path "~/.config/emacs/themes")
 (load-theme 'dracula t)
 
 
