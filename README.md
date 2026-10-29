@@ -4,9 +4,12 @@
  
 ### for kurisuno
 ### since 2024.12.02 
-### last update 2026.10.25
+### last update 2026.10.29
 
-
+### file administration with stow 
+   zsh emacs clangd   
+   $stow -t $HOME xxx  
+   
 ## Japanese directory name exchange to English
 　　 $ LANG=C xdg-user-dirs-gtk-update
  
@@ -49,6 +52,7 @@
 
 ##  Default Editor
 　　 $ sudo update-alternatives --config editor  
+
 
 ## bash switch to zsh
 　To change login-shell   

@@ -183,25 +183,19 @@
 
 (leaf highlight-indent-guides
   :ensure t
-  :hook (prog-mode-hook . highlight-indent-guides-mode)
+  :hook (yaml-ts-mode-hook . highlight-indent-guides-mode)
+  :hook (python-ts-mode-hook . highlight-indent-guides-mode)
   :custom
   (highlight-indent-guides-method . 'column)
   (highlight-indent-guides-auto-enabled . nil) ; 自動色計算をオフにしてカスタムカラーを使用
   (highlight-indent-guides-responsive . 'top)   ; カーソル位置のガイドをアクティブ強調
   :config
-  ;; --- Dracula風 4色カラーパレット設定 ---
-  ;; レベル 1 (Cyan / シアン)
-  (set-face-background 'highlight-indent-guides-odd-face "#8be9fd")
-  ;; レベル 2 (Pink / ピンク)
-  (set-face-background 'highlight-indent-guides-even-face "#ff79c6")
-  ;; レベル 3 (Purple / パープル)
-  (set-face-background 'highlight-indent-guides-character-face "#bd93f9")
-  ;; レベル 4 (Green / グリーン)
-  (set-face-background 'highlight-indent-guides-top-face "#50fa7b"))
-
-
-
-
+  ;; --- Dracula風 4色カラーパレット設定 --- #f1fa8c
+  ;; Cyan:#8BE9FD Pink:#FF79C6 Yellow:#F1FA8C Purple:#BD93F9 Green:#50FA7B
+  (set-face-background 'highlight-indent-guides-odd-face "#F1FA8C")
+  (set-face-background 'highlight-indent-guides-even-face "#50FA7B")
+  (set-face-background 'highlight-indent-guides-top-even-face "#FF79C6")
+  (set-face-background 'highlight-indent-guides-top-odd-face "#BD93F9") )
 
 
 (leaf simple
