@@ -4,27 +4,22 @@
 #               lastupdate 20260918
 
 
-# PATH 
-[[ -f ~/.zprofile ]] && source ~/.zprofile
+# PATH   load .zprofile 
 
-
-setopt histignorealldups sharehistory
-export EDITOR='emacs '
+# EDITOR
+export EDITOR='emacs'
 
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
 
+# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 export HISTCONTROL=ignorespace
 export HISTIGNORE="*password*:*token*:*secret*"
-
-
-# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
-# 履歴ファイルの保存先
 export HISTFILE=~/.zsh_history
-# 履歴の保存件数
 export HISTSIZE=10000
 export SAVEHIST=10000
 
+setopt histignorealldups sharehistory
 setopt extended_history
 setopt hist_allow_clobber
 setopt hist_fcntl_lock
@@ -42,7 +37,6 @@ compinit
 
 # zstyle :completion:<function>:<completer>:<command>:<argument>:<tag>
 # completion:Func:Completer:Cmd-or-Context:Arg:Tag  
-
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' menu true
 zstyle ':completion:*:*:rm:*:*' menu false
@@ -50,7 +44,6 @@ zstyle ':completion:*:*:rm:*:*' menu false
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
 #zstyle ':completion:*:(cd|less):*' maticher 'm:{a-z}={A-Z}'
-
 #zstyle ':completion:*:setopt:*' menu true select 
 #zstyle ':completion:*' file-list all
 #zstyle ':completion:*:*:*:*:descriptions' format '%F{green}-- %d --%f'
@@ -79,16 +72,18 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias rgrep='egrep --color=auto'
 alias grep='grep --color=auto'
-export GREP_COLORS='ms=1;3;38;2;255;135;190:mc=1;3;38;2;255;135;190:sl=38;2;189;147;249:cx=38;2;135;175;255:fn=38;2;189;147;249:ln=38;2;80;250;123:bn=38;2;80;250;123:se=38;2;98;114;164'
+# Dracula theme for GNU grep - https://draculatheme.com/grep
+export GREP_COLORS="mt=1;38;2;255;85;85:fn=38;2;255;121;198:ln=38;2;80;250;123:bn=38;2;80;250;123:se=38;2;139;233;253"
+#export GREP_COLORS='ms=1;3;38;2;255;135;190:mc=1;3;38;2;255;135;190:sl=38;2;189;147;249:cx=38;2;135;175;255:fn=38;2;189;147;249:ln=38;2;80;250;123:bn=38;2;80;250;123:se=38;2;98;114;164'
 alias ls='ls --color=auto'
 export LS_COLORS='di=01;38;5;141:ln=01;38;5;117:so=01;38;5;212:pi=38;5;215:ex=01;38;5;84:bd=38;5;215:cd=38;5;215:*.tgz=01;38;5;203:*.gz=01;38;5;203:*.zip=01;38;5;203:*.bz2=01;38;5;203:*.xz=01;38;5;203:*.jpg=01;38;5;212:*.jpeg=01;38;5;212:*.png=01;38;5;212:*.gif=01;38;5;212:*.mp3=01;38;5;215:*.mp4=01;38;5;215:*.mkv=01;38;5;215:*.pdf=01;38;5;141:*.md=01;38;5;117:*.txt=38;5;255'
+
 alias e='emacs'
 alias ps='grc ps'
 alias l='ls -lF'
 alias la='ls -a'
 alias ll='ls -alF'
 alias lx='ls -aF'
-alias vdir='vdir --color=auto'
 #lessをbatに変更
 alias bat='/usr/bin/batcat'
 alias less='bat'
@@ -113,10 +108,10 @@ zinit light zsh-users/zsh-completions
 zinit light zdharma/history-search-multi-word
 zinit light dracula/zsh
 
-#
+#--- --- --- --- --- --- --- --- --- --- --- --- --- ---
 #    fzfの設定
-#          if which fzf is exist, then ...
-#
+#          if fzf is exist, then execute.
+#--- --- --- --- --- --- --- --- --- --- --- --- --- ---
 if [[ -e $(which fzf) ]] then 
    eval "$(fzf --zsh)"
    #export FZF_DEFAULT_OPTS='--height 40% --reverse --border'

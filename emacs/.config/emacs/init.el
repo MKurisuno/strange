@@ -1,4 +1,4 @@
-;; init --- Personal Emacs configuration -*- lexical-binding: t; -*-
+;;; package --- init Personal Emacs configuration -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; Personal Emacs configuration.
 ;; M.Kurisuno .emacs/init.el
@@ -13,8 +13,11 @@
 ;;
 
 ;;; Code:
-(when (version< emacs-version "30.0")  (error "This requires Emacs 30.0 and above!"))
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Initial Setting.
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+(when (version< emacs-version "30.0")  (error "This requires Emacs 30.0 and above!"))
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
 (setq inhibit-compacting-font-caches t)
@@ -23,7 +26,6 @@
 (setq column-number-mode t)
 (global-display-line-numbers-mode t)
 (defalias 'yes-or-no-p 'y-or-n-p)
-
 ;; スクロールした際のカーソルの移動行数
 (setq scroll-conservatively 1)
 ;; スクロール開始のマージンの行数
@@ -59,6 +61,9 @@
 (set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
 
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Leaf `setting-constant'
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (eval-and-compile
   (customize-set-variable
    'package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
@@ -85,7 +90,9 @@
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
 
 
-
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;  Buckup files setting.
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf files
   :doc "file input and output commands for Emacs"
   :global-minor-mode auto-save-visited-mode
@@ -104,7 +111,9 @@
   :custom `((savehist-file . ,(locate-user-emacs-file "savehist")))
   :global-minor-mode t)
 
-
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;  mozc color setting
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf mozc
   :ensure t
   :custom
@@ -142,6 +151,10 @@
                         :background "#282A36")))
 
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+
 (leaf autorevert
   :doc "Revert buffers automatically when underlying files change"
   :tag "builtin"
@@ -158,9 +171,67 @@
   :doc "delete selection if you insert"
   :global-minor-mode delete-selection-mode)
 
-;;
-;; macrostep. paren. delimiter. higtlight
-;;
+(leaf simple
+  :doc "basic editing commands for Emacs"
+  :custom ((kill-read-only-ok . t)
+           (kill-whole-line . t)
+           (eval-expression-print-length . nil)
+           (eval-expression-print-level . nil)))
+
+(leaf which-key
+  :doc "Display available keybindings in popup"
+  :ensure t
+  :global-minor-mode t)
+
+(when (eq system-type 'gnu/linux)
+  (leaf exec-path-from-shell
+    :doc "Get environment variables such as $PATH from the shell"
+    :ensure t
+    :defun (exec-path-from-shell-initialize)
+    :custom ((exec-path-from-shell-check-startup-files)
+             (exec-path-from-shell-variables . '("PATH" "GOPATH" "JAVA_HOME")))
+    :config
+  (exec-path-from-shell-initialize))
+  )
+
+(leaf puni
+  :doc "Parentheses Universalistic"
+  :ensure t
+  :global-minor-mode puni-global-mode
+  :bind (:puni-mode-map
+         ;; default mapping  sexp = Symbolic-Expression
+         ;; ("C-M-f" . puni-forward-sexp)      ;次のSexpの末尾まで進む
+         ;; ("C-M-b" . puni-backward-sexp)     ;前のSexpのまで戻る
+         ;; ("C-M-a" . puni-beginning-of-sexp) ;(S式)の先頭まで移動
+         ;; ("C-M-e" . puni-end-of-sexp)       ;(S式)の末尾まで移動
+         ;; ("C-M-u" . backward-up-list)       ;( )内にあるとき( )の先頭に移動
+         ;; ("C-M-d" . backward-down-list)     ;次の( )内に移動
+         ;; ("M-)"   . puni-syntactic-forward-punct)  ;次の句読点(punctuation)までJamp
+         ;; ("M-("   . puni-syntactic-backward-punct) ;前の句読点(punctuation)までJamp
+         ;; (global-map) M-f or ESC<right>  forward-word
+         ;; (global-map) M-b or ESC<left>   backward-word
+         ;; ("M-{")  . backword-paragraph)  ;;次のパラグラフ先頭へ  Ctrl+<up>
+         ;; ("M-}")  . forward-paragraph)   ;;前のパラグラフ先頭へ  Ctrl+<down>
+         ("C-c }" . puni-slurp-forward)   ;; (a) b  -> (a  b)   ; slurp = 括弧内へ取り込む
+         ("C-c {" . puni-slurp-backward)  ;;  a (b) -> (a  b)   ;
+         ("C-c <" . puni-barf-forward)    ;; (a  b) -> (a) b    ; barf  = 括弧外へ出す
+         ("C-c >" . puni-barf-backward)   ;; (a  b) ->  a (b)   ;
+         ("C-c )" . puni-wrap-round)      ;;   a    ->  (a)     ; wrap  = 括弧を付ける
+         ("C-c (" . puni-splice)          ;;  (a)   ->   a      ; splice = 括弧を外す
+         ("M-r" . puni-raise)             ;; A(b(x),y) -> b(x)  ; raise = 親のS式を現在のS式で置き換える
+         ("M-U" . puni-splice-killing-backward)
+         ("M-z" . puni-squeeze)           ;; foo (bar) baz -> { + C-y + } -> foo {bar} baz
+                                          ;; squeeze = 中身を一時退避して括弧を付け替える
+	 )
+  :config
+  (leaf elec-pair
+    :doc "Automatic parenthesis pairing"
+    :global-minor-mode electric-pair-mode))
+
+
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; macrostep paren delimiter highlight-indent-guides
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf macrostep
   :ensure t
   :bind (("C-c e" . macrostep-expand)))
@@ -180,7 +251,6 @@
            (show-paren-when-point-inside-paren . t)
            (show-paren-when-point-in-periphery . t)))
 
-
 (leaf highlight-indent-guides
   :ensure t
   :hook (yaml-ts-mode-hook . highlight-indent-guides-mode)
@@ -198,13 +268,9 @@
   (set-face-background 'highlight-indent-guides-top-odd-face "#BD93F9") )
 
 
-(leaf simple
-  :doc "basic editing commands for Emacs"
-  :custom ((kill-read-only-ok . t)
-           (kill-whole-line . t)
-           (eval-expression-print-length . nil)
-           (eval-expression-print-level . nil)))
-
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;  flymake + jinx
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf flymake
   :doc "A universal on-the-fly syntax checker"
   :hook (emacs-lisp-mode-hook . flymake-mode)
@@ -224,26 +290,11 @@
   (jinx-languages . "en"))
 
 
-(leaf which-key
-  :doc "Display available keybindings in popup"
-  :ensure t
-  :global-minor-mode t)
 
-(when (eq system-type 'gnu/linux)
-  (leaf exec-path-from-shell
-    :doc "Get environment variables such as $PATH from the shell"
-    :ensure t
-    :defun (exec-path-from-shell-initialize)
-    :custom ((exec-path-from-shell-check-startup-files)
-             (exec-path-from-shell-variables . '("PATH" "GOPATH" "JAVA_HOME")))
-    :config
-  (exec-path-from-shell-initialize))
-  )
-
-
-;;
-;; -- vertico marginalia corfu cape jinx --
-;;
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;  Completion settings.
+;;  -- vertico marginalia corfu cape etc...
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
  (leaf vertico
   :doc "VERTical Interactive Completion"
   :ensure t
@@ -371,57 +422,6 @@
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
   )
 
-(leaf embark
-  :ensure t
-  :bind (("C-."   . embark-act)
-         ("C-;"   . embark-dwim)
-         ("C-h B" . embark-bindings)))
-
-
-(leaf embark-consult
-  :doc "Consult integration for Embark"
-  :ensure t
-  :bind ((minibuffer-mode-map
-          :package emacs
-          ("M-." . embark-dwim)
-          ("C-." . embark-act))))
-
-(leaf puni
-  :doc "Parentheses Universalistic"
-  :ensure t
-  :global-minor-mode puni-global-mode
-  :bind (:puni-mode-map
-         ;; default mapping  sexp = Symbolic-Expression
-         ;; ("C-M-f" . puni-forward-sexp)      ;次のSexpの末尾まで進む
-         ;; ("C-M-b" . puni-backward-sexp)     ;前のSexpのまで戻る
-         ;; ("C-M-a" . puni-beginning-of-sexp) ;(S式)の先頭まで移動
-         ;; ("C-M-e" . puni-end-of-sexp)       ;(S式)の末尾まで移動
-         ;; ("C-M-u" . backward-up-list)       ;( )内にあるとき( )の先頭に移動
-         ;; ("C-M-d" . backward-down-list)     ;次の( )内に移動
-         ;; ("M-)"   . puni-syntactic-forward-punct)  ;次の句読点(punctuation)までJamp
-         ;; ("M-("   . puni-syntactic-backward-punct) ;前の句読点(punctuation)までJamp
-         ;; (global-map) M-f or ESC<right>  forward-word
-         ;; (global-map) M-b or ESC<left>   backward-word
-         ;; ("M-{")  . backword-paragraph)  ;;次のパラグラフ先頭へ  Ctrl+<up>
-         ;; ("M-}")  . forward-paragraph)   ;;前のパラグラフ先頭へ  Ctrl+<down>
-         ("C-c }" . puni-slurp-forward)   ;; (a) b  -> (a  b)   ; slurp = 括弧内へ取り込む
-         ("C-c {" . puni-slurp-backward)  ;;  a (b) -> (a  b)   ;
-         ("C-c <" . puni-barf-forward)    ;; (a  b) -> (a) b    ; barf  = 括弧外へ出す
-         ("C-c >" . puni-barf-backward)   ;; (a  b) ->  a (b)   ;
-         ("C-c )" . puni-wrap-round)      ;;   a    ->  (a)     ; wrap  = 括弧を付ける
-         ("C-c (" . puni-splice)          ;;  (a)   ->   a      ; splice = 括弧を外す
-         ("M-r" . puni-raise)             ;; A(b(x),y) -> b(x)  ; raise = 親のS式を現在のS式で置き換える
-         ("M-U" . puni-splice-killing-backward)
-         ("M-z" . puni-squeeze)           ;; foo (bar) baz -> { + C-y + } -> foo {bar} baz
-                                          ;; squeeze = 中身を一時退避して括弧を付け替える
-	 )
-  :config
-  (leaf elec-pair
-    :doc "Automatic parenthesis pairing"
-    :global-minor-mode electric-pair-mode))
-
-
-
 (leaf yasnippet
   :ensure t
   :global-minor-mode   yas-global-mode )
@@ -438,12 +438,104 @@
                             (add-to-list 'completion-at-point-functions #'cape-file)
                             (add-to-list 'completion-at-point-functions #'yasnippet-capf 'append))))
 
+(leaf embark
+  :ensure t
+  :bind (("C-."   . embark-act)
+         ("C-;"   . embark-dwim)
+         ("C-h B" . embark-bindings)))
 
+(leaf embark-consult
+  :doc "Consult integration for Embark"
+  :ensure t
+  :bind ((minibuffer-mode-map
+          :package emacs
+          ("M-." . embark-dwim)
+          ("C-." . embark-act))))
+
+
+;;--- --- --- --- --- --- --- --- --- --- --- ---
+;;  git
+;;--- --- --- --- --- --- --- --- --- --- --- ---
 (leaf magit
   :ensure t
   :bind (("C-x g" . magit-status)))
 
 
+;;--- --- --- --- --- --- --- --- --- --- --- ---
+;; Editorconfig and Formatter.
+;;--- --- --- --- --- --- --- --- --- --- --- ---
+
+(leaf editorconfig
+  :doc "a file format for defining coding styles and a collection"
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
+(leaf composer
+  ;doc "currently we support only COMPOSER_BIN_DIR and COMPOSER_HOME."
+  :ensure t
+  ;; Eval: (composer-get-config "bin-dir") ;=> "vendor/bin"
+  )
+
+(leaf format-all
+  :ensure t
+  :bind (("C-c f" . format-all-buffer))
+  :hook (prog-mode . format-all-mode))
+
+
+;;--------------------------------------------------------
+;; Formatter php-cs-fixer for Symfony
+;;    in php project root,
+;;         $composer require --dev friendsofphp/php-cs-fixer
+;;--------------------------------------------------------
+(defvar my-php-cs-fixer-in-progress nil)
+(defun my-symfony-project-p ()
+  "現在のバッファが Symfony プロジェクト内かどうかを判定する."
+  (let ((root (locate-dominating-file default-directory "composer.json")))
+    (when root
+      (or
+       ;; 1. symfony.lock ファイルが存在するか
+       (file-exists-p (expand-file-name "symfony.lock" root))
+       ;; 2. または composer.json の中に "symfony/" が含まれているか
+       (let ((composer-path (expand-file-name "composer.json" root)))
+         (when (file-readable-p composer-path)
+           (with-temp-buffer
+             (insert-file-contents composer-path)
+             (search-forward "symfony/" nil t))))))))
+
+(defun my-run-php-cs-fixer ()
+  "Symfony プロジェクト内かつファイル保存直前に php-cs-fixer を実行する."
+  (when (and (derived-mode-p 'php-mode 'php-ts-mode)
+             (not (bound-and-true-p my-php-cs-fixer-in-progress))
+             ;; ★ ここで Symfony プロジェクトかどうかの判定を入れる
+             (my-symfony-project-p))
+    (let ((my-php-cs-fixer-in-progress t))
+      (let* ((root (locate-dominating-file default-directory "vendor/bin/php-cs-fixer"))
+             (global-fixer (expand-file-name "~/.config/composer/vendor/bin/php-cs-fixer"))
+             (fixer (cond
+                     (root (expand-file-name "vendor/bin/php-cs-fixer" root))
+                     ((file-executable-p global-fixer) global-fixer)
+                     (t "php-cs-fixer"))))
+        (when (file-executable-p fixer)
+          (call-process fixer nil nil nil "fix" buffer-file-name "--quiet")
+          (revert-buffer t t t)
+          (message "[SUCCESS] php-cs-fixer formatted this file.")
+          )))))
+
+;; 保存前フックに登録（バッファローカル）
+(add-hook 'php-mode-hook
+          (lambda () (add-hook 'before-save-hook #'my-run-php-cs-fixer nil t)))
+(add-hook 'php-ts-mode-hook
+          (lambda () (add-hook 'before-save-hook #'my-run-php-cs-fixer nil t)))
+;;--- --- --- End for symfony --- --- ---
+
+
+
+
+
+;;--- --- --- --- --- --- --- --- --- --- --- ---
+;; tree-sitter and Language-server setting
+;;--- --- --- --- --- --- --- --- --- --- --- ---
 (leaf *treesit
   :custom ((treesit-font-lock-level . 4))
   :config
@@ -499,7 +591,6 @@
   ;;(web-mode-hook . (lambda () (electric-pair-local-mode -1)))
   )
 
-
 (leaf eldoc
   :ensure nil
   :config
@@ -529,10 +620,10 @@
     )
 )
 
-;;
-;; eglot
-;;
 
+;; --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- --
+;;  Eglot
+;; --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- --
 (leaf eglot
   :doc "The Emacs Client for LSP servers"
   :ensure t
@@ -590,8 +681,6 @@
    (eglot-autoshutwon . t)
    (eglot-sync-connect . 0))
   )
-
-
 ;; 2個のLanguage-Serverを起動する方法　Rassが必要
 ;;(with-eval-after-load 'eglot
 ;;  (add-to-list 'eglot-server-programs '((web-mode) .
@@ -599,8 +688,6 @@
 ;;                                        "--" "vscode-html-language-server" "--stdio"
 ;;                                        "--" "intelephense" "--stdio")))
 ;; )
-
-
 
 (leaf eglot-booster
   :when (executable-find "emacs-lsp-booster")
@@ -620,39 +707,10 @@
 (leaf rg
   :ensure t)
 
-(leaf markdown-mode
-  :ensure t
-  :mode
-  (("\\.md\\'" . markdown-mode)
-   ("\\.markdown\\'" . markdown-mode))
-  :custom
-  ((markdown-command . "pandoc -f markdown+header_attributes-raw_html -t html5")
-   (markdown-fontify-code-blocks-natively . t)
-   (markdown-header-scaling . t)
-   (markdown-enable-math . t)
-   (markdown-url-compose-char . nil)
-   (markdown-list-indent-width . 2)
-   (markdown-indent-on-enter . t)
-   (indent-tabs-mode . nil))
-  :custom-face
-  (markdown-header-face-1 . '((t (:weight bold :height 1.3))))
-  (markdown-header-face-2 . '((t (:weight bold :height 1.2))))
-  (markdown-header-face-3 . '((t (:weight bold :height 1.1))))
-  (markdown-header-face-4 . '((t (:weight bold :height 1.0))))
-  :hook
-  ((markdown-mode-hook . visual-line-mode)
-   (markdown-mode-hook . jinx-mode))
-  :bind
-  (:markdown-mode-map
-   ("C-c C-t" . markdown-toc-generate-toc)
-   ("C-c C-p" . markdown-preview))
-  )
 
-;;
-;;
-;; Treemacs
-;;
-;;
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Treemacs Projectile
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf treemacs
   :ensure t
   :bind
@@ -779,6 +837,9 @@
   (advice-add #'treemacs :before #'my/treemacs-before))
 
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Ligature for JetBrains mono.
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf ligature
   :doc " リガチャしてみた．Setting for JetBrains Mono. "
   :config
@@ -797,6 +858,36 @@
                               "<:<" ";;;"))
   (global-ligature-mode t))
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Markdown-Mode
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+(leaf markdown-mode
+  :ensure t
+  :mode
+  (("\\.md\\'" . markdown-mode)
+   ("\\.markdown\\'" . markdown-mode))
+  :custom
+  ((markdown-command . "pandoc -f markdown+header_attributes-raw_html -t html5")
+   (markdown-fontify-code-blocks-natively . t)
+   (markdown-header-scaling . t)
+   (markdown-enable-math . t)
+   (markdown-url-compose-char . nil)
+   (markdown-list-indent-width . 2)
+   (markdown-indent-on-enter . t)
+   (indent-tabs-mode . nil))
+  :custom-face
+  (markdown-header-face-1 . '((t (:weight bold :height 1.3))))
+  (markdown-header-face-2 . '((t (:weight bold :height 1.2))))
+  (markdown-header-face-3 . '((t (:weight bold :height 1.1))))
+  (markdown-header-face-4 . '((t (:weight bold :height 1.0))))
+  :hook
+  ((markdown-mode-hook . visual-line-mode)
+   (markdown-mode-hook . jinx-mode))
+  :bind
+  (:markdown-mode-map
+   ("C-c C-t" . markdown-toc-generate-toc)
+   ("C-c C-p" . markdown-preview))
+  )
 
 ;;;
 ;;; This will enable emacs to compile a simple cpp single file without any makefile by just pressing [f9] key
