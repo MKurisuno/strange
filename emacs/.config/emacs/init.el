@@ -618,8 +618,9 @@
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;    Setting for Formatter with Language Servers.
+(eval-when-compile  (require 'eglot))
+(declare-function eglot-format-buffer "eglot")
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-(eval-when-compile  (require 'eglot)  (require 'project)) ;Escape Warning.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  Clangd for fotmat needs '.clang-format' in ProjectRoot.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -645,7 +646,7 @@
             ;; 2. 保存時にプロジェクト内の php-cs-fixer を実行する設定
             (add-hook 'before-save-hook
                       (lambda ()
-                        (when-let* ((root (car (project-roots (project-current)))))
+                        (when-let* ((root (car (project-root (project-current)))))
                           (let ((fixer (expand-file-name "vendor/bin/php-cs-fixer" root)))
                             ;; vendor/bin/php-cs-fixer が存在する場合のみ実行
                             (when (file-executable-p fixer)
