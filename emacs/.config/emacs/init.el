@@ -483,55 +483,6 @@
   :hook (prog-mode . format-all-mode))
 
 
-;;--------------------------------------------------------
-;; Formatter php-cs-fixer for Symfony
-;;    in php project root,
-;;         $composer require --dev friendsofphp/php-cs-fixer
-;;--------------------------------------------------------
-(defvar my-php-cs-fixer-in-progress nil)
-(defun my-symfony-project-p ()
-  "現在のバッファが Symfony プロジェクト内かどうかを判定する."
-  (let ((root (locate-dominating-file default-directory "composer.json")))
-    (when root
-      (or
-       ;; 1. symfony.lock ファイルが存在するか
-       (file-exists-p (expand-file-name "symfony.lock" root))
-       ;; 2. または composer.json の中に "symfony/" が含まれているか
-       (let ((composer-path (expand-file-name "composer.json" root)))
-         (when (file-readable-p composer-path)
-           (with-temp-buffer
-             (insert-file-contents composer-path)
-             (search-forward "symfony/" nil t))))))))
-
-(defun my-run-php-cs-fixer ()
-  "Symfony プロジェクト内かつファイル保存直前に php-cs-fixer を実行する."
-  (when (and (derived-mode-p 'php-mode 'php-ts-mode)
-             (not (bound-and-true-p my-php-cs-fixer-in-progress))
-             ;; ★ ここで Symfony プロジェクトかどうかの判定を入れる
-             (my-symfony-project-p))
-    (let ((my-php-cs-fixer-in-progress t))
-      (let* ((root (locate-dominating-file default-directory "vendor/bin/php-cs-fixer"))
-             (global-fixer (expand-file-name "~/.config/composer/vendor/bin/php-cs-fixer"))
-             (fixer (cond
-                     (root (expand-file-name "vendor/bin/php-cs-fixer" root))
-                     ((file-executable-p global-fixer) global-fixer)
-                     (t "php-cs-fixer"))))
-        (when (file-executable-p fixer)
-          (call-process fixer nil nil nil "fix" buffer-file-name "--quiet")
-          (revert-buffer t t t)
-          (message "[SUCCESS] php-cs-fixer formatted this file.")
-          )))))
-
-;; 保存前フックに登録（バッファローカル）
-(add-hook 'php-mode-hook
-          (lambda () (add-hook 'before-save-hook #'my-run-php-cs-fixer nil t)))
-(add-hook 'php-ts-mode-hook
-          (lambda () (add-hook 'before-save-hook #'my-run-php-cs-fixer nil t)))
-;;--- --- --- End for symfony --- --- ---
-
-
-
-
 
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
 ;; tree-sitter and Language-server setting
@@ -561,41 +512,18 @@
   (add-to-list 'auto-mode-alist '("\\.clang\\(?:d\\|-tidy\\|-format\\)\\'" . yaml-ts-mode)) ;;Clangd の設定file
   )
 
-(add-hook 'c++-ts-mode-hook
-	  (lambda ()
-	    (electric-indent-mode -1)
-	    (setq-local default-tab-width 4)
-	    (setq-local tab-width 4)
-	    (setq-local indent-tabs-mode t)
-	    (setq-local c-ts-mode-indent-offset 4)
-	    (setq-local c-basic-offset 4)))
-(add-hook 'c-ts-mode-hook
-	  (lambda ()
-	    (electric-indent-mode -1)
-	    (setq-local default-tab-width 4)
-	    (setq-local tab-width 4)
-	    (setq-local indent-tabs-mode t)
-	    (setq-local c-ts-mode-indent-offset 4)
-	    (setq-local c-basic-offset 4)))
 
-(leaf web-mode
-  :ensure t
-  :mode ("\\.html\\'")
-  :custom
-  (web-mode-markup-indent-offset  . 4)  ; HTMLインデント
-  (web-mode-css-indent-offset     . 2)  ; CSSインデント
-  (web-mode-code-indent-offset    . 4)  ; PHP/JSインデント
-  (web-mode-enable-auto-closing   . t)  ; 自動閉じタグ
-  (web-mode-enable-auto-pairing   . t)  ; 自動ペア
-  :hook
-  ;;(web-mode-hook . (lambda () (electric-pair-local-mode -1)))
-  )
+
+;; --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- --
+;;       Eglot + eldoc + eldocbox.
+;; --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- --
 
 (leaf eldoc
   :ensure nil
   :config
-  ;; MiniBuffer へのechoの文字の大きさを調節 下の設定は間違ってないけど読み込まない。
+  ;; MiniBuffer へのHoverからのechoの文字の大きさを調節 下の設定は間違ってないけど読み込まない。
   ;;(custom-set-faces  '(markdown-header-face-3 ((t (:height 0.85)))))
+  ;; なので、`with-eval-after-load'で読み込ませる.
   (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 1.0))
   :hook
   ((prog-mode-hook . eldoc-mode)))
@@ -603,8 +531,9 @@
 (leaf eldoc-box
   :ensure t
   :bind  (("C-c d" . eldoc-box-help-at-point))
-;;  :hook  ((eglot-managed-mode-hook . (lambda () (eldoc-box-hover-at-point-mode 1) )))
-;;  :custom ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 120))
+  ;;  :hook  ((eglot-managed-mode-hook . (lambda () (eldoc-box-hover-at-point-mode 1) )))
+  ;;  custom での設定はとりあえずは有効になるが、ブロック最後のwith-eval-after-load で読み込ませる.
+  ;;  :custom ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 120))
   :custom-face
   (eldoc-box-body . ' ((t (:background "#282A36" :foreground "#f8f8f2" :family "JetBrains Mono" :height 0.95 :weight normal :slant normal :alpha 70))))
   (eldoc-box-border . '((t (:background "#44475a" ))))
@@ -613,17 +542,14 @@
   ;;(setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88)
   ;HoverからのEchoの一行目の文字の大きさを調節
   (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.95))
-  (defvar eldoc-box-max-pixel-width) (defvar eldoc-box-max-pixel-height) (defvar eldoc-box-frame-parameters)
+  (defvar eldoc-box-max-pixel-width)
+  (defvar eldoc-box-max-pixel-height)
+  (defvar eldoc-box-frame-parameters)
   (with-eval-after-load 'eldoc-box
     (setq eldoc-box-max-pixel-width 600 eldoc-box-max-pixel-height 120)
-    (setf (alist-get 'min-width eldoc-box-frame-parameters) 40 (alist-get 'min-height eldoc-box-frame-parameters) 5)
-    )
-)
+    (setf (alist-get 'min-width eldoc-box-frame-parameters) 40
+          (alist-get 'min-height eldoc-box-frame-parameters) 5) ))
 
-
-;; --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- --
-;;  Eglot
-;; --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- --
 (leaf eglot
   :doc "The Emacs Client for LSP servers"
   :ensure t
@@ -639,25 +565,21 @@
   (add-to-list 'eglot-server-programs '((js-ts-mode tsx-ts-mode) . ("typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((web-mode) . ("vscode-html-language-server" "--stdio")))
 
-  ;;for install "sudo npm install -g twiggy-language-server"
+  ;;after install "sudo npm install -g twiggy-language-server", then
   ;;(add-to-list 'eglot-server-programs `(twig-mode . ("twiggy-language-server" "--stdio"
   ;;                                                   :initializationOptions
   ;;                                                   (:twiggy
   ;;                                                    (:framework "symfony"
   ;;                                                                :phpExecutable "php"
   ;;                                                                :symfonyConsolePath "bin/console")))))
-  ;;--- eglotとclangd のインデント設定を無効化する
-  (with-eval-after-load 'eglot
-    (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider)
-    (add-to-list 'eglot-ignored-server-capabilities :documentRangeFormattingProvider)
-    (add-to-list 'eglot-ignored-server-capabilities :documentOnTypeFormattingProvider))
-  ;;--- xref-find-reference の時の強調背景が明るすぎるため
+
+  ;;--- xref-find-reference の時の強調背景が明るすぎるため ---
   (with-eval-after-load 'xref
-  ;; (set-face-attribute 'xref-match nil :foreground "#1f2328" :background "#44475a" :weight 'bold)
     (set-face-attribute 'xref-match nil :foreground "#FFFFFF" :background "#44475a" :weight 'bold))
   :bind (("C-c i" . completion-at-point)
          ("C-c r" . eglot-rename)
          ("C-c o" . eglot-code-action-organize-imports))
+  ;;; --- --- Eglot key bind --- ---
   ;; M-.   : xref-find-definitions
   ;; M-,   : xref-go-back
   ;; M-?   : xref-find-reference
@@ -666,9 +588,9 @@
   ;; C-c i : Completion at point
   ;; C-c a : Rename
   :hook
-  ((c-ts-mode-hook   . eglot-ensure)
-   (c++-ts-mode-hook . eglot-ensure)
-   (php-ts-mode-hook . eglot-ensure)
+  (;;(c-ts-mode-hook   . eglot-ensure)    Written with formatter setting! in next.
+   ;;(c++-ts-mode-hook . eglot-ensure)
+   ;;(php-ts-mode-hook . eglot-ensure)
    (python-ts-mode-hook     . eglot-ensure)
    (typescript-ts-mode-hook . eglot-ensure)
    (tsx-ts-mode-hook  . eglot-ensure)
@@ -681,36 +603,76 @@
    (eglot-autoshutwon . t)
    (eglot-sync-connect . 0))
   )
+
 ;; 2個のLanguage-Serverを起動する方法　Rassが必要
 ;;(with-eval-after-load 'eglot
 ;;  (add-to-list 'eglot-server-programs '((web-mode) .
 ;;                                       ("rass"
 ;;                                        "--" "vscode-html-language-server" "--stdio"
-;;                                        "--" "intelephense" "--stdio")))
-;; )
+;;                                        "--" "intelephense" "--stdio"))))
 
 (leaf eglot-booster
   :when (executable-find "emacs-lsp-booster")
   :vc ( :url "https://github.com/jdtsmith/eglot-booster")
   :global-minor-mode t)
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+;;    Setting for Formatter with Language Servers.
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+(eval-when-compile  (require 'eglot)  (require 'project)) ;Escape Warning.
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+;;  Clangd for fotmat needs '.clang-format' in ProjectRoot.
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+(add-hook 'c++-ts-mode-hook
+          (lambda ()
+            (eglot-ensure)
+            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+            (message "[ Eglot format-buffer ] [ `clangd-format' executed !! ]")))
+
+(add-hook 'cc-ts-mode-hook
+          (lambda ()
+            (eglot-ensure)
+            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+            (message "[eglot-format-buffer `clangd-format' executed !! ]")))
+
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+;;  PHP Langage Server needs 'php-cs-fixer' and 'php-cs-fixer.dist'  in Symfony.
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+(add-hook 'php-ts-mode-hook
+          (lambda ()
+            ;; 1. Eglot (intelephense) を有効化
+            (eglot-ensure)
+            ;; 2. 保存時にプロジェクト内の php-cs-fixer を実行する設定
+            (add-hook 'before-save-hook
+                      (lambda ()
+                        (when-let* ((root (car (project-roots (project-current)))))
+                          (let ((fixer (expand-file-name "vendor/bin/php-cs-fixer" root)))
+                            ;; vendor/bin/php-cs-fixer が存在する場合のみ実行
+                            (when (file-executable-p fixer)
+                              (shell-command (format "%s fix %s --quiet"
+                                                     fixer
+                                                     (shell-quote-argument buffer-file-name)))
+                              ;; ファイルが書き換わるため、Emacs上のバッファをリロード
+                              (revert-buffer t t t)
+                              (message "[eglot-format-buffer `php-cs-fixer' executed !! ]")))))
+                      nil t)))
+
+
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Treemacs Projectile
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf projectile
   :ensure t
   :init
   (projectile-mode +1)
   ;; Recommended keymap prefix on Windows/Linux
-  :bind-keymap (("C-c p" . 'projectile-command-map))
-  )
+  :bind-keymap (("C-c p" . 'projectile-command-map)) )
 
 (leaf ag
   :ensure t)
 (leaf rg
   :ensure t)
 
-
-;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Treemacs Projectile
-;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf treemacs
   :ensure t
   :bind
