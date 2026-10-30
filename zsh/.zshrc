@@ -75,15 +75,24 @@ alias grep='grep --color=auto'
 # Dracula theme for GNU grep - https://draculatheme.com/grep
 export GREP_COLORS="mt=1;38;2;255;85;85:fn=38;2;255;121;198:ln=38;2;80;250;123:bn=38;2;80;250;123:se=38;2;139;233;253"
 #export GREP_COLORS='ms=1;3;38;2;255;135;190:mc=1;3;38;2;255;135;190:sl=38;2;189;147;249:cx=38;2;135;175;255:fn=38;2;189;147;249:ln=38;2;80;250;123:bn=38;2;80;250;123:se=38;2;98;114;164'
-alias ls='ls --color=auto'
-export LS_COLORS='di=01;38;5;141:ln=01;38;5;117:so=01;38;5;212:pi=38;5;215:ex=01;38;5;84:bd=38;5;215:cd=38;5;215:*.tgz=01;38;5;203:*.gz=01;38;5;203:*.zip=01;38;5;203:*.bz2=01;38;5;203:*.xz=01;38;5;203:*.jpg=01;38;5;212:*.jpeg=01;38;5;212:*.png=01;38;5;212:*.gif=01;38;5;212:*.mp3=01;38;5;215:*.mp4=01;38;5;215:*.mkv=01;38;5;215:*.pdf=01;38;5;141:*.md=01;38;5;117:*.txt=38;5;255'
-
 alias e='emacs'
 alias ps='grc ps'
-alias l='ls -lF'
-alias la='ls -a'
-alias ll='ls -alF'
-alias lx='ls -aF'
+
+# ls exchenge to colorls 
+export LS_COLORS='di=01;38;5;141:ln=01;38;5;117:so=01;38;5;212:pi=38;5;215:ex=01;38;5;84:bd=38;5;215:cd=38;5;215:*.tgz=01;38;5;203:*.gz=01;38;5;203:*.zip=01;38;5;203:*.bz2=01;38;5;203:*.xz=01;38;5;203:*.jpg=01;38;5;212:*.jpeg=01;38;5;212:*.png=01;38;5;212:*.gif=01;38;5;212:*.mp3=01;38;5;215:*.mp4=01;38;5;215:*.mkv=01;38;5;215:*.pdf=01;38;5;141:*.md=01;38;5;117:*.txt=38;5;255'
+alias ls='/bin/ls --color=auto'
+alias l='/bin/ls --color=auto -lF'
+alias la='/bin/ls --color=auto -a'
+alias ll='/bin/ls --color=auto -alF'
+alias lx='/bin/ls --color=auto -aF'
+
+alias lc='colorls'
+alias lcl='colorls -l --almost-all --sd'     # 詳細リスト ＋ 隠しファイル
+alias lca='colorls --almost-all'        # グリッド表示 ＋ 隠しファイル
+alias lct='colorls --tree'              # ツリー
+alias lcg='colorls --gs'
+alias lcf='colorls -lrt file_sizes'
+
 #lessをbatに変更
 alias bat='/usr/bin/batcat'
 alias less='bat'
