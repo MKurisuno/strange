@@ -131,7 +131,10 @@ backup 10.31 9:03pm
 　　 $curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -  
 　　 $sudo apt install -y nodejs  
 
-### PHP_LanguageServer:Intelephense
+### PHP_LanguageServer:phpactor
+
+
+### ~~ PHP_LanguageServer:Intelephense ~~
 　　1) Install Intelephense  
 　　　$sudo npm install -g intelephense  
 　　2) Insert those in initi.el  
