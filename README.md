@@ -86,7 +86,7 @@
 
 ## alacritty
 　  Dracua theme Download https://github.com/dracula/alacritty/archive/master.zip   
-　 Iinstall to  ~/.config/alacrity/themes/dracula
+　 Install to  ~/.config/alacrity/themes/dracula
 　 echo  "general.import = ["/path/to/dracula.toml"]"  > ~/.config/alacritty/alacritty.toml  
 
 ## python3 environment
@@ -129,7 +129,8 @@
 　　 $curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -  
 　　 $sudo apt install -y nodejs  
 
-### PHP_LanguageServer:Intelephense
+### PHP_LanguageServer: ~~Intelephense~~   
+   無償版はformatter機能が無効   
 　　1) Install Intelephense  
 　　　$sudo npm install -g intelephense  
 　　2) Insert those in initi.el  
