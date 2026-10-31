@@ -52,27 +52,39 @@
   (set-face-attribute 'font-lock-comment-face nil :foreground "#9aa8c7")
   )
 
+;; --------------------------------------------------
+;; 1. 英字デフォルトフォントの設定
+;; --------------------------------------------------
+(set-face-attribute 'default nil
+                    :family "JetBrains Mono"
+                    :size 140)
+
+;; --------------------------------------------------
+;; 2. 日本語フォントの優先割り当て関数
+;; --------------------------------------------------
+(defun my/apply-jp-font (&optional frame)
+  "指定したFRAME（または全フレーム）に対して日本語フォントを割り当てる"
+  (let ((jp-font (font-spec :family "Noto Sans CJK JP")))
+    (dolist (charset '(japanese-jisx0208 cjk-misc kana han))
+      (set-fontset-font t charset jp-font frame 'prepend))))
+
+;; --------------------------------------------------
+;; 3. スケール（サイズ比率）の微調整
+;; --------------------------------------------------
+(setq face-font-rescale-alist '(("Noto Sans CJK JP" . 0.85)))
+
+;; --------------------------------------------------
+;; 4. 適用タイミングの制御
+;; --------------------------------------------------
+;; 初期表示およびGUI新規フレーム作成時の双方に対応
+(my/apply-jp-font)
+(add-hook 'after-make-frame-functions #'my/apply-jp-font)
+
+
+
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Set up Fonts set
-;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-(set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
-;;(set-fontset-font t 'japanese-jisx0208 (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
-;;(set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
- (defun my-apply-jp-font (fs)
-    (let ((jp-font (font-spec :family "Noto Sans CJK JP")))
-      (set-fontset-font fs 'japanese-jisx0208 jp-font nil 'prepend)
-      (set-fontset-font fs 'cjk-misc          jp-font nil 'prepend)
-      (set-fontset-font fs 'kana              jp-font nil 'prepend)
-      (set-fontset-font fs 'han               jp-font nil 'prepend)))
-
-  ;; 3. 存在するすべての標準フォントセット（デフォルト、標準、ゴシックなど）に適用
-  (mapc 'my-apply-jp-font '("fontset-default" "fontset-standard" "fontset-startup"))
-  ;; 4. 英数と日本語のサイズバランス（0.85倍にする）
-  (setq face-font-rescale-alist '(("Noto Sans CJK JP" . 0.85)))
-
-;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Leaf `setting-constant'
+;;   Leaf Setting 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (eval-and-compile
   (customize-set-variable
