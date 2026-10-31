@@ -135,7 +135,7 @@ backup 10.31 9:03pm
 
 
 ### PHP_LanguageServer: ~~Intelephense~~
-   無償版はfotmatterは無効
+   無償版はformatter機能が無効    
 　　1) Install Intelephense  
 　　　$sudo npm install -g intelephense  
 　　2) Insert those in initi.el  
