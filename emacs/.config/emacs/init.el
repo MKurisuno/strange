@@ -654,9 +654,6 @@
             (add-hook 'before-save-hook #'eglot-format-buffer nil t)
             (message "[---EGLOT-format-buffer---] [ -- php-cs-fixer executed !! -- ]")))
 
-
-
-
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Treemacs Projectile
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -853,6 +850,8 @@
    ("C-c C-t" . markdown-toc-generate-toc)
    ("C-c C-p" . markdown-preview))
   )
+
+
 
 
 

@@ -18,7 +18,7 @@
 (add-hook 'emacs-startup-hook
           (lambda ()
             ;; GC閾値を実用的なサイズ（例: 16MB〜32MB）に戻す
-            (setq gc-cons-threshold (* 34 1024 1024))
+            (setq gc-cons-threshold (* 64 1024 1024))
             ;; ファイルハンドラを復元
             (setq file-name-handler-alist my-file-name-handler-alist)
             (message "Emacs ready in %s with %d GCs." (emacs-init-time) gcs-done)))
