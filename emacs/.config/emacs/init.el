@@ -56,10 +56,20 @@
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Set up Fonts set
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-(set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
-(set-fontset-font t 'japanese-jisx0208 (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
-(set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
+;;(set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
+;;(set-fontset-font t 'japanese-jisx0208 (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
+;;(set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
+ (defun my-apply-jp-font (fs)
+    (let ((jp-font (font-spec :family "Noto Sans CJK JP")))
+      (set-fontset-font fs 'japanese-jisx0208 jp-font nil 'prepend)
+      (set-fontset-font fs 'cjk-misc          jp-font nil 'prepend)
+      (set-fontset-font fs 'kana              jp-font nil 'prepend)
+      (set-fontset-font fs 'han               jp-font nil 'prepend)))
 
+  ;; 3. 存在するすべての標準フォントセット（デフォルト、標準、ゴシックなど）に適用
+  (mapc 'my-apply-jp-font '("fontset-default" "fontset-standard" "fontset-startup"))
+  ;; 4. 英数と日本語のサイズバランス（0.85倍にする）
+  (setq face-font-rescale-alist '(("Noto Sans CJK JP" . 0.85)))
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Leaf `setting-constant'
@@ -79,7 +89,9 @@
     (leaf blackout :ensure t)
     :config
     (leaf-keywords-init))
+
   )
+
 
 (leaf leaf-convert
   :doc "Convert many format to leaf format"
@@ -471,12 +483,6 @@
   :config
   (editorconfig-mode 1))
 
-(leaf composer
-  ;doc "currently we support only COMPOSER_BIN_DIR and COMPOSER_HOME."
-  :ensure t
-  ;; Eval: (composer-get-config "bin-dir") ;=> "vendor/bin"
-  )
-
 (leaf format-all
   :ensure t
   :bind (("C-c f" . format-all-buffer))
@@ -502,6 +508,7 @@
   (add-to-list 'auto-mode-alist '("\\.json\\'"  . js-json-mode))
   (add-to-list 'auto-mode-alist '("\\.php\\'"   . php-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.y?ml\\'"  . yaml-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.toml\\'"  . toml-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.\\(?:m\\|c\\)?js\\'"  . js-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.ts\\'"   . typescript-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx\\'"  . tsx-ts-mode))
@@ -559,7 +566,14 @@
   ;; 
   (add-to-list 'eglot-server-programs '((c++-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '((c-ts-mode) "clangd"))
-  (add-to-list 'eglot-server-programs '((php-ts-mode) . ("intelephense" "--stdio")))
+  ;;  (add-to-list 'eglot-server-programs '((php-ts-mode) . ("intelephense" "--stdio")))
+  (add-to-list 'eglot-server-programs
+               '((php-ts-mode php-mode) .
+                 (lambda (&rest _)
+                   (let ((local-phpactor (expand-file-name "vendor/bin/phpactor" (project-root (project-current)))))
+                     (if (file-executable-p local-phpactor)
+                         (list local-phpactor "language-server")
+                     '("phpactor" "language-server"))))))
   (add-to-list 'eglot-server-programs '((python-ts-mode) . ("pyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs '((typescript-ts-mode) . ("typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((js-ts-mode tsx-ts-mode) . ("typescript-language-server" "--stdio")))
@@ -604,13 +618,6 @@
    (eglot-sync-connect . 0))
   )
 
-;; 2個のLanguage-Serverを起動する方法　Rassが必要
-;;(with-eval-after-load 'eglot
-;;  (add-to-list 'eglot-server-programs '((web-mode) .
-;;                                       ("rass"
-;;                                        "--" "vscode-html-language-server" "--stdio"
-;;                                        "--" "intelephense" "--stdio"))))
-
 (leaf eglot-booster
   :when (executable-find "emacs-lsp-booster")
   :vc ( :url "https://github.com/jdtsmith/eglot-booster")
@@ -618,8 +625,9 @@
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;    Setting for Formatter with Language Servers.
+(eval-when-compile  (require 'eglot))
+(declare-function eglot-format-buffer "eglot")
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-(eval-when-compile  (require 'eglot)  (require 'project)) ;Escape Warning.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  Clangd for fotmat needs '.clang-format' in ProjectRoot.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -627,13 +635,13 @@
           (lambda ()
             (eglot-ensure)
             (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-            (message "[ Eglot format-buffer ] [ `clangd-format' executed !! ]")))
+            (message "[  EGLOT-format-buffer  ] [ `clangd-format' executed !! ]")))
 
 (add-hook 'cc-ts-mode-hook
           (lambda ()
             (eglot-ensure)
             (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-            (message "[eglot-format-buffer `clangd-format' executed !! ]")))
+            (message "[  EGLOT-format-buffer  ] [ `clangd-format' executed !! ]")))
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  PHP Langage Server needs 'php-cs-fixer' and 'php-cs-fixer.dist'  in Symfony.
@@ -643,19 +651,10 @@
             ;; 1. Eglot (intelephense) を有効化
             (eglot-ensure)
             ;; 2. 保存時にプロジェクト内の php-cs-fixer を実行する設定
-            (add-hook 'before-save-hook
-                      (lambda ()
-                        (when-let* ((root (car (project-roots (project-current)))))
-                          (let ((fixer (expand-file-name "vendor/bin/php-cs-fixer" root)))
-                            ;; vendor/bin/php-cs-fixer が存在する場合のみ実行
-                            (when (file-executable-p fixer)
-                              (shell-command (format "%s fix %s --quiet"
-                                                     fixer
-                                                     (shell-quote-argument buffer-file-name)))
-                              ;; ファイルが書き換わるため、Emacs上のバッファをリロード
-                              (revert-buffer t t t)
-                              (message "[eglot-format-buffer `php-cs-fixer' executed !! ]")))))
-                      nil t)))
+            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+            (message "[---EGLOT-format-buffer---] [ -- php-cs-fixer executed !! -- ]")))
+
+
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -799,11 +798,13 @@
   (advice-add #'treemacs :before #'my/treemacs-before))
 
 
+
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Ligature for JetBrains mono.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf ligature
   :doc " リガチャしてみた．Setting for JetBrains Mono. "
+  :ensure t
   :config
   (ligature-set-ligatures 'prog-mode '("--" "---" "==" "===" "!=" "!==" "=!="
                               "=:=" "=/=" "<=" ">=" "&&" "&&&" "&=" "++" "+++" "***" ";;" "!!"
@@ -819,6 +820,8 @@
                               ":?" ":?>" "//" "///" "/*" "*/" "/=" "//=" "/==" "@_" "__" "???"
                               "<:<" ";;;"))
   (global-ligature-mode t))
+
+
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Markdown-Mode
@@ -851,20 +854,6 @@
    ("C-c C-p" . markdown-preview))
   )
 
-;;;
-;;; This will enable emacs to compile a simple cpp single file without any makefile by just pressing [f9] key
-;;;
-;;(defun code-compile()
-;;  (interactive)
-;;  (unless (file-exists-p "Makefile")
-;;    (set (make-local-variable 'compile-command)
-;;	 (let ((file (file-name-nondirectory buffer-file-name)))
-;;	   (format "%s -std=c++20 -o %s %s"
-;;		   (if (equal (file-name-extension file) "cpp") "g++" "gcc")
-;;		   (file-name-sans-extension file)
-;;		   file)))
-;;    (compile compile-command)))
-;;(global-set-key [f9] 'code-compile)
 
 
 (provide 'init)
