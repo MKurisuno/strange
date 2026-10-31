@@ -56,7 +56,7 @@
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Set up Fonts set
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;;(set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
+(set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
 ;;(set-fontset-font t 'japanese-jisx0208 (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
 ;;(set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
  (defun my-apply-jp-font (fs)
