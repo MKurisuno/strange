@@ -662,9 +662,7 @@
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 (add-hook 'php-ts-mode-hook
           (lambda ()
-            ;; 1. Eglot (intelephense) を有効化
             (eglot-ensure)
-            ;; 2. 保存時にプロジェクト内の php-cs-fixer を実行する設定
             (add-hook 'before-save-hook #'eglot-format-buffer nil t)
             (message "[---EGLOT-format-buffer---] [ -- php-cs-fixer with php-cs-fixer.dist.php executed !! -- ]")))
 
