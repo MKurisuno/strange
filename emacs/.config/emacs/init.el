@@ -637,9 +637,11 @@
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;    Setting for Formatter with Language Servers.
+;;     clangd. phpactor. 
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 (eval-when-compile  (require 'eglot))
 (declare-function eglot-format-buffer "eglot")
-;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  Clangd for fotmat needs '.clang-format' in ProjectRoot.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -647,13 +649,13 @@
           (lambda ()
             (eglot-ensure)
             (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-            (message "[  EGLOT-format-buffer  ] [ `clangd-format' executed !! ]")))
+            (message "[  EGLOT-format-buffer  ] [ 'clangd-format' applied !! ]")))
 
 (add-hook 'cc-ts-mode-hook
           (lambda ()
             (eglot-ensure)
             (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-            (message "[  EGLOT-format-buffer  ] [ `clangd-format' executed !! ]")))
+            (message "[  EGLOT-format-buffer  ] [ 'clangd-format' applied !! ]")))
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  PHP Langage Server needs 'php-cs-fixer' and 'php-cs-fixer.dist'  in Symfony.
@@ -664,7 +666,7 @@
             (eglot-ensure)
             ;; 2. 保存時にプロジェクト内の php-cs-fixer を実行する設定
             (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-            (message "[---EGLOT-format-buffer---] [ -- php-cs-fixer executed !! -- ]")))
+            (message "[---EGLOT-format-buffer---] [ -- php-cs-fixer with php-cs-fixer.dist.php executed !! -- ]")))
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Treemacs Projectile
