@@ -46,7 +46,7 @@
               (concat path path-separator (getenv "PATH"))))))
 
 
-(push '(left       .        1) initial-frame-alist)
+(push '(left . 1) initial-frame-alist)
 (push '(fullscreen . maximized) default-frame-alist)
 (setq resize-mini-windows nil)
 
