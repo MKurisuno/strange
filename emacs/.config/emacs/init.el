@@ -53,14 +53,14 @@
   )
 
 ;; --------------------------------------------------
-;; 1. 英字デフォルトフォントの設定
+;; Default Font Set
 ;; --------------------------------------------------
 (set-face-attribute 'default nil
                     :family "JetBrains Mono"
                     :size 140)
 
 ;; --------------------------------------------------
-;; 2. 日本語フォントの優先割り当て関数
+;; 2. JP Font distributed function. 
 ;; --------------------------------------------------
 (defun my/apply-jp-font (&optional frame)
   "指定したFRAME（または全フレーム）に対して日本語フォントを割り当てる"
@@ -84,7 +84,7 @@
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;;   Leaf Setting 
+;;   Leaf Initial Setting 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (eval-and-compile
   (customize-set-variable
@@ -101,9 +101,7 @@
     (leaf blackout :ensure t)
     :config
     (leaf-keywords-init))
-
   )
-
 
 (leaf leaf-convert
   :doc "Convert many format to leaf format"
@@ -112,7 +110,6 @@
 (leaf cus-edit
   :doc "tools for customizing Emacs and Lisp packages"
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
-
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  Buckup files setting.
@@ -174,7 +171,6 @@
                         :foreground "#50FA7B"
                         :background "#282A36")))
 
-
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -189,7 +185,6 @@
   (auto-revert-interval . 1)
   (auto-revert-verbose . nil)
   :global-minor-mode global-auto-revert-mode)
-
 
 (leaf delsel
   :doc "delete selection if you insert"
@@ -252,7 +247,6 @@
     :doc "Automatic parenthesis pairing"
     :global-minor-mode electric-pair-mode))
 
-
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; macrostep paren delimiter highlight-indent-guides
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -291,9 +285,8 @@
   (set-face-background 'highlight-indent-guides-top-even-face "#FF79C6")
   (set-face-background 'highlight-indent-guides-top-odd-face "#BD93F9") )
 
-
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;;  flymake + jinx
+;;  syntax and Spell checher
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf flymake
   :doc "A universal on-the-fly syntax checker"
@@ -302,7 +295,6 @@
           ("M-n" . flymake-goto-next-error)
           ("M-p" . flymake-goto-prev-error))))
 
-;; -- Spell Checker --
 (leaf jinx
   :doc "Enchanted Spell Checker. Ubuntu needs libenchant-2-dev, pkgconf."
   :ensure t
@@ -310,10 +302,8 @@
   :bind (("M-$" . jinx-correct)
          ("C-M-$" . jinx-languages))
   :custom
-  ;; チェック対象の言語（デフォルトは "en" や OS の言語設定依存）
+  ;; target language（デフォルトは "en" や OS の言語設定依存）
   (jinx-languages . "en"))
-
-
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  Completion settings.
@@ -488,7 +478,6 @@
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
 ;; Editorconfig and Formatter.
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
-
 (leaf editorconfig
   :doc "a file format for defining coding styles and a collection"
   :ensure t
@@ -499,8 +488,6 @@
   :ensure t
   :bind (("C-c f" . format-all-buffer))
   :hook (prog-mode . format-all-mode))
-
-
 
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
 ;; tree-sitter and Language-server setting
@@ -532,11 +519,9 @@
   )
 
 
-
 ;; --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- --
 ;;       Eglot + eldoc + eldocbox.
 ;; --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- --
-
 (leaf eldoc
   :ensure nil
   :config
@@ -614,7 +599,7 @@
   ;; C-c i : Completion at point
   ;; C-c a : Rename
   :hook
-  (;;(c-ts-mode-hook   . eglot-ensure)    Written with formatter setting! in next.
+  (;;(c-ts-mode-hook   . eglot-ensure)    Written with formatter setting in next block.
    ;;(c++-ts-mode-hook . eglot-ensure)
    ;;(php-ts-mode-hook . eglot-ensure)
    (python-ts-mode-hook     . eglot-ensure)
@@ -636,8 +621,8 @@
   :global-minor-mode t)
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-;;    Setting for Formatter with Language Servers.
-;;     clangd. phpactor. 
+;;    Setting for Formatters with Language Servers.
+;;     clangd and phpactor. 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 (eval-when-compile  (require 'eglot))
 (declare-function eglot-format-buffer "eglot")
@@ -664,7 +649,7 @@
           (lambda ()
             (eglot-ensure)
             (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-            (message "[---EGLOT-format-buffer---] [ -- php-cs-fixer with php-cs-fixer.dist.php executed !! -- ]")))
+            (message "[---EGLOT-format-buffer---] [ -- php-cs-fixer with php-cs-fixer.dist executed !! -- ]")))
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Treemacs Projectile
@@ -677,8 +662,10 @@
   :bind-keymap (("C-c p" . 'projectile-command-map)) )
 
 (leaf ag
+  :doc "The Silver Searcher"
   :ensure t)
 (leaf rg
+  :doc "ripgrep"
   :ensure t)
 
 (leaf treemacs
