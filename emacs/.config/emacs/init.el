@@ -286,7 +286,7 @@
   (set-face-background 'highlight-indent-guides-top-odd-face "#BD93F9") )
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;;  syntax and Spell checher
+;;  Syntax and Spell checher
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf flymake
   :doc "A universal on-the-fly syntax checker"
