@@ -54,8 +54,8 @@
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Dracula theme
-;;               github dracula/emacs
+;; Dracula theme github dracula/emacs
+;;  起動が遅くなるかも、しかし、起動時から画面の色を決め打ちする. 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes")
 (load-theme 'dracula t)
