@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;; ---
 ;; ---  20241116
-
+;; ---  last update 2026.11.01
 ;;; Code:
 
 
@@ -22,6 +22,7 @@
             ;; ファイルハンドラを復元
             (setq file-name-handler-alist my-file-name-handler-alist)
             (message "Emacs ready in %s with %d GCs." (emacs-init-time) gcs-done)))
+
 
 ;; 起動時のGUIのちらつき防止（フレーム描画前に行うべき設定）
 (setq inhibit-startup-message t)
@@ -45,16 +46,20 @@
               (concat path path-separator (getenv "PATH"))))))
 
 
-;;--- Set initial frame size and position
-;;(setq initial-frame-alist
-;;      (append   '((top . 0) (left . 1000) (width . 115) (height . 1100)) initial-frame-alist)
-;;      )
-;;--- Launch maximized on the monitor to the left.
-;; A negative "left" value is measured from the right edge.
-;;;(push '(left       .        -1) initial-frame-alist)
-(push '(left       .        1) initial-frame-alist)
+(push '(left . 1) initial-frame-alist)
 (push '(fullscreen . maximized) default-frame-alist)
 (setq resize-mini-windows nil)
+
+
+
+
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Dracula theme github dracula/emacs
+;;  起動が遅くなるかも、しかし、起動時から画面の色を決め打ちする. 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+(add-to-list 'custom-theme-load-path "~/.config/emacs/themes")
+(load-theme 'dracula t)
+
 
 
 (provide 'early-init)

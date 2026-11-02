@@ -1,4 +1,4 @@
-;; init --- Personal Emacs configuration -*- lexical-binding: t; -*-
+;;; package --- init Personal Emacs configuration -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; Personal Emacs configuration.
 ;; M.Kurisuno .emacs/init.el
@@ -7,15 +7,17 @@
 ;;
 ;; 2024.12.16
 ;; 2025.06.20 Update
-;; 2026.09.08 Update
+;; 2026.11.01 Update
 ;;
 ;;
 ;;
 
 ;;; Code:
-(when (version< emacs-version "30.0")
-  (error "This requires Emacs 30.0 and above!"))
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Initial Setting.
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+(when (version< emacs-version "30.0")  (error "This requires Emacs 30.0 and above!"))
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
 (setq inhibit-compacting-font-caches t)
@@ -24,7 +26,6 @@
 (setq column-number-mode t)
 (global-display-line-numbers-mode t)
 (defalias 'yes-or-no-p 'y-or-n-p)
-
 ;; スクロールした際のカーソルの移動行数
 (setq scroll-conservatively 1)
 ;; スクロール開始のマージンの行数
@@ -34,12 +35,11 @@
 ;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
 (setq scroll-preserve-screen-position t)
 
-
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Dracula theme
 ;;               github dracula/emacs
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-(load-theme 'dracula t)
+;; load-theme written in early-init.el
 (with-eval-after-load 'dracula-theme
   (setopt dracula-enlarge-headings nil )
   (setopt dracula-height-title-1 1.2)
@@ -47,20 +47,22 @@
   (setopt dracula-height-title-3 1.0)
   (setopt dracula-height-doc-title 1.1)
   (setopt dracula-alternate-mode-line-and-minibuffer t)
-  (setopt dracula-bolder-keywords t))
-(with-eval-after-load 'dracula-theme
-  (set-face-attribute 'font-lock-comment-face nil
-                      :foreground "#9aa8c7")) ;;コメントのカラーを明るめに変更
+  (setopt dracula-bolder-keywords t)
+  ;;コメントのカラーを明るめに変更
+  (set-face-attribute 'font-lock-comment-face nil :foreground "#9aa8c7")
+  )
 
-
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Font Setting.
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Default Font Set
 (set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
-(set-fontset-font t 'japanese-jisx0208 (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
-(set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans JP" :size 12 :height 0.85) nil 'prepend)
+(set-fontset-font t 'japanese-jisx0208 (font-spec :name "Noto Sans CJK JP" :size 12 :height 0.85) nil 'prepend)
+(set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans CJK JP" :size 12 :height 0.85) nil 'prepend)
 
-
-
-
-
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;   Leaf Initial Setting.
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (eval-and-compile
   (customize-set-variable
    'package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
@@ -86,7 +88,9 @@
   :doc "tools for customizing Emacs and Lisp packages"
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
 
-
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;  Buckup files setting.
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf files
   :doc "file input and output commands for Emacs"
   :global-minor-mode auto-save-visited-mode
@@ -98,13 +102,16 @@
             (auto-save-visited-interval . 1)))
 (leaf startup
   :doc "process Emacs shell arguments"
+  ;; to recover session,  M-x recover-session .save-xxx
   :custom `((auto-save-list-file-prefix . ,(locate-user-emacs-file "backup/.saves-"))))
-
 (leaf savehist
   :doc "Save minibuffer history"
   :custom `((savehist-file . ,(locate-user-emacs-file "savehist")))
   :global-minor-mode t)
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;  mozc color setting
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf mozc
   :ensure t
   :custom
@@ -114,7 +121,7 @@
   :config  ;; after-load mozc でないと読み込まない
   (with-eval-after-load 'mozc
     (set-face-attribute 'mozc-preedit-face nil
-                        :height 0.85
+                        :height 0.95
                         :foreground "#8BE9FD"
                         :background "#282A36"
                         :weight 'bold)
@@ -141,17 +148,85 @@
                         :foreground "#50FA7B"
                         :background "#282A36")))
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+
 (leaf autorevert
-  :doc "revert buffers when files on disk change"
+  :doc "Revert buffers automatically when underlying files change"
+  :tag "builtin"
+  :require t
+  :custom
+  (auto-revert-check-vc-info . t)
+  (global-auto-revert-non-file-buffers . t)
+  (auto-revert-interval . 1)
+  (auto-revert-verbose . nil)
   :global-minor-mode global-auto-revert-mode)
 
 (leaf delsel
   :doc "delete selection if you insert"
   :global-minor-mode delete-selection-mode)
 
-;;
-;; macrostep. paren. delimiter. higtlight
-;;
+(leaf simple
+  :doc "basic editing commands for Emacs"
+  :custom ((kill-read-only-ok . t)
+           (kill-whole-line . t)
+           (eval-expression-print-length . nil)
+           (eval-expression-print-level . nil)))
+
+(leaf which-key
+  :doc "Display available keybindings in popup"
+  :ensure t
+  :global-minor-mode t)
+
+(when (eq system-type 'gnu/linux)
+  (leaf exec-path-from-shell
+    :doc "Get environment variables such as $PATH from the shell"
+    :ensure t
+    :defun (exec-path-from-shell-initialize)
+    :custom ((exec-path-from-shell-check-startup-files)
+             (exec-path-from-shell-variables . '("PATH" "GOPATH" "JAVA_HOME")))
+    :config
+  (exec-path-from-shell-initialize))
+  )
+
+(leaf puni
+  :doc "Parentheses Universalistic"
+  :ensure t
+  :global-minor-mode puni-global-mode
+  :bind (:puni-mode-map
+         ;; default mapping  sexp = Symbolic-Expression
+         ;; ("C-M-f" . puni-forward-sexp)      ;次のSexpの末尾まで進む
+         ;; ("C-M-b" . puni-backward-sexp)     ;前のSexpのまで戻る
+         ;; ("C-M-a" . puni-beginning-of-sexp) ;(S式)の先頭まで移動
+         ;; ("C-M-e" . puni-end-of-sexp)       ;(S式)の末尾まで移動
+         ;; ("C-M-u" . backward-up-list)       ;( )内にあるとき( )の先頭に移動
+         ;; ("C-M-d" . backward-down-list)     ;次の( )内に移動
+         ;; ("M-)"   . puni-syntactic-forward-punct)  ;次の句読点(punctuation)までJamp
+         ;; ("M-("   . puni-syntactic-backward-punct) ;前の句読点(punctuation)までJamp
+         ;; (global-map) M-f or ESC<right>  forward-word
+         ;; (global-map) M-b or ESC<left>   backward-word
+         ;; ("M-{")  . backword-paragraph)  ;;次のパラグラフ先頭へ  Ctrl+<up>
+         ;; ("M-}")  . forward-paragraph)   ;;前のパラグラフ先頭へ  Ctrl+<down>
+         ("C-c }" . puni-slurp-forward)   ;; (a) b  -> (a  b)   ; slurp = 括弧内へ取り込む
+         ("C-c {" . puni-slurp-backward)  ;;  a (b) -> (a  b)   ;
+         ("C-c <" . puni-barf-forward)    ;; (a  b) -> (a) b    ; barf  = 括弧外へ出す
+         ("C-c >" . puni-barf-backward)   ;; (a  b) ->  a (b)   ;
+         ("C-c )" . puni-wrap-round)      ;;   a    ->  (a)     ; wrap  = 括弧を付ける
+         ("C-c (" . puni-splice)          ;;  (a)   ->   a      ; splice = 括弧を外す
+         ("M-r" . puni-raise)             ;; A(b(x),y) -> b(x)  ; raise = 親のS式を現在のS式で置き換える
+         ("M-U" . puni-splice-killing-backward)
+         ("M-z" . puni-squeeze)           ;; foo (bar) baz -> { + C-y + } -> foo {bar} baz
+                                          ;; squeeze = 中身を一時退避して括弧を付け替える
+	 )
+  :config
+  (leaf elec-pair
+    :doc "Automatic parenthesis pairing"
+    :global-minor-mode electric-pair-mode))
+
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; macrostep paren delimiter highlight-indent-guides
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf macrostep
   :ensure t
   :bind (("C-c e" . macrostep-expand)))
@@ -171,25 +246,25 @@
            (show-paren-when-point-inside-paren . t)
            (show-paren-when-point-in-periphery . t)))
 
-;;(leaf  highlight-indent-guides
-;;  :ensure t
-;;  :custom
-;;  (highlight-indent-guides-method  . 'column)
-;;  (highlight-indent-guides-auto-enabled . t)
-;;  (highlight-indent-guides-responsive . 'top)
-;;  (highlight-indent-guides-delay . 0)
-;;  :hook
-;;  (prog-mode-hook . highlight-indent-guides-mode)
-;;  :config
-;;  )
+(leaf highlight-indent-guides
+  :ensure t
+  :hook (yaml-ts-mode-hook . highlight-indent-guides-mode)
+  :hook (python-ts-mode-hook . highlight-indent-guides-mode)
+  :custom
+  (highlight-indent-guides-method . 'column)
+  (highlight-indent-guides-auto-enabled . nil) ; 自動色計算をオフにしてカスタムカラーを使用
+  (highlight-indent-guides-responsive . 'top)   ; カーソル位置のガイドをアクティブ強調
+  :config
+  ;; --- Dracula風 4色カラーパレット設定 --- #f1fa8c
+  ;; Cyan:#8BE9FD Pink:#FF79C6 Yellow:#F1FA8C Purple:#BD93F9 Green:#50FA7B
+  (set-face-background 'highlight-indent-guides-odd-face "#F1FA8C")
+  (set-face-background 'highlight-indent-guides-even-face "#50FA7B")
+  (set-face-background 'highlight-indent-guides-top-even-face "#FF79C6")
+  (set-face-background 'highlight-indent-guides-top-odd-face "#BD93F9") )
 
-(leaf simple
-  :doc "basic editing commands for Emacs"
-  :custom ((kill-read-only-ok . t)
-           (kill-whole-line . t)
-           (eval-expression-print-length . nil)
-           (eval-expression-print-level . nil)))
-
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;  Syntax and Spell checher
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf flymake
   :doc "A universal on-the-fly syntax checker"
   :hook (emacs-lisp-mode-hook . flymake-mode)
@@ -197,28 +272,22 @@
           ("M-n" . flymake-goto-next-error)
           ("M-p" . flymake-goto-prev-error))))
 
-(leaf which-key
-  :doc "Display available keybindings in popup"
+(leaf jinx
+  :doc "Enchanted Spell Checker. Ubuntu needs libenchant-2-dev, pkgconf."
   :ensure t
-  :global-minor-mode t)
+  :hook (emacs-startup-mode-hook . global-jinx-mode)
+  :bind (("M-$" . jinx-correct)
+         ("C-M-$" . jinx-languages))
+  :custom
+  ;; target language（デフォルトは "en" や OS の言語設定依存）
+  (jinx-languages . "en"))
 
-(when (eq system-type 'gnu/linux)
-  (leaf exec-path-from-shell
-    :doc "Get environment variables such as $PATH from the shell"
-    :ensure t
-    ;; :if (eq system-type 'gnu/linux)
-    :defun (exec-path-from-shell-initialize)
-    :custom ((exec-path-from-shell-check-startup-files)
-             (exec-path-from-shell-variables . '("PATH" "GOPATH" "JAVA_HOME")))
-    :config
-  (exec-path-from-shell-initialize))
-  )
-
-;;
-;;  vertico+marginalia+consult+corfu+cape
-;;
-(leaf vertico
-  :doc "VERTical Interactive COmpletion"
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;  Completion settings.
+;;  -- vertico marginalia corfu cape etc...
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+ (leaf vertico
+  :doc "VERTical Interactive Completion"
   :ensure t
   :global-minor-mode t)
 
@@ -326,7 +395,7 @@
    )
 
 (leaf svg-lib
-  :doc "Emacs library that allows to create and display various SVG objects."
+  :doc "Emacs SVG library that allows to create and display various SVG objects."
   :ensure t)
 
 (defvar corfu-margin-formatters nil)
@@ -344,68 +413,6 @@
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
   )
 
-(leaf jinx
-  :doc "Enchanted Spell Checker. Ubuntu needs libenchant-2-dev, pkgconf."
-  :ensure t
-  :hook (emacs-startup-mode-hook . global-jinx-mode)
-  :bind (("M-$" . jinx-correct)
-         ("C-M-$" . jinx-languages))
-  :custom
-  ;; チェック対象の言語（デフォルトは "en" や OS の言語設定依存）
-  (jinx-languages . "en"))
-
-
-(leaf embark
-  :ensure t
-  :bind (("C-."   . embark-act)
-         ("C-;"   . embark-dwim)
-         ("C-h B" . embark-bindings)))
-
-
-(leaf embark-consult
-  :doc "Consult integration for Embark"
-  :ensure t
-  :bind ((minibuffer-mode-map
-          :package emacs
-          ("M-." . embark-dwim)
-          ("C-." . embark-act))))
-
-(leaf puni
-  :doc "Parentheses Universalistic"
-  :ensure t
-  :global-minor-mode puni-global-mode
-  :bind (:puni-mode-map
-         ;; default mapping  sexp = Symbolic-Expression
-         ;; ("C-M-f" . puni-forward-sexp)      ;次のSexpの末尾まで進む
-         ;; ("C-M-b" . puni-backward-sexp)     ;前のSexpのまで戻る
-         ;; ("C-M-a" . puni-beginning-of-sexp) ;(S式)の先頭まで移動
-         ;; ("C-M-e" . puni-end-of-sexp)       ;(S式)の末尾まで移動
-         ;; ("C-M-u" . backward-up-list)       ;( )内にあるとき( )の先頭に移動
-         ;; ("C-M-d" . backward-down-list)     ;次の( )内に移動
-         ;; ("M-)"   . puni-syntactic-forward-punct)  ;次の句読点(punctuation)までJamp
-         ;; ("M-("   . puni-syntactic-backward-punct) ;前の句読点(punctuation)までJamp
-         ;; (global-map) M-f or ESC<right>  forward-word
-         ;; (global-map) M-b or ESC<left>   backward-word
-         ;; ("M-{")  . backword-paragraph)  ;;次のパラグラフ先頭へ  Ctrl+<up>
-         ;; ("M-}")  . forward-paragraph)   ;;前のパラグラフ先頭へ  Ctrl+<down>
-         ("C-c }" . puni-slurp-forward)   ;; (a) b  -> (a  b)   ; slurp = 括弧内へ取り込む
-         ("C-c {" . puni-slurp-backward)  ;;  a (b) -> (a  b)   ;
-         ("C-c <" . puni-barf-forward)    ;; (a  b) -> (a) b    ; barf  = 括弧外へ出す
-         ("C-c >" . puni-barf-backward)   ;; (a  b) ->  a (b)   ;
-         ("C-c )" . puni-wrap-round)      ;;   a    ->  (a)     ; wrap  = 括弧を付ける
-         ("C-c (" . puni-splice)          ;;  (a)   ->   a      ; splice = 括弧を外す
-         ("M-r" . puni-raise)             ;; A(b(x),y) -> b(x)  ; raise = 親のS式を現在のS式で置き換える
-         ("M-U" . puni-splice-killing-backward)
-         ("M-z" . puni-squeeze)           ;; foo (bar) baz -> { + C-y + } -> foo {bar} baz
-                                          ;; squeeze = 中身を一時退避して括弧を付け替える
-	 )
-  :config
-  (leaf elec-pair
-    :doc "Automatic parenthesis pairing"
-    :global-minor-mode electric-pair-mode))
-
-
-
 (leaf yasnippet
   :ensure t
   :global-minor-mode   yas-global-mode )
@@ -422,12 +429,46 @@
                             (add-to-list 'completion-at-point-functions #'cape-file)
                             (add-to-list 'completion-at-point-functions #'yasnippet-capf 'append))))
 
+(leaf embark
+  :ensure t
+  :bind (("C-."   . embark-act)
+         ("C-;"   . embark-dwim)
+         ("C-h B" . embark-bindings)))
 
+(leaf embark-consult
+  :doc "Consult integration for Embark"
+  :ensure t
+  :bind ((minibuffer-mode-map
+          :package emacs
+          ("M-." . embark-dwim)
+          ("C-." . embark-act))))
+
+
+;;--- --- --- --- --- --- --- --- --- --- --- ---
+;;  git
+;;--- --- --- --- --- --- --- --- --- --- --- ---
 (leaf magit
   :ensure t
   :bind (("C-x g" . magit-status)))
 
 
+;;--- --- --- --- --- --- --- --- --- --- --- ---
+;; Editorconfig and Formatter.
+;;--- --- --- --- --- --- --- --- --- --- --- ---
+(leaf editorconfig
+  :doc "a file format for defining coding styles and a collection"
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
+(leaf format-all
+  :ensure t
+  :bind (("C-c f" . format-all-buffer))
+  :hook (prog-mode . format-all-mode))
+
+;;--- --- --- --- --- --- --- --- --- --- --- ---
+;; tree-sitter and Language-server setting
+;;--- --- --- --- --- --- --- --- --- --- --- ---
 (leaf *treesit
   :custom ((treesit-font-lock-level . 4))
   :config
@@ -443,6 +484,7 @@
   (add-to-list 'auto-mode-alist '("\\.json\\'"  . js-json-mode))
   (add-to-list 'auto-mode-alist '("\\.php\\'"   . php-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.y?ml\\'"  . yaml-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.toml\\'"  . toml-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.\\(?:m\\|c\\)?js\\'"  . js-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.ts\\'"   . typescript-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx\\'"  . tsx-ts-mode))
@@ -453,42 +495,16 @@
   (add-to-list 'auto-mode-alist '("\\.clang\\(?:d\\|-tidy\\|-format\\)\\'" . yaml-ts-mode)) ;;Clangd の設定file
   )
 
-(add-hook 'c++-ts-mode-hook
-	  (lambda ()
-	    (electric-indent-mode -1)
-	    (setq-local default-tab-width 4)
-	    (setq-local tab-width 4)
-	    (setq-local indent-tabs-mode t)
-	    (setq-local c-ts-mode-indent-offset 4)
-	    (setq-local c-basic-offset 4)))
-(add-hook 'c-ts-mode-hook
-	  (lambda ()
-	    (electric-indent-mode -1)
-	    (setq-local default-tab-width 4)
-	    (setq-local tab-width 4)
-	    (setq-local indent-tabs-mode t)
-	    (setq-local c-ts-mode-indent-offset 4)
-	    (setq-local c-basic-offset 4)))
 
-(leaf web-mode
-  :ensure t
-  :mode ("\\.html\\'")
-  :custom
-  (web-mode-markup-indent-offset  . 4)  ; HTMLインデント
-  (web-mode-css-indent-offset     . 2)  ; CSSインデント
-  (web-mode-code-indent-offset    . 4)  ; PHP/JSインデント
-  (web-mode-enable-auto-closing   . t)  ; 自動閉じタグ
-  (web-mode-enable-auto-pairing   . t)  ; 自動ペア
-  :hook
-  ;;(web-mode-hook . (lambda () (electric-pair-local-mode -1)))
-  )
-
-
+;; --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- --
+;;       Eglot + eldoc + eldocbox.
+;; --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- --
 (leaf eldoc
   :ensure nil
   :config
-  ;; MiniBuffer へのechoの文字の大きさを調節 下の設定は間違ってないけど読み込まない。
+  ;; MiniBuffer へのHoverからのechoの文字の大きさを調節 下の設定は間違ってないけど読み込まない。
   ;;(custom-set-faces  '(markdown-header-face-3 ((t (:height 0.85)))))
+  ;; なので、`with-eval-after-load'で読み込ませる.
   (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 1.0))
   :hook
   ((prog-mode-hook . eldoc-mode)))
@@ -496,8 +512,9 @@
 (leaf eldoc-box
   :ensure t
   :bind  (("C-c d" . eldoc-box-help-at-point))
-;;  :hook  ((eglot-managed-mode-hook . (lambda () (eldoc-box-hover-at-point-mode 1) )))
-;;  :custom ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 120))
+  ;;  :hook  ((eglot-managed-mode-hook . (lambda () (eldoc-box-hover-at-point-mode 1) )))
+  ;;  custom での設定はとりあえずは有効になるが、ブロック最後のwith-eval-after-load で読み込ませる.
+  ;;  :custom ((eldoc-box-max-pixel-width . 600) (eldoc-box-max-pixel-height . 120))
   :custom-face
   (eldoc-box-body . ' ((t (:background "#282A36" :foreground "#f8f8f2" :family "JetBrains Mono" :height 0.95 :weight normal :slant normal :alpha 70))))
   (eldoc-box-border . '((t (:background "#44475a" ))))
@@ -506,16 +523,13 @@
   ;;(setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88)
   ;HoverからのEchoの一行目の文字の大きさを調節
   (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.95))
-  (defvar eldoc-box-max-pixel-width) (defvar eldoc-box-max-pixel-height) (defvar eldoc-box-frame-parameters)
+  (defvar eldoc-box-max-pixel-width)
+  (defvar eldoc-box-max-pixel-height)
+  (defvar eldoc-box-frame-parameters)
   (with-eval-after-load 'eldoc-box
     (setq eldoc-box-max-pixel-width 600 eldoc-box-max-pixel-height 120)
-    (setf (alist-get 'min-width eldoc-box-frame-parameters) 40 (alist-get 'min-height eldoc-box-frame-parameters) 5)
-    )
-)
-
-;;
-;; eglot
-;;
+    (setf (alist-get 'min-width eldoc-box-frame-parameters) 40
+          (alist-get 'min-height eldoc-box-frame-parameters) 5) ))
 
 (leaf eglot
   :doc "The Emacs Client for LSP servers"
@@ -526,31 +540,34 @@
   ;; 
   (add-to-list 'eglot-server-programs '((c++-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '((c-ts-mode) "clangd"))
-  (add-to-list 'eglot-server-programs '((php-ts-mode) . ("intelephense" "--stdio")))
+  ;;  (add-to-list 'eglot-server-programs '((php-ts-mode) . ("intelephense" "--stdio")))
+  (add-to-list 'eglot-server-programs
+               '((php-ts-mode php-mode) .
+                 (lambda (&rest _)
+                   (let ((local-phpactor (expand-file-name "vendor/bin/phpactor" (project-root (project-current)))))
+                     (if (file-executable-p local-phpactor)
+                         (list local-phpactor "language-server")
+                     '("phpactor" "language-server"))))))
   (add-to-list 'eglot-server-programs '((python-ts-mode) . ("pyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs '((typescript-ts-mode) . ("typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((js-ts-mode tsx-ts-mode) . ("typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((web-mode) . ("vscode-html-language-server" "--stdio")))
 
-  ;;for install "sudo npm install -g twiggy-language-server"
+  ;;after install "sudo npm install -g twiggy-language-server", then
   ;;(add-to-list 'eglot-server-programs `(twig-mode . ("twiggy-language-server" "--stdio"
   ;;                                                   :initializationOptions
   ;;                                                   (:twiggy
   ;;                                                    (:framework "symfony"
   ;;                                                                :phpExecutable "php"
   ;;                                                                :symfonyConsolePath "bin/console")))))
-  ;;--- eglotとclangd のインデント設定を無効化する
-  (with-eval-after-load 'eglot
-    (add-to-list 'eglot-ignored-server-capabilities :documentFormattingProvider)
-    (add-to-list 'eglot-ignored-server-capabilities :documentRangeFormattingProvider)
-    (add-to-list 'eglot-ignored-server-capabilities :documentOnTypeFormattingProvider))
-  ;;--- xref-find-reference の時の強調背景が明るすぎるため
+
+  ;;--- xref-find-reference の時の強調背景が明るすぎるため ---
   (with-eval-after-load 'xref
-  ;; (set-face-attribute 'xref-match nil :foreground "#1f2328" :background "#44475a" :weight 'bold)
     (set-face-attribute 'xref-match nil :foreground "#FFFFFF" :background "#44475a" :weight 'bold))
   :bind (("C-c i" . completion-at-point)
          ("C-c r" . eglot-rename)
          ("C-c o" . eglot-code-action-organize-imports))
+  ;;; --- --- Eglot key bind --- ---
   ;; M-.   : xref-find-definitions
   ;; M-,   : xref-go-back
   ;; M-?   : xref-find-reference
@@ -559,9 +576,9 @@
   ;; C-c i : Completion at point
   ;; C-c a : Rename
   :hook
-  ((c-ts-mode-hook   . eglot-ensure)
-   (c++-ts-mode-hook . eglot-ensure)
-   (php-ts-mode-hook . eglot-ensure)
+  (;;(c-ts-mode-hook   . eglot-ensure)    Written with formatter setting in next block.
+   ;;(c++-ts-mode-hook . eglot-ensure)
+   ;;(php-ts-mode-hook . eglot-ensure)
    (python-ts-mode-hook     . eglot-ensure)
    (typescript-ts-mode-hook . eglot-ensure)
    (tsx-ts-mode-hook  . eglot-ensure)
@@ -575,68 +592,55 @@
    (eglot-sync-connect . 0))
   )
 
-
-;; 2個のLanguage-Serverを起動する方法　Rassが必要
-;;(with-eval-after-load 'eglot
-;;  (add-to-list 'eglot-server-programs '((web-mode) .
-;;                                       ("rass"
-;;                                        "--" "vscode-html-language-server" "--stdio"
-;;                                        "--" "intelephense" "--stdio")))
-;; )
-
-
-
 (leaf eglot-booster
   :when (executable-find "emacs-lsp-booster")
   :vc ( :url "https://github.com/jdtsmith/eglot-booster")
   :global-minor-mode t)
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+;;    Setting for Formatters with Language Servers.
+;;     clangd and phpactor.
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+(eval-when-compile  (require 'eglot))
+(declare-function eglot-format-buffer "eglot")
+
+;;  Clangd for fotmat needs '.clang-format' in ProjectRoot.
+(add-hook 'c++-ts-mode-hook
+          (lambda ()
+            (eglot-ensure)
+            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+            (message "[  EGLOT-format-buffer  ] [ 'clangd-format' applied !! ]")))
+
+(add-hook 'cc-ts-mode-hook
+          (lambda ()
+            (eglot-ensure)
+            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+            (message "[  EGLOT-format-buffer  ] [ 'clangd-format' applied !! ]")))
+
+;;  PHP Langage Server needs 'php-cs-fixer' and 'php-cs-fixer.dist'  in Symfony.
+(add-hook 'php-ts-mode-hook
+          (lambda ()
+            (eglot-ensure)
+            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+            (message "[---EGLOT-format-buffer---] [ -- php-cs-fixer with php-cs-fixer.dist executed !! -- ]")))
+
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Treemacs and Projectile
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf projectile
   :ensure t
   :init
   (projectile-mode +1)
   ;; Recommended keymap prefix on Windows/Linux
-  :bind-keymap (("C-c p" . 'projectile-command-map))
-  )
+  :bind-keymap (("C-c p" . 'projectile-command-map)) )
 
 (leaf ag
+  :doc "The Silver Searcher"
   :ensure t)
 (leaf rg
+  :doc "ripgrep"
   :ensure t)
 
-(leaf markdown-mode
-  :ensure t
-  :mode
-  (("\\.md\\'" . markdown-mode)
-   ("\\.markdown\\'" . markdown-mode))
-  :custom
-  ((markdown-command . "pandoc -f markdown+header_attributes-raw_html -t html5")
-   (markdown-fontify-code-blocks-natively . t)
-   (markdown-header-scaling . t)
-   (markdown-enable-math . t)
-   (markdown-url-compose-char . nil)
-   (markdown-list-indent-width . 2)
-   (markdown-indent-on-enter . t)
-   (indent-tabs-mode . nil))
-  :custom-face
-  (markdown-header-face-1 . '((t (:weight bold :height 1.3))))
-  (markdown-header-face-2 . '((t (:weight bold :height 1.2))))
-  (markdown-header-face-3 . '((t (:weight bold :height 1.1))))
-  (markdown-header-face-4 . '((t (:weight bold :height 1.0))))
-  :hook
-  ((markdown-mode-hook . visual-line-mode)
-   (markdown-mode-hook . flyspell-mode))
-  :bind
-  (:markdown-mode-map
-   ("C-c C-t" . markdown-toc-generate-toc)
-   ("C-c C-p" . markdown-preview))
-  )
-
-;;
-;;
-;; Treemacs
-;;
-;;
 (leaf treemacs
   :ensure t
   :bind
@@ -764,22 +768,12 @@
 
 
 
-;;;
-;;; This will enable emacs to compile a simple cpp single file without any makefile by just pressing [f9] key
-;;;
-;;(defun code-compile()
-;;  (interactive)
-;;  (unless (file-exists-p "Makefile")
-;;    (set (make-local-variable 'compile-command)
-;;	 (let ((file (file-name-nondirectory buffer-file-name)))
-;;	   (format "%s -std=c++20 -o %s %s"
-;;		   (if (equal (file-name-extension file) "cpp") "g++" "gcc")
-;;		   (file-name-sans-extension file)
-;;		   file)))
-;;    (compile compile-command)))
-;;(global-set-key [f9] 'code-compile)
-
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;    Ligature for JetBrains mono.
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf ligature
+  :doc " リガチャしてみた．Setting for JetBrains Mono. "
+  :ensure t
   :config
   (ligature-set-ligatures 'prog-mode '("--" "---" "==" "===" "!=" "!==" "=!="
                               "=:=" "=/=" "<=" ">=" "&&" "&&&" "&=" "++" "+++" "***" ";;" "!!"
@@ -796,6 +790,36 @@
                               "<:<" ";;;"))
   (global-ligature-mode t))
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Markdown-Mode
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+(leaf markdown-mode
+  :ensure t
+  :mode
+  (("\\.md\\'" . markdown-mode)
+   ("\\.markdown\\'" . markdown-mode))
+  :custom
+  ((markdown-command . "pandoc -f markdown+header_attributes-raw_html -t html5")
+   (markdown-fontify-code-blocks-natively . t)
+   (markdown-header-scaling . t)
+   (markdown-enable-math . t)
+   (markdown-url-compose-char . nil)
+   (markdown-list-indent-width . 2)
+   (markdown-indent-on-enter . t)
+   (indent-tabs-mode . nil))
+  :custom-face
+  (markdown-header-face-1 . '((t (:weight bold :height 1.3))))
+  (markdown-header-face-2 . '((t (:weight bold :height 1.2))))
+  (markdown-header-face-3 . '((t (:weight bold :height 1.1))))
+  (markdown-header-face-4 . '((t (:weight bold :height 1.0))))
+  :hook
+  ((markdown-mode-hook . visual-line-mode)
+   (markdown-mode-hook . jinx-mode))
+  :bind
+  (:markdown-mode-map
+   ("C-c C-t" . markdown-toc-generate-toc)
+   ("C-c C-p" . markdown-preview))
+  )
 
 
 (provide 'init)

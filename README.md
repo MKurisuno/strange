@@ -4,9 +4,12 @@
  
 ### for kurisuno
 ### since 2024.12.02 
-### last update 2026.10.25
+### last update 2026.10.29
 
-
+### file administration with stow 
+   zsh emacs clangd   
+   $stow -t $HOME xxx  
+   
 ## Japanese directory name exchange to English
 　　 $ LANG=C xdg-user-dirs-gtk-update
  
@@ -50,6 +53,7 @@
 ##  Default Editor
 　　 $ sudo update-alternatives --config editor  
 
+
 ## bash switch to zsh
 　To change login-shell   
 　　$chsh -s /usr/bin/zsh  
@@ -80,13 +84,23 @@
 ## gnome-terminal
 　  https://draculatheme.com/gnome-terminal  
 
+## alacritty
+　  Dracua theme Download https://github.com/dracula/alacritty/archive/master.zip   
+　 Install to  ~/.config/alacrity/themes/dracula
+　 echo  "general.import = ["/path/to/dracula.toml"]"  > ~/.config/alacritty/alacritty.toml  
+
+## python3 environment
+　　Activate virtual environment.  
+　　 $ mkdir ~/.Apliris  
+　　 $ python3 -m venv .Aprilis  
+　　 $ source .Aprilis/bin/active
+
 ##  Disable bluetooth service
 　  $ sudo systemctl disable bluetooth.service  
   
 ##  Disable printer service  
 　  $ sudo systemctl stop cups.service  
 　  $ sudo systemctl disable cups.service  
-  
 
 ##  Wifi pawer-save-mode off
 ####　 if wifi is unstable,  
@@ -99,7 +113,6 @@
 　   3) (enable)   
 　　   wifi.powersave = 2  
 
-
 ## Emacs eglot LanguageServer
 ### C/C++ LanguageServer : Clangd 
    Download clang and clangd from <https://apt.llvm.org/#llvmsh > .   
@@ -109,12 +122,6 @@
 　　{project}/.clang-tidy    
 　　{project}/.clang-format   
 
-### python3 environment  2026.08.07
-　　Activate virtual environment.  
-　　 $ mkdir ~/.Apliris  
-　　 $ python3 -m venv .Aprilis  
-　　 $ source .Aprilis/bin/active
-
 ### Node.js to install 
 　　Install Node.js  
 　　 $sudo apt update  
@@ -122,8 +129,8 @@
 　　 $curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -  
 　　 $sudo apt install -y nodejs  
 
-
-### PHP_LanguageServer:Intelephense
+### PHP_LanguageServer: ~~Intelephense~~   
+   無償版はformatter機能が無効   
 　　1) Install Intelephense  
 　　　$sudo npm install -g intelephense  
 　　2) Insert those in initi.el  
@@ -148,4 +155,5 @@
 　　　$sudo npm install -g vscode-langservers-extracted  
 　　2) Insert those in init.el  
 　　　(add-to-list 'eglot-server-programs '((web-mode) . ("vscode-html-language-server" "--stdio")))  
+
 
