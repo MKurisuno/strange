@@ -52,31 +52,19 @@
   (set-face-attribute 'font-lock-comment-face nil :foreground "#9aa8c7")
   )
 
-;; --------------------------------------------------
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Font Setting.
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Default Font Set
-;; --------------------------------------------------
-(set-face-attribute 'default nil
-                    :family "JetBrains Mono"
-                    :size 140)
-
-;; --------------------------------------------------
-;; 2. JP Font distributed function. 
-;; --------------------------------------------------
+(set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
+;; 2. JP Font distributed function.
 (defun my/apply-jp-font (&optional frame)
-  "指定したFRAME（または全フレーム）に対して日本語フォントを割り当てる"
+  "指定したFRAME（または全フレーム）に対して日本語フォントを割り当てる."
   (let ((jp-font (font-spec :family "Noto Sans CJK JP")))
     (dolist (charset '(japanese-jisx0208 cjk-misc kana han))
       (set-fontset-font t charset jp-font frame 'prepend))))
-
-;; --------------------------------------------------
-;; 3. スケール（サイズ比率）の微調整
-;; --------------------------------------------------
 (setq face-font-rescale-alist '(("Noto Sans CJK JP" . 0.85)))
-
-;; --------------------------------------------------
 ;; 4. 適用タイミングの制御
-;; --------------------------------------------------
-;; 初期表示およびGUI新規フレーム作成時の双方に対応
 (my/apply-jp-font)
 (add-hook 'after-make-frame-functions #'my/apply-jp-font)
 
@@ -84,7 +72,7 @@
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;;   Leaf Initial Setting 
+;;   Leaf Initial Setting.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (eval-and-compile
   (customize-set-variable
