@@ -57,19 +57,8 @@
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Default Font Set
 (set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
-;; 2. JP Font distributed function.
-(defun my/apply-jp-font (&optional frame)
-  "指定したFRAME（または全フレーム）に対して日本語フォントを割り当てる."
-  (let ((jp-font (font-spec :family "Noto Sans CJK JP")))
-    (dolist (charset '(japanese-jisx0208 cjk-misc kana han))
-      (set-fontset-font t charset jp-font frame 'prepend))))
-(setq face-font-rescale-alist '(("Noto Sans CJK JP" . 0.85)))
-;; 4. 適用タイミングの制御
-(my/apply-jp-font)
-(add-hook 'after-make-frame-functions #'my/apply-jp-font)
-
-
-
+(set-fontset-font t 'japanese-jisx0208 (font-spec :name "Noto Sans CJK JP" :size 12 :height 0.85) nil 'prepend)
+(set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans CJK JP" :size 12 :height 0.85) nil 'prepend)
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;   Leaf Initial Setting.
@@ -610,14 +599,12 @@
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;    Setting for Formatters with Language Servers.
-;;     clangd and phpactor. 
+;;     clangd and phpactor.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 (eval-when-compile  (require 'eglot))
 (declare-function eglot-format-buffer "eglot")
 
-;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  Clangd for fotmat needs '.clang-format' in ProjectRoot.
-;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 (add-hook 'c++-ts-mode-hook
           (lambda ()
             (eglot-ensure)
@@ -630,18 +617,16 @@
             (add-hook 'before-save-hook #'eglot-format-buffer nil t)
             (message "[  EGLOT-format-buffer  ] [ 'clangd-format' applied !! ]")))
 
-;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  PHP Langage Server needs 'php-cs-fixer' and 'php-cs-fixer.dist'  in Symfony.
-;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 (add-hook 'php-ts-mode-hook
           (lambda ()
             (eglot-ensure)
             (add-hook 'before-save-hook #'eglot-format-buffer nil t)
             (message "[---EGLOT-format-buffer---] [ -- php-cs-fixer with php-cs-fixer.dist executed !! -- ]")))
 
-;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Treemacs Projectile
-;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Treemacs and Projectile
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf projectile
   :ensure t
   :init
@@ -784,7 +769,7 @@
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Ligature for JetBrains mono.
+;;    Ligature for JetBrains mono.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf ligature
   :doc " リガチャしてみた．Setting for JetBrains Mono. "
@@ -804,8 +789,6 @@
                               ":?" ":?>" "//" "///" "/*" "*/" "/=" "//=" "/==" "@_" "__" "???"
                               "<:<" ";;;"))
   (global-ligature-mode t))
-
-
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Markdown-Mode
@@ -837,9 +820,6 @@
    ("C-c C-t" . markdown-toc-generate-toc)
    ("C-c C-p" . markdown-preview))
   )
-
-
-
 
 
 (provide 'init)
