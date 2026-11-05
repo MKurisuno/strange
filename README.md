@@ -159,16 +159,16 @@
 
 ## Formatter Apheleia
 ### Python
-　　1) Install ruff　　
+　　1) Install ruff  
        $pip install -U ruff　　
-　　2) Insert next at Apeleia block in init.el.　　
-　　　　(setf (alist-get 'python-ts-mode apheleia-mode-alist) '(ruff-isort ruff))　　
+　　2) Insert next at Apeleia block in init.el.  
+       (setf (alist-get 'python-ts-mode apheleia-mode-alist) '(ruff-isort ruff))    
 
 ### Typescript Java-Script ...
-　　1) Install Prettir 
-       $sudo  npm i -g prettier　　
-　　2) Inset next at Apheleia block in init.el.　　
-　　　　(setf (alist-get 'typescript-ts-mode apheleia-mode-alist) 'prettier)　　
-　　　　(setf (alist-get 'json-ts-mode apheleia-mode-alist) 'prettier)　　
+　　1) Install Prettir    
+       $sudo  npm i -g prettier    　
+　　2) Inset next at Apheleia block in init.el.    
+       (setf (alist-get 'typescript-ts-mode aphele ia-mode-alist) 'prettier)　　
+       (setf (alist-get 'json-ts-mode apheleia-mode-alist) 'prettier)　　
 
 
