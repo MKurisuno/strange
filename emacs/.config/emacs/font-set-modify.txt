@@ -1,0 +1,15 @@
+;; Default Font: JetBrains Mono 14pt
+(set-face-attribute 'default nil
+                    :family "JetBrains Mono"
+                    :height 140)
+
+;; 日本語フォント
+(dolist (charset '(kana han cjk-misc japanese-jisx0208 japanese-jisx0213.2004-1))
+  (set-fontset-font t charset (font-spec :family "Noto Sans CJK JP") nil 'prepend))
+
+;; 日本語の高さ調整（倍率を下げると高さも下がる）
+(setq face-font-rescale-alist
+      '(("Noto Sans CJK JP" . 0.85)))
+
+;; 行の高さが日本語行だけ高くなるのを防ぐ
+(setq-default line-spacing 0)

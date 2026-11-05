@@ -1,7 +1,7 @@
 ;;; package --- init Personal Emacs configuration -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; Personal Emacs configuration.
-;; M.Kurisuno .emacs/init.el
+;; M.Kurisuno emacs/init.el
 ;;
 ;;
 ;;
@@ -256,7 +256,7 @@
   (highlight-indent-guides-responsive . 'top)   ; カーソル位置のガイドをアクティブ強調
   :config
   ;; --- Dracula風 4色カラーパレット設定 --- #f1fa8c
-  ;; Cyan:#8BE9FD Pink:#FF79C6 Yellow:#F1FA8C Purple:#BD93F9 Green:#50FA7B
+  ;; Cyan:#8BE9FD Pink:#FF79C6 Yellow:#F1FA8C Purple:#BD93F9 Green:#50FA7B Orange:#FFB86C Red:#FF5555
   (set-face-background 'highlight-indent-guides-odd-face "#F1FA8C")
   (set-face-background 'highlight-indent-guides-even-face "#50FA7B")
   (set-face-background 'highlight-indent-guides-top-even-face "#FF79C6")
