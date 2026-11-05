@@ -502,7 +502,9 @@
   (add-to-list 'auto-mode-alist '("\\.c\\'"    . c-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.h\\'"    . c++-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.cpp\\'"  . c++-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.c++\\'"  . c++-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.hpp\\'"  . c++-ts-mode))
+
   (add-to-list 'auto-mode-alist '("\\.clang\\(?:d\\|-tidy\\|-format\\)\\'" . yaml-ts-mode)) ;;Clangd の設定file
   )
 

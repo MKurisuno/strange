@@ -65,7 +65,8 @@ zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:
 #zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 
-# alias 
+# alias
+alias lo='exit'
 alias bd='cd $OLDPWD'
 alias dir='dir --color=auto'
 alias egrep='egrep --color=auto'
