@@ -1,7 +1,7 @@
 ;;; package --- init Personal Emacs configuration -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; Personal Emacs configuration.
-;; M.Kurisuno .emacs/init.el
+;; M.Kurisuno emacs/init.el
 ;;
 ;;
 ;;
@@ -55,10 +55,13 @@
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Font Setting.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Default Font Set
-(set-face-attribute 'default nil :font (font-spec :family "JetBrains Mono" :size 14))
-(set-fontset-font t 'japanese-jisx0208 (font-spec :name "Noto Sans CJK JP" :size 12 :height 0.85) nil 'prepend)
-(set-fontset-font t 'cjk-misc          (font-spec :name "Noto Sans CJK JP" :size 12 :height 0.85) nil 'prepend)
+(set-face-attribute 'default nil :family "JetBrains Mono" :height 105)
+(dolist (charset '(kana han cjk-misc japanese-jisx0208 japanese-jisx0213.2004-1))
+  (set-fontset-font t charset (font-spec :family "Noto Sans CJK JP") nil 'prepend)
+  (set-fontset-font t 'emoji  (font-spec :family "Noto Color Emoji") nil 'append))
+;; 日本語の高さ調整
+(setopt face-font-rescale-alist '(("Noto Sans CJK JP" . 1.2)))
+
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;   Leaf Initial Setting.
@@ -88,6 +91,9 @@
   :doc "tools for customizing Emacs and Lisp packages"
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
 
+
+
+
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  Buckup files setting.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -108,6 +114,11 @@
   :doc "Save minibuffer history"
   :custom `((savehist-file . ,(locate-user-emacs-file "savehist")))
   :global-minor-mode t)
+
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; `mh-e'
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+(setopt mh-x-face-file "~/.mh-x-face" )
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  mozc color setting
@@ -187,7 +198,7 @@
     :custom ((exec-path-from-shell-check-startup-files)
              (exec-path-from-shell-variables . '("PATH" "GOPATH" "JAVA_HOME")))
     :config
-  (exec-path-from-shell-initialize))
+    (exec-path-from-shell-initialize))
   )
 
 (leaf puni
@@ -217,7 +228,7 @@
          ("M-r" . puni-raise)             ;; A(b(x),y) -> b(x)  ; raise = 親のS式を現在のS式で置き換える
          ("M-U" . puni-splice-killing-backward)
          ("M-z" . puni-squeeze)           ;; foo (bar) baz -> { + C-y + } -> foo {bar} baz
-                                          ;; squeeze = 中身を一時退避して括弧を付け替える
+         ;; squeeze = 中身を一時退避して括弧を付け替える
 	 )
   :config
   (leaf elec-pair
@@ -256,7 +267,7 @@
   (highlight-indent-guides-responsive . 'top)   ; カーソル位置のガイドをアクティブ強調
   :config
   ;; --- Dracula風 4色カラーパレット設定 --- #f1fa8c
-  ;; Cyan:#8BE9FD Pink:#FF79C6 Yellow:#F1FA8C Purple:#BD93F9 Green:#50FA7B
+  ;; Cyan:#8BE9FD Pink:#FF79C6 Yellow:#F1FA8C Purple:#BD93F9 Green:#50FA7B Orange:#FFB86C Red:#FF5555
   (set-face-background 'highlight-indent-guides-odd-face "#F1FA8C")
   (set-face-background 'highlight-indent-guides-even-face "#50FA7B")
   (set-face-background 'highlight-indent-guides-top-even-face "#FF79C6")
@@ -286,7 +297,7 @@
 ;;  Completion settings.
 ;;  -- vertico marginalia corfu cape etc...
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
- (leaf vertico
+(leaf vertico
   :doc "VERTical Interactive Completion"
   :ensure t
   :global-minor-mode t)
@@ -325,20 +336,20 @@
          ("C-M-s s" . isearch-forward)
          ("C-M-s C-s" . isearch-forward-regexp)
          ("C-M-s r" . consult-ripgrep))
-         ;;
-         ;; C-r     : consult-history  in MiniBuffer-mode-map
-         ;; C-s     : consult-line     c/consult-line
-         ;; C-x b   : consult-buffer
-         ;; C-x p b : consult-project-buffer
-         ;; M-g g   : consult-goto-line
-         ;; M-g i   : consult-imenu
-         ;; M-g f   : consult-flymake
-         ;; C-u C-s : at-point iserch-forward
-         ;; C-M-s s   : iserch-forward
-         ;; C-M-s C-s : iserch-forward-regexp
-         ;; C-M-s r   : consult-ripgrep
-         ;; C-M-s g   : affe-grep
-         ;; C-M-s f   : affe-find
+  ;;
+  ;; C-r     : consult-history  in MiniBuffer-mode-map
+  ;; C-s     : consult-line     c/consult-line
+  ;; C-x b   : consult-buffer
+  ;; C-x p b : consult-project-buffer
+  ;; M-g g   : consult-goto-line
+  ;; M-g i   : consult-imenu
+  ;; M-g f   : consult-flymake
+  ;; C-u C-s : at-point iserch-forward
+  ;; C-M-s s   : iserch-forward
+  ;; C-M-s C-s : iserch-forward-regexp
+  ;; C-M-s r   : consult-ripgrep
+  ;; C-M-s g   : affe-grep
+  ;; C-M-s f   : affe-find
   )
 
 (leaf affe
@@ -387,12 +398,12 @@
   :bind ((corfu-map
           ("C-s" . corfu-insert-separator)))
   :init   ;; 各種補完ソースを Capf に追加するフック
-    (add-hook 'prog-mode-hook
+  (add-hook 'prog-mode-hook
             (lambda ()
               (add-to-list 'completion-at-point-functions #'cape-file)
               (add-to-list 'completion-at-point-functions #'cape-dabbrev)
               (add-to-list 'completion-at-point-functions #'yasnippet-capf 'append)))
-   )
+  )
 
 (leaf svg-lib
   :doc "Emacs SVG library that allows to create and display various SVG objects."
@@ -521,7 +532,7 @@
   :config
   ;;次の設定は結果としてEmacsを透過して壁紙が見える
   ;;(setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88)
-  ;HoverからのEchoの一行目の文字の大きさを調節
+                                        ;HoverからのEchoの一行目の文字の大きさを調節
   (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.95))
   (defvar eldoc-box-max-pixel-width)
   (defvar eldoc-box-max-pixel-height)
@@ -540,26 +551,13 @@
   ;; 
   (add-to-list 'eglot-server-programs '((c++-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '((c-ts-mode) "clangd"))
-  ;;  (add-to-list 'eglot-server-programs '((php-ts-mode) . ("intelephense" "--stdio")))
-  (add-to-list 'eglot-server-programs
-               '((php-ts-mode php-mode) .
-                 (lambda (&rest _)
-                   (let ((local-phpactor (expand-file-name "vendor/bin/phpactor" (project-root (project-current)))))
-                     (if (file-executable-p local-phpactor)
-                         (list local-phpactor "language-server")
-                     '("phpactor" "language-server"))))))
+  ;;(add-to-list 'eglot-server-programs '((php-ts-mode) . ("intelephense" "--stdio")))
+  (add-to-list 'eglot-server-programs '((php-ts-mode) . ("phpactor" "language-server")))
   (add-to-list 'eglot-server-programs '((python-ts-mode) . ("pyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs '((typescript-ts-mode) . ("typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((js-ts-mode tsx-ts-mode) . ("typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((web-mode) . ("vscode-html-language-server" "--stdio")))
 
-  ;;after install "sudo npm install -g twiggy-language-server", then
-  ;;(add-to-list 'eglot-server-programs `(twig-mode . ("twiggy-language-server" "--stdio"
-  ;;                                                   :initializationOptions
-  ;;                                                   (:twiggy
-  ;;                                                    (:framework "symfony"
-  ;;                                                                :phpExecutable "php"
-  ;;                                                                :symfonyConsolePath "bin/console")))))
 
   ;;--- xref-find-reference の時の強調背景が明るすぎるため ---
   (with-eval-after-load 'xref
@@ -599,8 +597,9 @@
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;    Setting for Formatters with Language Servers.
-;;     clangd and phpactor.
+;;     clangd and phpactor.       他のサーバーでも出来なくはない
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
 (eval-when-compile  (require 'eglot))
 (declare-function eglot-format-buffer "eglot")
 
@@ -623,6 +622,25 @@
             (eglot-ensure)
             (add-hook 'before-save-hook #'eglot-format-buffer nil t)
             (message "[---EGLOT-format-buffer---] [ -- php-cs-fixer with php-cs-fixer.dist executed !! -- ]")))
+
+
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Formatter Apheleia
+;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+(defvar apheleia-mode-alist)
+(leaf apheleia
+  :ensure t
+  :global-minor-mode apheleia-global-mode
+  :config
+  ;; Prettier がインストールされているプロジェクト/パスを確認して自動適用されます
+  (with-eval-after-load `apheleia
+    (setf (alist-get 'typescript-ts-mode apheleia-mode-alist) 'prettier)
+    (setf (alist-get 'json-ts-mode apheleia-mode-alist) 'prettier)
+    (setf (alist-get 'python-ts-mode apheleia-mode-alist) '(ruff-isort ruff)))
+  )
+
+
+
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Treemacs and Projectile
@@ -715,17 +733,17 @@
 	  '(foo-package-to-function #'ignore "Customized with leaf in foo-package block")
 	  '(foo-package-to-lambda (lambda (elm) (message elm)) "Customized with leaf in foo-package block")
 	  )
-	  ;;
-	  ;; The default width and height of the icons is 22 pixels. If you are
-	  ;; using a Hi-DPI display, uncomment this to double the icon size.
-	  ;;(treemacs-resize-icons 44)
+	 ;;
+	 ;; The default width and height of the icons is 22 pixels. If you are
+	 ;; using a Hi-DPI display, uncomment this to double the icon size.
+	 ;;(treemacs-resize-icons 44)
 	 (treemacs-follow-mode . t)
 	 (treemacs-filewatch-mode . t)
 	 (treemacs-fringe-indicator-mode . 'always)
-	  ;;(treemacs-fringe-indicator-mode . 'only-when-focused)
-	  ;;(treemacs-git-mode . 'deferred)
+	 ;;(treemacs-fringe-indicator-mode . 'only-when-focused)
+	 ;;(treemacs-git-mode . 'deferred)
 	 (treemacs-git-mode . 'simple)
-  )
+         )
   
   :hook
   (treemacs-mode-hook . (lambda ()
@@ -767,6 +785,33 @@
   (advice-add #'treemacs :before #'my/treemacs-before))
 
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; vterm-toggle
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+
+(leaf vterm
+  :ensure t)
+
+(leaf vterm-toggle
+  :ensure t
+  :bind
+  (("C-c v"   . vterm-toggle)
+   ("C-c C-v" . vterm-toggle-cd)
+   ("C-c n"   . vterm-toggle-forward)
+   ("C-c b"   . vterm-toggle-backward)
+   )
+  :custom
+  ((vterm-toggle-scope . 'project)) ; プロジェクトごとにターミナルを分離
+  :config
+  ;; 画面下部に高さを抑えてポップアップ表示させる設定
+  (add-to-list 'display-buffer-alist
+               '("\\*vterm\\*"
+                 (display-buffer-reuse-window display-buffer-in-side-window)
+                 (side . bottom)
+                 (slot . 0)
+                 (window-height . 0.25)  ;;or (window-hight . 15) means 15columns.
+                 (dedicated . t))))
+
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;    Ligature for JetBrains mono.
@@ -776,18 +821,18 @@
   :ensure t
   :config
   (ligature-set-ligatures 'prog-mode '("--" "---" "==" "===" "!=" "!==" "=!="
-                              "=:=" "=/=" "<=" ">=" "&&" "&&&" "&=" "++" "+++" "***" ";;" "!!"
-                              "??" "???" "?:" "?." "?=" "<:" ":<" ":>" ">:" "<:<" "<>" "<<<" ">>>"
-                              "<<" ">>" "||" "-|" "_|_" "|-" "||-" "|=" "||=" "##" "###" "####"
-                              "#{" "#[" "]#" "#(" "#?" "#_" "#_(" "#:" "#!" "#=" "^=" "<$>" "<$"
-                              "$>" "<+>" "<+" "+>" "<*>" "<*" "*>" "</" "</>" "/>" "<!--" "<#--"
-                              "-->" "->" "->>" "<<-" "<-" "<=<" "=<<" "<<=" "<==" "<=>" "<==>"
-                              "==>" "=>" "=>>" ">=>" ">>=" ">>-" ">-" "-<" "-<<" ">->" "<-<" "<-|"
-                              "<=|" "|=>" "|->" "<->" "<~~" "<~" "<~>" "~~" "~~>" "~>" "~-" "-~"
-                              "~@" "[||]" "|]" "[|" "|}" "{|" "[<" ">]" "|>" "<|" "||>" "<||"
-                              "|||>" "<|||" "<|>" "..." ".." ".=" "..<" ".?" "::" ":::" ":=" "::="
-                              ":?" ":?>" "//" "///" "/*" "*/" "/=" "//=" "/==" "@_" "__" "???"
-                              "<:<" ";;;"))
+                                       "=:=" "=/=" "<=" ">=" "&&" "&&&" "&=" "++" "+++" "***" ";;" "!!"
+                                       "??" "???" "?:" "?." "?=" "<:" ":<" ":>" ">:" "<:<" "<>" "<<<" ">>>"
+                                       "<<" ">>" "||" "-|" "_|_" "|-" "||-" "|=" "||=" "##" "###" "####"
+                                       "#{" "#[" "]#" "#(" "#?" "#_" "#_(" "#:" "#!" "#=" "^=" "<$>" "<$"
+                                       "$>" "<+>" "<+" "+>" "<*>" "<*" "*>" "</" "</>" "/>" "<!--" "<#--"
+                                       "-->" "->" "->>" "<<-" "<-" "<=<" "=<<" "<<=" "<==" "<=>" "<==>"
+                                       "==>" "=>" "=>>" ">=>" ">>=" ">>-" ">-" "-<" "-<<" ">->" "<-<" "<-|"
+                                       "<=|" "|=>" "|->" "<->" "<~~" "<~" "<~>" "~~" "~~>" "~>" "~-" "-~"
+                                       "~@" "[||]" "|]" "[|" "|}" "{|" "[<" ">]" "|>" "<|" "||>" "<||"
+                                       "|||>" "<|||" "<|>" "..." ".." ".=" "..<" ".?" "::" ":::" ":=" "::="
+                                       ":?" ":?>" "//" "///" "/*" "*/" "/=" "//=" "/==" "@_" "__" "???"
+                                       "<:<" ";;;"))
   (global-ligature-mode t))
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -820,6 +865,8 @@
    ("C-c C-t" . markdown-toc-generate-toc)
    ("C-c C-p" . markdown-preview))
   )
+
+
 
 
 (provide 'init)
