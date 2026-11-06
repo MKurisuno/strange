@@ -1,7 +1,7 @@
 ;;; package --- init Personal Emacs configuration -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; Personal Emacs configuration.
-;; M.Kurisuno .emacs/init.el
+;; M.Kurisuno emacs/init.el
 ;;
 ;;
 ;;
