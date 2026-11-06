@@ -1,4 +1,0 @@
-=== install Complete === 
- $(date "+%T")
-=== install Complete === 
- ${date "+%T"}
