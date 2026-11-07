@@ -433,20 +433,14 @@
   :doc "Emacs SVG library that allows to create and display various SVG objects."
   :ensure t)
 
-(defvar corfu-margin-formatters nil)
-(leaf kind-icon
-  :doc "Colorful icons for completion in Emacs. corfu-popupinfo needs."
+(leaf nerd-icons-corfu
   :ensure t
-  :after corfu
-  :require t
-  :custom
-  (kind-icon-use-icons . t)
-  (kind-icon-default-face . 'corfu-default)
-  (kind-icon-blend-background . nil)
-  (kind-icon-blend-frac . 0.08)
+  :after (nerd-icons corfu)
   :config
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
-  )
+  ;; Corfuのアイコン表示バックエンドとして nerd-icons-corfu を設定
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+
+
 
 (leaf yasnippet
   :ensure t
