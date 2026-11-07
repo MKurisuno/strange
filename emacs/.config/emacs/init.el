@@ -36,21 +36,6 @@
 (setq scroll-preserve-screen-position t)
 
 
-(leaf doom-themes
-  :ensure t
-  :config
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-  (load-theme 'doom-dracula t)
-  (doom-themes-org-config)
-  (doom-themes-treemacs-config)
-  ;; コメントのカラーを明るめに変更
-  (set-face-attribute 'font-lock-comment-face nil :foreground "#9aa8c7"))
-
-(leaf nerd-icons
-  :ensure t
-  )
-
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Font Setting.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -91,7 +76,23 @@
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
 
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;  Introduce doom-themes not doom-emacs.
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+(leaf doom-themes
+  :ensure t
+  :custom ((doom-themes-enable-bold . t)
+           (doom-themes-enable-italic . t))
+  :config
+  (load-theme 'doom-dracula t)
+  (doom-themes-org-config)
+  (doom-themes-treemacs-config)
+  ;; コメントのカラーを明るめに変更
+  (set-face-attribute 'font-lock-comment-face nil :foreground "#9aa8c7"))
 
+(leaf nerd-icons
+  :ensure t
+  )
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  Buckup files setting.
@@ -768,13 +769,15 @@
 (leaf treemacs-magit
   :after (treemacs magit)
   :ensure t)
+
 (leaf treemacs-nerd-icons
+  :doc "Need 'M-x nerd-icons-install-fonts' "
+  :ensure t
   :after treemacs
+  :defun treemacs-load-theme
+  :require t
   :config
   (treemacs-load-theme "nerd-icons"))
-
-
-
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; vterm-toggle
@@ -857,6 +860,30 @@
    ("C-c C-p" . markdown-preview))
   )
 
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;; Org-mode
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+(leaf org
+  ;; org は Emacs 標準なので :ensure は付けない
+  ;; (付けると ELPA 版が入って、バージョンが食い違うことがある)
+  :custom ((org-directory . "~/org/")
+           (org-startup-indented . t)
+           (org-hide-emphasis-markers . t)
+           (org-ellipsis . " ▾")
+           (org-log-done . 'time)
+           (org-src-fontify-natively . t)
+           (org-src-tab-acts-natively . t)))
+
+(leaf org-modern
+  :ensure t
+  :after org
+  :hook ((org-mode-hook . org-modern-mode)
+         (org-agenda-finalize-hook . org-modern-agenda)))
+
+(leaf org-appear
+  :ensure t
+  :after org
+  :hook (org-mode-hook . org-appear-mode))
 
 
 
