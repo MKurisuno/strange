@@ -6,7 +6,7 @@
 ;;; Code:
 
 
-; 起動時のGC閾値を極限まで引き上げ
+                                        ; 起動時のGC閾値を極限まで引き上げ
 (setq gc-cons-threshold most-positive-fixnum)
 (setq garbage-collection-messages nil)
 
@@ -53,12 +53,6 @@
 
 
 
-;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Dracula theme github dracula/emacs
-;;  起動が遅くなるかも、しかし、起動時から画面の色を決め打ちする. 
-;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-(add-to-list 'custom-theme-load-path "~/.config/emacs/themes")
-(load-theme 'dracula t)
 
 
 

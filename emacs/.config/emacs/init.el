@@ -39,7 +39,7 @@
 ;; Dracula theme
 ;;               github dracula/emacs
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; load-theme written in early-init.el
+(load-theme 'dracula t)
 (with-eval-after-load 'dracula-theme
   (setopt dracula-enlarge-headings nil )
   (setopt dracula-height-title-1 1.2)
