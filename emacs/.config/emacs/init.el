@@ -64,8 +64,7 @@
     (leaf el-get :ensure t)
     (leaf blackout :ensure t)
     :config
-    (leaf-keywords-init))
-  )
+    (leaf-keywords-init)))
 
 (leaf leaf-convert
   :doc "Convert many format to leaf format"
@@ -95,7 +94,7 @@
   )
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;;  Buckup files setting.
+;;  emacs defaults setting.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf files
   :doc "file input and output commands for Emacs"
@@ -114,6 +113,24 @@
   :doc "Save minibuffer history"
   :custom `((savehist-file . ,(locate-user-emacs-file "savehist")))
   :global-minor-mode t)
+(leaf org
+  :custom ((org-directory . "~/org/")
+           (org-startup-indented . t)
+           (org-hide-emphasis-markers . t)
+           (org-ellipsis . " ▾")
+           (org-log-done . 'time)
+           (org-src-fontify-natively . t)
+           (org-src-tab-acts-natively . t)))
+(leaf org-modern
+  :ensure t
+  :after org
+  :hook ((org-mode-hook . org-modern-mode)
+         (org-agenda-finalize-hook . org-modern-agenda)))
+(leaf org-appear
+  :ensure t
+  :after org
+  :hook (org-mode-hook . org-appear-mode))
+
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; `mh-e'
@@ -860,30 +877,6 @@
    ("C-c C-p" . markdown-preview))
   )
 
-;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Org-mode
-;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-(leaf org
-  ;; org は Emacs 標準なので :ensure は付けない
-  ;; (付けると ELPA 版が入って、バージョンが食い違うことがある)
-  :custom ((org-directory . "~/org/")
-           (org-startup-indented . t)
-           (org-hide-emphasis-markers . t)
-           (org-ellipsis . " ▾")
-           (org-log-done . 'time)
-           (org-src-fontify-natively . t)
-           (org-src-tab-acts-natively . t)))
-
-(leaf org-modern
-  :ensure t
-  :after org
-  :hook ((org-mode-hook . org-modern-mode)
-         (org-agenda-finalize-hook . org-modern-agenda)))
-
-(leaf org-appear
-  :ensure t
-  :after org
-  :hook (org-mode-hook . org-appear-mode))
 
 
 
