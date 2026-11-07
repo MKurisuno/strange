@@ -78,6 +78,9 @@
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  Introduce doom-themes not doom-emacs.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+(leaf nerd-icons
+  :ensure t  )
+
 (leaf doom-themes
   :ensure t
   :custom ((doom-themes-enable-bold . t)
@@ -89,9 +92,13 @@
   ;; コメントのカラーを明るめに変更
   (set-face-attribute 'font-lock-comment-face nil :foreground "#9aa8c7"))
 
-(leaf nerd-icons
+(leaf doom-modeline
   :ensure t
-  )
+  :hook (after-init-hook . doom-modeline-mode)
+  :config
+  ;; モデルラインのバーの色を変更
+  (set-face-attribute 'doom-modeline-bar nil :background "#6272a4"))
+
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  emacs defaults setting.
