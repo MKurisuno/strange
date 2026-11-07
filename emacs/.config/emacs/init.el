@@ -35,21 +35,20 @@
 ;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
 (setq scroll-preserve-screen-position t)
 
-;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Dracula theme
-;;               github dracula/emacs
-;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; load-theme written in early-init.el
-(with-eval-after-load 'dracula-theme
-  (setopt dracula-enlarge-headings nil )
-  (setopt dracula-height-title-1 1.2)
-  (setopt dracula-height-title-2 1.1)
-  (setopt dracula-height-title-3 1.0)
-  (setopt dracula-height-doc-title 1.1)
-  (setopt dracula-alternate-mode-line-and-minibuffer t)
-  (setopt dracula-bolder-keywords t)
-  ;;コメントのカラーを明るめに変更
-  (set-face-attribute 'font-lock-comment-face nil :foreground "#9aa8c7")
+
+(leaf doom-themes
+  :ensure t
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (load-theme 'doom-dracula t)
+  (doom-themes-org-config)
+  (doom-themes-treemacs-config)
+  ;; コメントのカラーを明るめに変更
+  (set-face-attribute 'font-lock-comment-face nil :foreground "#9aa8c7"))
+
+(leaf nerd-icons
+  :ensure t
   )
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -462,6 +461,13 @@
   :ensure t
   :bind (("C-x g" . magit-status)))
 
+(leaf git-gutter
+  :ensure t
+  :global-minor-mode global-git-gutter-mode
+  :custom
+  ((git-gutter:added-sign . "+")
+   (git-gutter:deleted-sign . "-")
+   (git-gutter:modified-sign . "=")))
 
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
 ;; Editorconfig and Formatter.
@@ -759,32 +765,15 @@
 (leaf treemacs-projectile
   :after (treemacs projectile)
   :ensure t)
-(leaf treemacs-icons-dired
-  :hook (dired-mode . treemacs-icons-dired-enable-once)
-  :ensure t)
 (leaf treemacs-magit
   :after (treemacs magit)
   :ensure t)
+(leaf treemacs-nerd-icons
+  :after treemacs
+  :config
+  (treemacs-load-theme "nerd-icons"))
 
-(defun my/treemacs-layout ()
-  "左側にウィンドウがなければ左右分割し、右側を上下に分割する."
-  ;;左側にウィンドウがなければ左右分割
-  (unless (window-at-side-p nil 'left)
-    (split-window-horizontally))
-  ;; 右側へ移動
-  (when (window-at-side-p nil 'left)
-    (select-window (next-window)))
-  ;; 右側をさらに左右分割し、最右側を上下分割
-  (when (window-at-side-p nil 'right)
-    (split-window-horizontally)
-    (other-window 1)
-    (split-window-vertically)
-    (other-window -1)))
-(defun my/treemacs-before (&rest _args)
-  "Treemacs の起動前にウィンドウレイアウトを設定する."
-  (my/treemacs-layout))
-(with-eval-after-load 'treemacs
-  (advice-add #'treemacs :before #'my/treemacs-before))
+
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
