@@ -419,7 +419,7 @@
   )
 
 (leaf corfu
-  :doc "Completion in Region Function"
+  :doc "COmpletion in Region FUnction"
   :ensure t
   :require t
   :global-minor-mode (global-corfu-mode corfu-popupinfo-mode)
