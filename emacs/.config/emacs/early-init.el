@@ -15,24 +15,52 @@
 (setq file-name-handler-alist nil)
 
 ;; 起動完了後に上記の2個の設定を元に戻す
+;;(add-hook 'emacs-startup-hook
+;;          (lambda ()
+;;            ;; GC閾値を実用的なサイズ（例: 16MB〜32MB）に戻す
+;;            (setq gc-cons-threshold (* 64 1024 1024))
+;;            ;; ファイルハンドラを復元
+;;            (setq file-name-handler-alist my-file-name-handler-alist)
+;;            (message "Emacs ready in %s with %d GCs." (emacs-init-time) gcs-done)))
+
+;; 起動完了後に上記の2個の設定を元に戻す
 (add-hook 'emacs-startup-hook
           (lambda ()
-            ;; GC閾値を実用的なサイズ（例: 16MB〜32MB）に戻す
+            ;; GC閾値を実用的なサイズに戻す
             (setq gc-cons-threshold (* 64 1024 1024))
-            ;; ファイルハンドラを復元
-            (setq file-name-handler-alist my-file-name-handler-alist)
+            ;; ファイルハンドラを安全に結合して復元
+            (setq file-name-handler-alist
+                  (delete-dups (append file-name-handler-alist my-file-name-handler-alist)))
             (message "Emacs ready in %s with %d GCs." (emacs-init-time) gcs-done)))
 
-
 ;; 起動時のGUIのちらつき防止（フレーム描画前に行うべき設定）
+(setq frame-inhibit-implied-resize t)
+(setq initial-frame-alist
+      (append '((background-color . "#282a36")
+                (foreground-color . "#f8f8f2"))
+              initial-frame-alist))
+(setq default-frame-alist
+      (append '((background-color . "#282a36")
+                (foreground-color . "#f8f8f2"))
+              default-frame-alist))
+
 (setq inhibit-startup-message t)
 (setq inhibit-startup-screen t)
 (setq initial-scratch-message nil)
-(setq initial-major-mode 'fundamental-mode)
-(toggle-scroll-bar nil)
+
+(scroll-bar-mode 1)
+;;(toggle-scroll-bar nil)
+
 (push '(tool-bar-lines . 0) default-frame-alist)
-;;(push '(menu-bar-lines . 0) default-frame-alist)
+(push '(menu-bar-lines . 0) default-frame-alist)
+(global-set-key [f10] 'menu-bar-mode)
 (setq create-lockfiles nil)
+
+(push '(left . 1) initial-frame-alist)
+(push '(fullscreen . maximized) default-frame-alist)
+(setq resize-mini-windows nil)
+
+(setq initial-major-mode 'fundamental-mode)
 
 
 ;; Windows11 MSYS2 の設定
@@ -44,24 +72,6 @@
       (add-to-list 'exec-path path)
       (setenv "PATH"
               (concat path path-separator (getenv "PATH"))))))
-
-
-(push '(left . 1) initial-frame-alist)
-(push '(fullscreen . maximized) default-frame-alist)
-(setq resize-mini-windows nil)
-
-
-;; initial frame color 
-(setq initial-frame-alist
-      (append '((background-color . "#282a36")
-                (foreground-color . "#f8f8f2"))
-              initial-frame-alist))
-(setq default-frame-alist
-      (append '((background-color . "#282a36")
-                (foreground-color . "#f8f8f2"))
-              default-frame-alist))
-
-
 
 
 (provide 'early-init)

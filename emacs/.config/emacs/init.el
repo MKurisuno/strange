@@ -85,8 +85,12 @@
   :ensure t
   :custom ((doom-themes-enable-bold . t)
            (doom-themes-enable-italic . t))
+  ;; for treemacs users
+  ;;(doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
   :config
   (load-theme 'doom-dracula t)
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
   (doom-themes-org-config)
   (doom-themes-treemacs-config)
   ;; コメントのカラーを明るめに変更
@@ -94,7 +98,12 @@
 
 (leaf doom-modeline
   :ensure t
-  :hook (after-init-hook . doom-modeline-mode)
+  :hook ((after-init-hook . doom-modeline-mode)
+         (after-init-hook . display-time-mode))
+  :custom
+  ;;時刻・日付の表示
+  (display-time-format . "%Y-%m-%d %H:%M")
+  (display-time-default-load-average . nil)
   :config
   ;; モデルラインのバーの色を変更
   (set-face-attribute 'doom-modeline-bar nil :background "#6272a4"))
@@ -208,6 +217,7 @@
            (kill-whole-line . t)
            (eval-expression-print-length . nil)
            (eval-expression-print-level . nil)))
+(with-eval-after-load 'simple  (setopt idle-update-delay 1.0))
 
 (leaf which-key
   :doc "Display available keybindings in popup"
