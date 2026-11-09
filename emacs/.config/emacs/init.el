@@ -34,9 +34,7 @@
 (setq next-screen-context-lines 4)
 ;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
 (setq scroll-preserve-screen-position t)
-;; ネイティブコンパイルの警告を非表示にする（必要に応じて）
-(setq warning-suppress-log-types '((comp)))
-(setq comp-deferred-compilation t)
+
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -150,6 +148,57 @@
   :after org
   :hook (org-mode-hook . org-appear-mode))
 
+(leaf tab-bar
+  :ensure nil
+  :custom
+  ((tab-bar-close-button-show . nil)
+   (tab-bar-new-button-show   . nil)
+   (tab-bar-tab-hints         . t)
+   (tab-bar-auto-width        . nil)
+   (tab-bar-separator         . " ")
+   (tab-bar-format . '(tab-bar-format-tabs-groups
+                       ;;tab-bar-format-tabs
+                       tab-bar-separator
+                       tab-bar-format-add-tab)))
+  :bind (("C-x t P" . emacs-solo/tab-group-from-project)
+         ("C-x t g" . emacs-solo/tab-switch-to-group))
+  :init
+  (defun tab-bar-tab-name-format-hints (name _tab i)
+    (if tab-bar-tab-hints (concat (format " » %d « " i) "") name)
+    )
+
+  (defun tab-bar-tab-group-format-default (tab _i &optional current-p)
+    (propertize
+     (funcall tab-bar-tab-group-function tab)
+     'face (if current-p 'tab-bar-tab-group-current 'tab-bar-tab-group-inactive)))
+
+  (defun emacs-solo/tab-group-from-project ()
+    "Call `tab-group' with the current project(project.el) name as the group."
+    (interactive)
+    (when-let* ((proj (project-current))
+                (name (file-name-nondirectory
+                       (directory-file-name (project-root proj)))))
+      (tab-group (format "[%s]" name))))
+
+  (defun emacs-solo/tab-switch-to-group ()
+    "Prompt for a tab group and switch to its first tab."
+    (interactive)
+    (let* ((tabs (funcall tab-bar-tabs-function))
+           (groups (delete-dups
+                    (mapcar (lambda (tab) (funcall tab-bar-tab-group-function tab))
+                            tabs)))
+           (group (completing-read "Switch to group: " groups nil t))
+           (i 1) found)
+      (dolist (tab tabs)
+        (when (and (not found)
+                   (string= (funcall tab-bar-tab-group-function tab) group))
+          (setq found t)
+          (tab-bar-select-tab i))
+        (setq i (1+ i)))))
+
+  :config
+  ;;(tab-bar-mode 1)
+  )
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; `mh-e'
@@ -238,39 +287,7 @@
     (exec-path-from-shell-initialize))
   )
 
-(leaf puni
-  :doc "Parentheses Universalistic"
-  :ensure t
-  :global-minor-mode puni-global-mode
-  :bind (:puni-mode-map
-         ;; default mapping  sexp = Symbolic-Expression
-         ;; ("C-M-f" . puni-forward-sexp)      ;次のSexpの末尾まで進む
-         ;; ("C-M-b" . puni-backward-sexp)     ;前のSexpのまで戻る
-         ;; ("C-M-a" . puni-beginning-of-sexp) ;(S式)の先頭まで移動
-         ;; ("C-M-e" . puni-end-of-sexp)       ;(S式)の末尾まで移動
-         ;; ("C-M-u" . backward-up-list)       ;( )内にあるとき( )の先頭に移動
-         ;; ("C-M-d" . backward-down-list)     ;次の( )内に移動
-         ;; ("M-)"   . puni-syntactic-forward-punct)  ;次の句読点(punctuation)までJamp
-         ;; ("M-("   . puni-syntactic-backward-punct) ;前の句読点(punctuation)までJamp
-         ;; (global-map) M-f or ESC<right>  forward-word
-         ;; (global-map) M-b or ESC<left>   backward-word
-         ;; ("M-{")  . backword-paragraph)  ;;次のパラグラフ先頭へ  Ctrl+<up>
-         ;; ("M-}")  . forward-paragraph)   ;;前のパラグラフ先頭へ  Ctrl+<down>
-         ("C-c }" . puni-slurp-forward)   ;; (a) b  -> (a  b)   ; slurp = 括弧内へ取り込む
-         ("C-c {" . puni-slurp-backward)  ;;  a (b) -> (a  b)   ;
-         ("C-c <" . puni-barf-forward)    ;; (a  b) -> (a) b    ; barf  = 括弧外へ出す
-         ("C-c >" . puni-barf-backward)   ;; (a  b) ->  a (b)   ;
-         ("C-c )" . puni-wrap-round)      ;;   a    ->  (a)     ; wrap  = 括弧を付ける
-         ("C-c (" . puni-splice)          ;;  (a)   ->   a      ; splice = 括弧を外す
-         ("M-r" . puni-raise)             ;; A(b(x),y) -> b(x)  ; raise = 親のS式を現在のS式で置き換える
-         ("M-U" . puni-splice-killing-backward)
-         ("M-z" . puni-squeeze)           ;; foo (bar) baz -> { + C-y + } -> foo {bar} baz
-         ;; squeeze = 中身を一時退避して括弧を付け替える
-	 )
-  :config
-  (leaf elec-pair
-    :doc "Automatic parenthesis pairing"
-    :global-minor-mode electric-pair-mode))
+
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; macrostep paren delimiter highlight-indent-guides
@@ -309,6 +326,42 @@
   (set-face-background 'highlight-indent-guides-even-face "#50FA7B")
   (set-face-background 'highlight-indent-guides-top-even-face "#FF79C6")
   (set-face-background 'highlight-indent-guides-top-odd-face "#BD93F9") )
+
+
+(leaf puni
+  :doc "Parentheses Universalistic"
+  :ensure t
+  :global-minor-mode puni-global-mode
+  :bind (:puni-mode-map
+         ;; default mapping  sexp = Symbolic-Expression
+         ;; ("C-M-f" . puni-forward-sexp)      ;次のSexpの末尾まで進む
+         ;; ("C-M-b" . puni-backward-sexp)     ;前のSexpのまで戻る
+         ;; ("C-M-a" . puni-beginning-of-sexp) ;(S式)の先頭まで移動
+         ;; ("C-M-e" . puni-end-of-sexp)       ;(S式)の末尾まで移動
+         ;; ("C-M-u" . backward-up-list)       ;( )内にあるとき( )の先頭に移動
+         ;; ("C-M-d" . backward-down-list)     ;次の( )内に移動
+         ;; ("M-)"   . puni-syntactic-forward-punct)  ;次の句読点(punctuation)までJamp
+         ;; ("M-("   . puni-syntactic-backward-punct) ;前の句読点(punctuation)までJamp
+         ;; (global-map) M-f or ESC<right>  forward-word
+         ;; (global-map) M-b or ESC<left>   backward-word
+         ;; ("M-{")  . backword-paragraph)  ;;次のパラグラフ先頭へ  Ctrl+<up>
+         ;; ("M-}")  . forward-paragraph)   ;;前のパラグラフ先頭へ  Ctrl+<down>
+         ("C-c }" . puni-slurp-forward)   ;; (a) b  -> (a  b)   ; slurp = 括弧内へ取り込む
+         ("C-c {" . puni-slurp-backward)  ;;  a (b) -> (a  b)   ;
+         ("C-c <" . puni-barf-forward)    ;; (a  b) -> (a) b    ; barf  = 括弧外へ出す
+         ("C-c >" . puni-barf-backward)   ;; (a  b) ->  a (b)   ;
+         ("C-c )" . puni-wrap-round)      ;;   a    ->  (a)     ; wrap  = 括弧を付ける
+         ("C-c (" . puni-splice)          ;;  (a)   ->   a      ; splice = 括弧を外す
+         ("M-r" . puni-raise)             ;; A(b(x),y) -> b(x)  ; raise = 親のS式を現在のS式で置き換える
+         ("M-U" . puni-splice-killing-backward)
+         ("M-z" . puni-squeeze)           ;; foo (bar) baz -> { + C-y + } -> foo {bar} baz
+         ;; squeeze = 中身を一時退避して括弧を付け替える
+	 )
+  :config
+  (leaf elec-pair
+    :doc "Automatic parenthesis pairing"
+    :global-minor-mode electric-pair-mode))
+
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  Syntax and Spell checher
@@ -447,14 +500,13 @@
   :doc "Emacs SVG library that allows to create and display various SVG objects."
   :ensure t)
 
+(defvar corfu-margin-formatters nil)
 (leaf nerd-icons-corfu
   :ensure t
   :after (nerd-icons corfu)
   :config
   ;; Corfuのアイコン表示バックエンドとして nerd-icons-corfu を設定
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
-
-
 
 (leaf yasnippet
   :ensure t
@@ -791,16 +843,12 @@
 
 
 
-(leaf treemacs-evil
-  :after (treemacs evil)
-  :ensure t)
 (leaf treemacs-projectile
   :after (treemacs projectile)
   :ensure t)
 (leaf treemacs-magit
   :after (treemacs magit)
   :ensure t)
-
 (leaf treemacs-nerd-icons
   :doc "Need 'M-x nerd-icons-install-fonts' "
   :ensure t

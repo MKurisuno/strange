@@ -50,5 +50,17 @@
  ;; M-r      : puni-raise              ; A(b(x),y) -> b(x)  ; raise = 親のS式を現在のS式で変換
  ;; M-U      : puni-splice-killing-backward  
  ;; M-z      : puni-squeeze            ; foo (bar) baz -> { + C-y + } -> foo {bar} baz  
-                                       ; with elec-pair. 
+ 
+ ## tab-bar-mode 
+ C-x t P    : Group the Current Project.
+ C-x t g    : Switch Groups 
+ --- default tab-bar key-bind 
+ C-x t 2    : New tab
+ C-x t 0    : delete current tab
+ C-x t o    : Move next tab
+ C-x t r    : Rename Tab-name
+ C-x t G    : Give Name current tab
+ 
+                                       
+    
 
