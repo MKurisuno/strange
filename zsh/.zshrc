@@ -77,6 +77,8 @@ alias grep='grep --color=auto'
 export GREP_COLORS="mt=1;38;2;255;85;85:fn=38;2;255;121;198:ln=38;2;80;250;123:bn=38;2;80;250;123:se=38;2;139;233;253"
 #export GREP_COLORS='ms=1;3;38;2;255;135;190:mc=1;3;38;2;255;135;190:sl=38;2;189;147;249:cx=38;2;135;175;255:fn=38;2;189;147;249:ln=38;2;80;250;123:bn=38;2;80;250;123:se=38;2;98;114;164'
 alias e='emacs'
+alias doom="EMACSDIR=$HOME/.emacs.doom DOOMDIR=$HOME/.config/doom ~/.emacs.doom/bin/doom emacs"
+
 alias ps='grc ps'
 
 # ls exchenge to colorls 

@@ -34,6 +34,9 @@
 (setq next-screen-context-lines 4)
 ;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
 (setq scroll-preserve-screen-position t)
+;; ネイティブコンパイルの警告を非表示にする（必要に応じて）
+(setq warning-suppress-log-types '((comp)))
+(setq comp-deferred-compilation t)
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -199,7 +202,7 @@
 (leaf autorevert
   :doc "Revert buffers automatically when underlying files change"
   :tag "builtin"
-  :require t
+  ;;  :require t
   :custom
   (auto-revert-check-vc-info . t)
   (global-auto-revert-non-file-buffers . t)
@@ -334,7 +337,8 @@
 (leaf vertico
   :doc "VERTical Interactive Completion"
   :ensure t
-  :global-minor-mode t)
+  :global-minor-mode t
+  :hook (emacs-startup-hook . vertico-mode))
 
 (leaf marginalia
   :doc "Enrich existing commands with completion annotations"
@@ -486,9 +490,10 @@
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
 ;;  git
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
-(leaf magit
+(leaf  magit
   :ensure t
-  :bind (("C-x g" . magit-status)))
+  :bind (("C-x g" . magit-status))
+  :commands (magit-status))
 
 (leaf git-gutter
   :ensure t
@@ -702,12 +707,8 @@
   ;;((define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action))
   (:treemacs-mode-map ([mouse-1] . #'treemacs-single-click-expand-action))
   (("C-x t t"   . treemacs)
-   ("M-0"       . treemacs-select-window)
-   ("C-x t 1"   . treemacs-delete-other-windows)
-   ("C-x t d"   . treemacs-select-directory)
-   ("C-x t B"   . treemacs-bookmark)
-   ("C-x t C-t" . treemacs-find-file)
-   ("C-x t M-t" . treemacs-find-tag))
+   ("C-x t 1"       . treemacs-select-window)
+   )
   :custom
   (progn 'treemacs
 	 (custom-set-variables
@@ -787,6 +788,8 @@
 			  (setq mode-line-format nil)
 			  (display-line-numbers-mode 0)))
   )
+
+
 
 (leaf treemacs-evil
   :after (treemacs evil)
