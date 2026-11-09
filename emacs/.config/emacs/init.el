@@ -164,7 +164,7 @@
          ("C-x t g" . emacs-solo/tab-switch-to-group))
   :init
   (defun tab-bar-tab-name-format-hints (name _tab i)
-    (if tab-bar-tab-hints (concat (format " » %d « " i) "") name)
+    (if tab-bar-tab-hints (concat (format " »-%d-« " i) "") name)
     )
 
   (defun tab-bar-tab-group-format-default (tab _i &optional current-p)
@@ -197,7 +197,7 @@
         (setq i (1+ i)))))
 
   :config
-  ;;(tab-bar-mode 1)
+  (tab-bar-mode 1)
   )
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---

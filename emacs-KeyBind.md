@@ -29,37 +29,37 @@
   
 ## puni  
 ### sexp = Symbolic-Expression  
- ;; C-M-f    : puni-forward-sexp       ;次のSexpの末尾まで進む
+ ;; C-M-f    : puni-forward-sexp       ;次のSexpの末尾まで進む  
  ;; C-M-b    : puni-backward-sexp       ;前のSexpのまで戻る  
- ;; C-M-a    : puni-beginning-of-sexp   ;(S式)の先頭まで移動
+ ;; C-M-a    : puni-beginning-of-sexp   ;(S式)の先頭まで移動  
  ;; C-M-e    : puni-end-of-sexp         ;(S式)の末尾まで移動  
- ;; C-M-u    : backward-up-list         ;( )内にあるとき( )の先頭に移動
+ ;; C-M-u    : backward-up-list         ;( )内にあるとき( )の先頭に移動  
  ;; C-M-d    : backward-down-list       ;次の( )内に移動  
- ;; M-)      : puni-syntactic-forward-punct   ;次の句読点(punctuation)までJamp
+ ;; M-)      : puni-syntactic-forward-punct   ;次の句読点(punctuation)までJamp  
  ;; M-(      : puni-syntactic-backward-punct) ;前の句読点(punctuation)までJamp  
- ;; M-f      : forward-word (global-map)                       Ctrl+<right>
+ ;; M-f      : forward-word (global-map)                       Ctrl+<right>  
  ;; M-b      : backward-word (global-map)                      Ctrl+<left>  
- ;; M-{      : backword-paragraph      ; 次のパラグラフ先頭へ  Ctrl+<up>
+ ;; M-{      : backword-paragraph      ; 次のパラグラフ先頭へ  Ctrl+<up>  
  ;; M-}      : forward-paragraph       ; 前のパラグラフ先頭へ  Ctrl+<down>  
- ;; C-c }    : puni-slurp-forward      ; (a) b  -> (a  b)   ; slurp = 括弧内へ取り込む
+ ;; C-c }    : puni-slurp-forward      ; (a) b  -> (a  b)   ; slurp = 括弧内へ取り込む  
  ;; C-c {    : puni-slurp-backward     ;  a (b) -> (a  b)   ;  
- ;; C-c <    : puni-barf-forward       ; (a  b) -> (a) b    ; barf  = 括弧外へ出す
+ ;; C-c <    : puni-barf-forward       ; (a  b) -> (a) b    ; barf  = 括弧外へ出す  
  ;; C-c >    : puni-barf-backward      ; (a  b) ->  a (b)   ;  
- ;; C-c )    : puni-wrap-round         ;   a    ->  (a)     ; wrap  = 括弧を付ける
+ ;; C-c )    : puni-wrap-round         ;   a    ->  (a)     ; wrap  = 括弧を付ける  
  ;; C-c (    : puni-splice             ;  (a)   ->   a      ; splice = 括弧を外す  
- ;; M-r      : puni-raise              ; A(b(x),y) -> b(x)  ; raise = 親のS式を現在のS式で変換
+ ;; M-r      : puni-raise              ; A(b(x),y) -> b(x)  ; raise = 親のS式を現在のS式で変換  
  ;; M-U      : puni-splice-killing-backward  
  ;; M-z      : puni-squeeze            ; foo (bar) baz -> { + C-y + } -> foo {bar} baz  
  
- ## tab-bar-mode 
- C-x t P    : Group the Current Project.
- C-x t g    : Switch Groups 
- --- default tab-bar key-bind 
- C-x t 2    : New tab
- C-x t 0    : delete current tab
- C-x t o    : Move next tab
- C-x t r    : Rename Tab-name
- C-x t G    : Give Name current tab
+ ## tab-bar-mode   
+ C-x t P    : Group current tabs with this [Project name].  
+ C-x t g    : Switch Groups.   
+ --- default tab-bar key-bind.   
+ C-x t 2    : New tab.   
+ C-x t 0    : delete current tab.   
+ C-x t o    : Move next tab.   
+ C-x t r    : Rename Tab-name.   
+ C-x t G    : Make group new tab.   
  
                                        
     
