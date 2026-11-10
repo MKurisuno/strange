@@ -396,7 +396,7 @@
 ;;  -- vertico marginalia corfu cape etc...
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf vertico
-  :doc "VERTical Interactive Completion"
+  :doc "VERTical Interactive COmpletion"
   :ensure t
   :global-minor-mode t
   :hook (emacs-startup-hook . vertico-mode))
