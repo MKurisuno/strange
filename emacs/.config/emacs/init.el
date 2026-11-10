@@ -7,7 +7,7 @@
 ;;
 ;; 2024.12.16
 ;; 2025.06.20 Update
-;; 2026.11.01 Update
+;; 2026.11.10 Update
 ;;
 ;;
 ;;
@@ -151,22 +151,31 @@
 (leaf tab-bar
   :ensure nil
   :custom
-  ((tab-bar-close-button-show . nil)
-   (tab-bar-new-button-show   . nil)
+  ((tab-bar-close-button-show . t)
+   (tab-bar-new-button-show   . t)
    (tab-bar-tab-hints         . t)
    (tab-bar-auto-width        . nil)
    (tab-bar-separator         . " ")
+   (tab-bar-tab-name-format-function
+    . (lambda (tab i)
+        (let* ((face (funcall tab-bar-tab-face-function tab))
+               (name (truncate-string-to-width
+                      (alist-get 'name tab) 12 nil ?\s "…"))
+               (text (propertize (format " (%d) %s" i name) 'face face)))
+          (concat text
+                  (when (and tab-bar-close-button-show
+                             (or (not (eq tab-bar-close-button-show 'non-selected))
+                                 (not (eq (car tab) 'current-tab))))
+                    (propertize tab-bar-close-button
+                                'face face))))))
    (tab-bar-format . '(tab-bar-format-tabs-groups
                        ;;tab-bar-format-tabs
                        tab-bar-separator
-                       tab-bar-format-add-tab)))
+                       tab-bar-format-add-tab))
+   )
   :bind (("C-x t P" . emacs-solo/tab-group-from-project)
          ("C-x t g" . emacs-solo/tab-switch-to-group))
   :init
-  (defun tab-bar-tab-name-format-hints (name _tab i)
-    (if tab-bar-tab-hints (concat (format " »-%d-« " i) "") name)
-    )
-
   (defun tab-bar-tab-group-format-default (tab _i &optional current-p)
     (propertize
      (funcall tab-bar-tab-group-function tab)
@@ -195,7 +204,6 @@
           (setq found t)
           (tab-bar-select-tab i))
         (setq i (1+ i)))))
-
   :config
   (tab-bar-mode 1)
   )
@@ -392,6 +400,12 @@
   :ensure t
   :global-minor-mode t
   :hook (emacs-startup-hook . vertico-mode))
+(leaf vertico-directory
+  :after vertico
+  :ensure nil
+  :bind (:vertico-map
+         ("DEL"   . vertico-directory-delete-char)
+         ("M-DEL" . vertico-directory-delete-word)))
 
 (leaf marginalia
   :doc "Enrich existing commands with completion annotations"
