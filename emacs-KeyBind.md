@@ -12,20 +12,20 @@
 
 ### consult
  ;; C-r       : consult-history  (minibuffer-mode-map)  
- ;; C-s       : consult-line     c/consult-line
+ ;; C-s       : consult-line     c/consult-line  
  ;; C-x b     : consult-buffer  
- ;; C-x p b   : consult-project-buffer
+ ;; C-x p b   : consult-project-buffer  
  ;; M-g g     : consult-goto-line  
- ;; M-g i     : consult-imenu
+ ;; M-g i     : consult-imenu  
  ;; M-g f     : consult-flymake  
- ;; C-u C-s   : at-point iserch-forward
+ ;; C-u C-s   : at-point iserch-forward  
  ;; C-M-s s   : iserch-forward  
- ;; C-M-s C-s : iserch-forward-regexp
+ ;; C-M-s C-s : iserch-forward-regexp  
  ;; C-M-s r   : consult-ripgrep  
  
 ### aff
  ;; C-M-s g   : affe-grep  
- ;; C-M-s f   : affe-find
+ ;; C-M-s f   : affe-find  
   
 ### puni 
  ;; C-M-f    : puni-forward-sexp        ;次のSexpの末尾まで進む  
