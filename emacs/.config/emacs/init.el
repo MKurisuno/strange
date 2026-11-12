@@ -205,11 +205,11 @@
   :config
   (tab-bar-mode 1)
   (set-face-attribute 'tab-bar-tab nil
-                      :foreground "#39FF14" ;;BrightGreen
+                      :foreground "#818EB6"
                       :background "#282A36")
   (set-face-attribute   'tab-bar-tab-inactive nil
-                        :foreground "#44475A"
-                        :background "#282A36")
+                        :foreground "#484A56"
+                        :background "#1C1D27")
   )
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -333,10 +333,9 @@
   (highlight-indent-guides-responsive . 'top)   ; カーソル位置のガイドをアクティブ強調
   :config
   ;; --- Dracula風 4色カラーパレット設定 --- #f1fa8c
-  ;; Cyan:#8BE9FD Pink:#FF79C6 Yellow:#F1FA8C Purple:#BD93F9 Green:#50FA7B BrightGreen:#39FF14 Orange:#FFB86C Red:#FF5555
-  (set-face-background 'highlight-indent-guides-odd-face "#F1FA8C")
+  (set-face-background 'highlight-indent-guides-odd-face "#FFFF00")
   (set-face-background 'highlight-indent-guides-even-face "#39FF14")
-  (set-face-background 'highlight-indent-guides-top-even-face "#FF79C6")
+  (set-face-background 'highlight-indent-guides-top-even-face "#FF69B4")
   (set-face-background 'highlight-indent-guides-top-odd-face "#BD93F9") )
 
 
