@@ -22,6 +22,7 @@
  ;; C-M-s s   : iserch-forward  
  ;; C-M-s C-s : iserch-forward-regexp  
  ;; C-M-s r   : consult-ripgrep  
+ ;; C-M-s d   : consult-fd  
  
 ### aff
  ;; C-M-s g   : affe-grep  

@@ -180,7 +180,6 @@
     (propertize
      (funcall tab-bar-tab-group-function tab)
      'face (if current-p 'tab-bar-tab-group-current 'tab-bar-tab-group-inactive)))
-
   (defun emacs-solo/tab-group-from-project ()
     "Call `tab-group' with the current project(project.el) name as the group."
     (interactive)
@@ -188,7 +187,6 @@
                 (name (file-name-nondirectory
                        (directory-file-name (project-root proj)))))
       (tab-group (format "[%s]" name))))
-
   (defun emacs-solo/tab-switch-to-group ()
     "Prompt for a tab group and switch to its first tab."
     (interactive)
@@ -206,6 +204,12 @@
         (setq i (1+ i)))))
   :config
   (tab-bar-mode 1)
+  (set-face-attribute 'tab-bar-tab nil
+                      :foreground "#39FF14" ;;BrightGreen
+                      :background "#282A36")
+  (set-face-attribute   'tab-bar-tab-inactive nil
+                        :foreground "#44475A"
+                        :background "#282A36")
   )
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -329,9 +333,9 @@
   (highlight-indent-guides-responsive . 'top)   ; カーソル位置のガイドをアクティブ強調
   :config
   ;; --- Dracula風 4色カラーパレット設定 --- #f1fa8c
-  ;; Cyan:#8BE9FD Pink:#FF79C6 Yellow:#F1FA8C Purple:#BD93F9 Green:#50FA7B Orange:#FFB86C Red:#FF5555
+  ;; Cyan:#8BE9FD Pink:#FF79C6 Yellow:#F1FA8C Purple:#BD93F9 Green:#50FA7B BrightGreen:#39FF14 Orange:#FFB86C Red:#FF5555
   (set-face-background 'highlight-indent-guides-odd-face "#F1FA8C")
-  (set-face-background 'highlight-indent-guides-even-face "#50FA7B")
+  (set-face-background 'highlight-indent-guides-even-face "#39FF14")
   (set-face-background 'highlight-indent-guides-top-even-face "#FF79C6")
   (set-face-background 'highlight-indent-guides-top-odd-face "#BD93F9") )
 
@@ -399,13 +403,19 @@
   :doc "VERTical Interactive COmpletion"
   :ensure t
   :global-minor-mode t
-  :hook (emacs-startup-hook . vertico-mode))
-(leaf vertico-directory
-  :after vertico
-  :ensure nil
   :bind (:vertico-map
+         ("RET" . vertico-directory-enter)
          ("DEL"   . vertico-directory-delete-char)
-         ("M-DEL" . vertico-directory-delete-word)))
+         ("M-DEL" . vertico-directory-delete-word))
+  :hook (emacs-startup-hook . vertico-mode))
+
+;;(leaf vertico-directory
+;;  :after vertico
+;;  :ensure nil
+;;  :bind (:vertico-map
+;;         ("DEL"   . vertico-directory-delete-char)
+;;         ("M-DEL" . vertico-directory-delete-word))
+;;  )
 
 (leaf marginalia
   :doc "Enrich existing commands with completion annotations"
@@ -440,7 +450,9 @@
          ("C-M-s"   . nil)                ; isearch-forward-regexp
          ("C-M-s s" . isearch-forward)
          ("C-M-s C-s" . isearch-forward-regexp)
-         ("C-M-s r" . consult-ripgrep))
+         ("C-M-s r" . consult-ripgrep)
+         ("C-M-s d" . consult-fd)
+         )
   ;;
   ;; C-r     : consult-history  in MiniBuffer-mode-map
   ;; C-s     : consult-line     c/consult-line
@@ -453,6 +465,7 @@
   ;; C-M-s s   : iserch-forward
   ;; C-M-s C-s : iserch-forward-regexp
   ;; C-M-s r   : consult-ripgrep
+  ;; C-M-s d   : consult-fd
   ;; C-M-s g   : affe-grep
   ;; C-M-s f   : affe-find
   )
