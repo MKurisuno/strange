@@ -148,35 +148,18 @@
   :after org
   :hook (org-mode-hook . org-appear-mode))
 
+;;------------------------------------------------------------------------------
+;;--- --- --- tab-bar-mode --- --- ---
+;;------------------------------------------------------------------------------
 (leaf tab-bar
   :ensure nil
-  :custom
-  ((tab-bar-close-button-show . t)
-   (tab-bar-new-button-show   . t)
-   (tab-bar-tab-hints         . t)
-   (tab-bar-auto-width        . nil)
-   (tab-bar-separator         . " ")
-   (tab-bar-tab-name-format-function
-    . (lambda (tab i)
-        (let* ((face (funcall tab-bar-tab-face-function tab))
-               (name (truncate-string-to-width
-                      (alist-get 'name tab) 12 nil ?\s "…"))
-               (text (propertize (format " (%d) %s" i name) 'face face)))
-          (concat text
-                  (when (and tab-bar-close-button-show
-                             (or (not (eq tab-bar-close-button-show 'non-selected))
-                                 (not (eq (car tab) 'current-tab))))
-                    (propertize tab-bar-close-button
-                                'face face))))))
-   (tab-bar-format . '(tab-bar-format-tabs-groups
-                       ;;tab-bar-format-tabs
-                       tab-bar-separator
-                       tab-bar-format-add-tab))
-   )
-  :bind ( ("S-<backspace>" . tab-bar-switch-to-prev-tab)
-          ("C-x t P" . emacs-solo/tab-group-from-project)
-          ("C-x t g" . emacs-solo/tab-switch-to-group))
+  :bind (("S-<backspace>" . tab-bar-switch-to-prev-tab)
+         ("C-x t P" . emacs-solo/tab-group-from-project)
+         ("C-x t g" . emacs-solo/tab-switch-to-group))
+  :hook
+  (after-init-hook . tab-bar-mode)
   :init
+  (declare-function project-root "project" (project))
   (defun tab-bar-tab-group-format-default (tab _i &optional current-p)
     (propertize
      (funcall tab-bar-tab-group-function tab)
@@ -204,14 +187,30 @@
           (tab-bar-select-tab i))
         (setq i (1+ i)))))
   :config
-  (tab-bar-mode 1)
-  (set-face-attribute 'tab-bar-tab nil
-                      :foreground "#F8F8F2"
-                      :background "#282A36")
-  (set-face-attribute   'tab-bar-tab-inactive nil
-                        :foreground "#484A56"
-                        :background "#1C1D27")
-  )
+  (with-eval-after-load 'tab-bar
+    (setq tab-bar-close-button-show t
+          tab-bar-tab-hints t
+          tab-bar-auto-width nil
+          tab-bar-separator " ")
+    (setq tab-bar-format '(tab-bar-format-tabs-groups
+                           tab-bar-separator
+                           tab-bar-format-add-tab))
+    (setq tab-bar-tab-name-format-function
+          (lambda (tab i)
+            (let* ((face (funcall tab-bar-tab-face-function tab))
+                   (name (truncate-string-to-width
+                          (alist-get 'name tab) 12 nil ?\s "…"))
+                   (text (propertize (format " (%d) %s" i name) 'face face)))
+              (concat text
+                      (when (and tab-bar-close-button-show
+                                 (or (not (eq tab-bar-close-button-show 'non-selected))
+                                     (not (eq (car tab) 'current-tab))))
+                        (propertize tab-bar-close-button 'face face))))))
+    (set-face-attribute 'tab-bar-tab nil
+                        :foreground "#F8F8F2" :background "#282A36")
+    (set-face-attribute 'tab-bar-tab-inactive nil
+                        :foreground "#484A56" :background "#1C1D27")))
+;;--- --- --- end of tab-bar-mode --- --- ---
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; `mh-e'
@@ -909,7 +908,8 @@
                  (display-buffer-reuse-window display-buffer-in-side-window)
                  (side . bottom)
                  (slot . 0)
-                 (window-height . 0.25)  ;;or (window-hight . 15) means 15columns.
+                 ;;(window-height . 0.25)  ;; window ratio
+                 (window-hight . 12)       ;; means 15columns.
                  (dedicated . t))))
 
 
