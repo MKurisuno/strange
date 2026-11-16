@@ -582,10 +582,10 @@
   :config
   (editorconfig-mode 1))
 
-(leaf format-all
-  :ensure t
-  :bind (("C-c f" . format-all-buffer))
-  :hook (prog-mode . format-all-mode))
+;;(leaf format-all
+;;  :ensure t
+;;  :bind (("C-c f" . format-all-buffer))
+;;  :hook (prog-mode . format-all-mode))
 
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
 ;; tree-sitter and Language-server setting
