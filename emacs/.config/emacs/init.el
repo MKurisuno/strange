@@ -153,9 +153,11 @@
 ;;------------------------------------------------------------------------------
 (leaf tab-bar
   :ensure nil
-  :bind (("S-<backspace>" . tab-bar-switch-to-prev-tab)
-         ("C-x t P" . emacs-solo/tab-group-from-project)
-         ("C-x t g" . emacs-solo/tab-switch-to-group))
+  :bind (;;default (\"C-<tab>" . tab-bar-switch-to-next-tab)
+         ("S-<backspace>" . tab-bar-switch-to-prev-tab)
+         ("C-<tab>"       . tab-bar-switch-to-next-tab)
+         ("C-x t P"       . emacs-solo/tab-group-from-project)
+         ("C-x t g"       . emacs-solo/tab-switch-to-group))
   :hook
   (after-init-hook . tab-bar-mode)
   :init
@@ -218,7 +220,7 @@
 (setopt mh-x-face-file "~/.mh-x-face" )
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;;  mozc color setting
+;;  mozc color settings
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf mozc
   :ensure t
@@ -226,35 +228,19 @@
   (default-input-method . "japanese-mozc")
   (mozc-helper-program-name . "mozc_emacs_helper")
   (mozc-leim-title . "かな")
-  :config  ;; after-load mozc でないと読み込まない
+  :config
   (with-eval-after-load 'mozc
-    (set-face-attribute 'mozc-preedit-face nil
-                        :height 0.95
-                        :foreground "#8BE9FD"
-                        :background "#282A36"
-                        :weight 'bold)
-    (set-face-attribute 'mozc-preedit-selected-face nil
-                        :height 0.90
-                        :foreground "#282A36"
-                        :background "#8BE9FD"
-                        :weight 'bold)
-    (set-face-attribute 'mozc-cand-overlay-focused-face nil
-                        :height 0.85
-                        :foreground "#282A36"
-                        :background "#BD93F9"
-                        :weight 'bold)
-    (set-face-attribute 'mozc-cand-overlay-odd-face nil
-                        :height 0.85
-                        :foreground "#F8F8F2"
-                        :background "#44475A")
-    (set-face-attribute 'mozc-cand-overlay-even-face nil
-                        :height 0.85
-                        :foreground "#F8F8F2"
-                        :background "#282A36")
-    (set-face-attribute 'mozc-cand-overlay-footer-face nil
-                        :height 0.80
-                        :foreground "#50FA7B"
-                        :background "#282A36")))
+    (dolist (spec '((mozc-preedit-face            "#8BE9FD" "#282A36" bold)   ;fg:cyan bg:dracula.black
+                    (mozc-preedit-selected-face   "#282A36" "#8BE9FD" bold)   ;fg:black bg:cyan
+                    (mozc-cand-overlay-focused-face "#282A36" "#BD93F9" bold) ;fg:black bg:dracula.purple
+                    (mozc-cand-overlay-odd-face   "#F8F8F2" "#44475A" normal) ;bg:dracula.black
+                    (mozc-cand-overlay-even-face  "#F8F8F2" "#282A36" normal) ;bg:dracula.grey
+                    (mozc-cand-overlay-footer-face "#50FA7B" "#282A36" normal))) ;fg:bright.green bg:dracula.black
+      (set-face-attribute (nth 0 spec) nil
+                          :foreground (nth 1 spec)
+                          :background (nth 2 spec)
+                          :weight (nth 3 spec))))
+  )
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;
@@ -337,6 +323,12 @@
   (set-face-background 'highlight-indent-guides-even-face "#39FF14")
   (set-face-background 'highlight-indent-guides-top-even-face "#FF69B4")
   (set-face-background 'highlight-indent-guides-top-odd-face "#BD93F9") )
+
+(leaf smooth-scroll
+  :ensure t
+  :custom
+  (smooth-scroll-mode . t)
+  )
 
 
 (leaf puni
@@ -938,33 +930,36 @@
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Markdown-Mode
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;(leaf markdown-mode
+;;  :ensure t
+;;  :mode ("\\.md\\'" . gfm-mode)
+;;  :hook (gfm-mode . visual-line-mode)
+;;  :custom
+;;  ((markdown-command . "pandoc -f markdown+header_attributes-raw_html -t html5")
+;;   (markdown-enable-math . t)
+;;   (markdown-list-indent-width . 2)
+;;   (markdown-fontify-code-blocks-natively . nil))
+;;  :bind
+;;  (:markdown-mode-map
+;;   ("C-c C-t" . markdown-toc-generate-toc)
+;;   ("C-c C-p" . markdown-preview)))
+
 (leaf markdown-mode
   :ensure t
-  :mode
-  (("\\.md\\'" . markdown-mode)
-   ("\\.markdown\\'" . markdown-mode))
+  :mode ("\\.md\\'" . gfm-mode)
   :custom
-  ((markdown-command . "pandoc -f markdown+header_attributes-raw_html -t html5")
-   (markdown-fontify-code-blocks-natively . t)
-   (markdown-header-scaling . t)
-   (markdown-enable-math . t)
-   (markdown-url-compose-char . nil)
-   (markdown-list-indent-width . 2)
-   (markdown-indent-on-enter . t)
-   (indent-tabs-mode . nil))
-  :custom-face
-  (markdown-header-face-1 . '((t (:weight bold :height 1.3))))
-  (markdown-header-face-2 . '((t (:weight bold :height 1.2))))
-  (markdown-header-face-3 . '((t (:weight bold :height 1.1))))
-  (markdown-header-face-4 . '((t (:weight bold :height 1.0))))
+  (markdown-fontify-code-blocks-natively . nil) ;コードブロックのネイティブ着色が重い
   :hook
-  ((markdown-mode-hook . visual-line-mode)
-   (markdown-mode-hook . jinx-mode))
-  :bind
-  (:markdown-mode-map
-   ("C-c C-t" . markdown-toc-generate-toc)
-   ("C-c C-p" . markdown-preview))
-  )
+  ((gfm-mode-hook . visual-line-mode)
+   (markdown-mode-hook . (lambda () (setq-local jit-lock-defer-time 0.05)))))
+
+(leaf mermaid-mode
+  :ensure t
+  :custom
+  (mermaid-output-format . ".svg"))
+
+(leaf edit-indirect :ensure t)
+
 
 
 
