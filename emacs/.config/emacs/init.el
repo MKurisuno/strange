@@ -15,7 +15,7 @@
 ;;; Code:
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Initial Setting.
+;;   Initial Setting.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (when (version< emacs-version "30.0")  (error "This requires Emacs 30.0 and above!"))
 (set-language-environment "Japanese")
@@ -38,7 +38,7 @@
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Font Setting.
+;;   Font Setting.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (set-face-attribute 'default nil :family "JetBrains Mono" :height 105)
 (dolist (charset '(kana han cjk-misc japanese-jisx0208 japanese-jisx0213.2004-1))
