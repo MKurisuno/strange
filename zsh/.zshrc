@@ -23,13 +23,14 @@ setopt histignorealldups sharehistory
 setopt extended_history
 setopt hist_allow_clobber
 setopt hist_fcntl_lock
-setopt hist_find_no_dups 
-setopt hist_ignore_dups
-setopt hist_ignore_all_dups
-setopt hist_ignore_space
-setopt hist_no_functions
-setopt hist_no_store
-setopt hist_reduce_blanks
+setopt hist_find_no_dups       #ラインエディタでヒストリ検索するときに、一度見つかったものは後続で表示しない
+setopt hist_ignore_dups        #直前と同じコマンドは履歴に追加しない
+setopt hist_ignore_all_dups    #すでに同じコマンドがある場合には古い方を削除して新しい方と残す
+setopt hist_ignore_space       #スペースから始まるコマンドは残なさい
+setopt hist_no_functions       #関数定義のコマンドを履歴リストに追加しない
+setopt hist_no_store           #ヒストリ参照コマンド(fc -l, history) を履歴リストに追加しない
+setopt hist_reduce_blanks      #履歴リスト登録時に、コマンドライン中の余分なスペースを削除
+setopt HIST_SAVE_NO_DUPS       #履歴ファイルに書き込むとき、重複したイベントを削除
 
 # Use modern completion system
 autoload -Uz compinit
