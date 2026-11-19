@@ -80,6 +80,7 @@
 ;;  Introduce doom-themes not doom-emacs.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf nerd-icons
+  :doc "Need 'M-x nerd-icons-install-fonts' "
   :ensure t  )
 
 (leaf doom-themes
