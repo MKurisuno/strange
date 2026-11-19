@@ -401,14 +401,6 @@
          ("M-DEL" . vertico-directory-delete-word))
   :hook (emacs-startup-hook . vertico-mode))
 
-;;(leaf vertico-directory
-;;  :after vertico
-;;  :ensure nil
-;;  :bind (:vertico-map
-;;         ("DEL"   . vertico-directory-delete-char)
-;;         ("M-DEL" . vertico-directory-delete-word))
-;;  )
-
 (leaf marginalia
   :doc "Enrich existing commands with completion annotations"
   :ensure t
