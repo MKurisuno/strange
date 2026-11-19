@@ -69,15 +69,15 @@ zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:
 alias lo='exit'
 alias bd='cd $OLDPWD'
 alias dir='dir --color=auto'
+# Dracula theme for GNU grep - https://draculatheme.com/grep
+export GREP_COLORS="mt=1;38;2;255;85;85:fn=38;2;255;121;198:ln=38;2;80;250;123:bn=38;2;80;250;123:se=38;2;139;233;253"
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias rgrep='egrep --color=auto'
 alias grep='grep --color=auto'
-# Dracula theme for GNU grep - https://draculatheme.com/grep
-export GREP_COLORS="mt=1;38;2;255;85;85:fn=38;2;255;121;198:ln=38;2;80;250;123:bn=38;2;80;250;123:se=38;2;139;233;253"
 #export GREP_COLORS='ms=1;3;38;2;255;135;190:mc=1;3;38;2;255;135;190:sl=38;2;189;147;249:cx=38;2;135;175;255:fn=38;2;189;147;249:ln=38;2;80;250;123:bn=38;2;80;250;123:se=38;2;98;114;164'
+
 alias e='emacs'
-alias doom="EMACSDIR=$HOME/.emacs.doom DOOMDIR=$HOME/.config/doom ~/.emacs.doom/bin/doom emacs"
 
 alias ps='grc ps'
 
@@ -96,15 +96,16 @@ alias lct='colorls --tree'              # ツリー
 alias lcg='colorls --gs'
 alias lcf='colorls -lrt file_sizes'
 
-#lessをbatに変更
-alias bat='/usr/bin/batcat'
-alias less='bat'
 export LESS="-R"
 
-# man のPAGERをbatに変更
-man() {
-  /usr/bin/man "$@" | col -b |  batcat -p --language=man --theme=Dracula --style=full
-}
+#lessをbatに変更
+if command -v batcat &>/dev/null; then
+   alias bat='/usr/bin/batcat'
+   export MANPAGER="sh -c 'col -bx | /usr/bin/batcat -l man -p'"
+   alias less='bat'
+fi
+
+
 
 #
 # ZINIT 
@@ -124,7 +125,7 @@ zinit light dracula/zsh
 #    fzfの設定
 #          if fzf is exist, then execute.
 #--- --- --- --- --- --- --- --- --- --- --- --- --- ---
-if [[ -e $(which fzf) ]] then 
+if command -v fzf &>/dev/null; then 
    #export FZF_DEFAULT_OPTS_01='--height 40% --reverse --border --preview-window=:hidden'
 
    export FZF_DEFAULT_OPTS_02='--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
