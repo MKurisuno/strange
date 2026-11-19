@@ -637,7 +637,7 @@
   :config
   ;;次の設定は結果としてEmacsを透過して壁紙が見える
   ;;(setf (alist-get 'alpha-background eldoc-box-frame-parameters) 88)
-                                        ;HoverからのEchoの一行目の文字の大きさを調節
+  ;;  HoverからのEchoの一行目の文字の大きさを調節
   (with-eval-after-load 'markdown-mode (set-face-attribute 'markdown-header-face-3 nil :height 0.95))
   (defvar eldoc-box-max-pixel-width)
   (defvar eldoc-box-max-pixel-height)
