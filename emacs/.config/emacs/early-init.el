@@ -53,7 +53,9 @@
 
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(menu-bar-lines . 0) default-frame-alist)
-(global-set-key [f10] 'menu-bar-mode)
+;;(global-set-key [f10] 'menu-bar-mode)
+(global-set-key [f9] #'menu-bar-open) ;メニューバーにアクセスするKey
+(global-set-key [f10] 'menu-bar-mode) ;上部のメニューバーをon/off
 (setq create-lockfiles nil)
 
 (push '(left . 1) initial-frame-alist)
