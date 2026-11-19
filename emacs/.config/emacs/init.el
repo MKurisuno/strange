@@ -710,6 +710,8 @@
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;    Setting for Formatters with Language Servers.
 ;;     clangd and phpactor.       他のサーバーでも出来なくはない
+;; clangdはformatterとしてclang-formatを内包しているので、eglot-format-bufferが(clangd(clang-format))をcallするため,
+;; eglotに記述無しでもclang-formatによってsave前にformatされる。symfonyにおけるphpactorとphp-cs-fixerも同様。   
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 (eval-when-compile  (require 'eglot))
@@ -737,7 +739,9 @@
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Formatter Apheleia
+;;    Formatter Apheleia
+;;  eglot-format-bufferを使わずにsave時に自動formatする設定。それぞれにformatterが必要。 
+;;  eglot程頻回では無いが、smoothにformatするので、smartにcoding出来る。
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 (defvar apheleia-mode-alist)
 (leaf apheleia
