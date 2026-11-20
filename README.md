@@ -75,7 +75,7 @@
 　　　  eraly-init.el  
 
 ## ~~gnu-source-highlight~~
-　~~download~~ ~~from~~ ~~ftp:~~//ftp.gnu.org/gnu/src-highlite.    
+　~~download~~ ~~from~~ ftp://ftp.gnu.org/gnu/src-highlite.    
 　~~src-hilite-lesspipe.sh~~　  
 　~~esc256.outlang~~　  
 　~~custom.style~~　  
@@ -86,7 +86,7 @@
 
 ## alacritty
 　  Dracua theme Download https://github.com/dracula/alacritty/archive/master.zip   
-　 Install to  ~/.config/alacrity/themes/dracula
+　 Install to  ~/.config/alacrity/themes/dracula   
 　 echo  "general.import = ["/path/to/dracula.toml"]"  > ~/.config/alacritty/alacritty.toml  
 
 ## python3 environment
@@ -129,23 +129,23 @@
 　　 $curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -  
 　　 $sudo apt install -y nodejs  
 
-### PHP_LanguageServer: ~~Intelephense~~   
+### PHP_LanguageServer: Intelephense
    無償版はformatter機能が無効   
 　　1) Install Intelephense  
 　　　$sudo npm install -g intelephense  
-　　2) Insert those in initi.el  
+　　2) Insert those at eglot block in initi.el  
 　　　(add-to-list 'eglot-server-programs '(php-ts-mode .("intelephense" "--stdio")))  
 		
 ### Python_LanguageServer:Pyright
 　　1) Install pyright  
 　　　$sudo npm install -g pyright  
-　　2) Insert in init.el  
+　　2) Insert at eglot block in init.el  
 　　　(add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))  
 
 ### TypeScript_JavaScript_LanguageServer
 　　1) install  
 　　　$sudo npm install -g typescript-language-server typescript@6  
-　　2) Insert those in init.el  
+　　2) Insert those at eglot block in init.el  
 　　　(add-to-list 'eglot-server-programs '((typescript-ts-mode) . ("typescript-language-server" "--stdio")))  
 　　　(add-to-list 'eglot-server-programs '((tsx-ts-mode) . ("typescript-language-server" "--stdio")))  
 　　　(add-to-list 'eglot-server-programs '((js-ts-mode) . ("typescript-language-server" "--stdio")))  
@@ -153,7 +153,7 @@
 ### For HTML LanguageServer:vscode-langservers-extracted
 　　1) install  
 　　　$sudo npm install -g vscode-langservers-extracted  
-　　2) Insert those in init.el  
+　　2) Insert next at wglot block in init.el.     
 　　　(add-to-list 'eglot-server-programs '((web-mode) . ("vscode-html-language-server" "--stdio")))  
 
 
