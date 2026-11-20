@@ -149,9 +149,9 @@
   :after org
   :hook (org-mode-hook . org-appear-mode))
 
-;;------------------------------------------------------------------------------
-;;   --- --- --- tab-bar-mode --- --- ---
-;;------------------------------------------------------------------------------
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;   tab-bar-mode
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf tab-bar
   :ensure nil
   :bind (;;default (\"C-<tab>" . tab-bar-switch-to-next-tab)
@@ -507,9 +507,9 @@
               (add-to-list 'completion-at-point-functions #'yasnippet-capf 'append)))
   )
 
-(leaf svg-lib
-  :doc "Emacs SVG library that allows to create and display various SVG objects."
-  :ensure t)
+;;(leaf svg-lib
+;;  :doc "Emacs SVG library that allows to create and display various SVG objects."
+;;  :ensure t)
 
 (defvar corfu-margin-formatters nil)
 (leaf nerd-icons-corfu
