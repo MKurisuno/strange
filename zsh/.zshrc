@@ -1,11 +1,13 @@
 # Set up the prompt
 #
 # zshrc Nuc6i5  since 20241116
-#               lastupdate 20260918
+#               last update 20261120
 
 
 # PATH   load .zprofile 
 
+# MANPAGER
+export MANPAGER='/usr/bin/batcat -l man -p'
 # EDITOR
 export EDITOR='emacs'
 
@@ -79,7 +81,6 @@ alias grep='grep --color=auto'
 #export GREP_COLORS='ms=1;3;38;2;255;135;190:mc=1;3;38;2;255;135;190:sl=38;2;189;147;249:cx=38;2;135;175;255:fn=38;2;189;147;249:ln=38;2;80;250;123:bn=38;2;80;250;123:se=38;2;98;114;164'
 
 alias e='emacs'
-
 alias ps='grc ps'
 
 # ls exchenge to colorls 
@@ -89,7 +90,7 @@ alias l='/bin/ls --color=auto -lF'
 alias la='/bin/ls --color=auto -a'
 alias ll='/bin/ls --color=auto -alF'
 alias lx='/bin/ls --color=auto -aF'
-
+# colorls ちょっと使いにくい
 alias lc='colorls'
 alias lcl='colorls -l --almost-all --sd'     # 詳細リスト ＋ 隠しファイル
 alias lca='colorls --almost-all'        # グリッド表示 ＋ 隠しファイル
@@ -102,11 +103,8 @@ export LESS="-R"
 #lessをbatに変更
 if command -v batcat &>/dev/null; then
    alias bat='/usr/bin/batcat'
-   export MANPAGER="sh -c 'col -bx | /usr/bin/batcat -l man -p'"
    alias less='bat'
 fi
-
-
 
 #
 # ZINIT 
