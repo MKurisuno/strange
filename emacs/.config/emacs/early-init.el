@@ -58,11 +58,25 @@
 (global-set-key [f10] 'menu-bar-mode) ;上部のメニューバーをon/off
 (setq create-lockfiles nil)
 
-(push '(left . 1) initial-frame-alist)
-(push '(fullscreen . maximized) default-frame-alist)
+(push '(left . 1) initial-frame-alist) ; (0,0)の位置に配置
+;;(push '(fullscreen . maximized) default-frame-alist) ; Fullscreen設定
+(push '(width . 111) default-frame-alist)
+(push '(height . 72) default-frame-alist)
+;;(push '(left . 0) default-frame-alist)
+;;(push '(top . 0) default-frame-alist)
+
+
+
 (setq resize-mini-windows nil)
 
+
 (setq initial-major-mode 'fundamental-mode)
+
+;;背景の透過性を設定
+(add-to-list 'default-frame-alist '(alpha-background . 90))
+
+
+
 
 
 ;; Windows11 MSYS2 の設定

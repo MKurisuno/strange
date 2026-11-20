@@ -70,6 +70,10 @@ _R=$'\001'"$_red"$'\002'
 _G=$'\001'"$_green"$'\002'
 _Z=$'\001'"$_reset"$'\002'
 
+# Arrow_icon
+#ARROW_ICON="->λ "
+ARROW_ICON="➡ "
+
 git_prompt() {
   local out branch
   GIT_INFO=
@@ -86,7 +90,7 @@ git_prompt() {
   fi
 }
 PROMPT_COMMAND=git_prompt
-PS1="${green}\D{%y/%m/%d %H:%M}${reset} ${PURPLE}\w${reset}${CYAN}\${GIT_INFO}${reset}\n${orange}[${MSYSTEM:-Bash}]${reset} ${green}➡ ${reset} "
+PS1="${green}\D{%y/%m/%d %H:%M}${reset} ${PURPLE}\w${reset}${CYAN}\${GIT_INFO}${reset}\n${orange}[${MSYSTEM:-Bash}]${reset} ${green}${ARROW_ICON}${reset} "
 
 
 
