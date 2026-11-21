@@ -1,0 +1,32 @@
+# Set Themes --- download from dracula
+general.import = ["~/.config/alacritty/themes/dracula.toml"]
+
+[terminal.shell]
+program = "/bin/zsh"
+#LoginShellとしてTerminalを起動
+#args = ["-l"]
+
+[font]
+# フォントサイズはお好みで調整してください
+size = 11.0
+
+[font.normal]
+family = "JetBrains Mono"
+style = "Regular"
+
+[font.bold]
+family = "JetBrains Mono"
+style = "Bold"
+
+[font.italic]
+family = "JetBrains Mono"
+style = "Italic"
+
+[window]
+opacity = 0.9
+
+[window.dimensions]
+columns = 96
+lines = 54
+
+
