@@ -681,7 +681,7 @@
   :hook
   (;;(c-ts-mode-hook   . eglot-ensure)    Written with formatter setting in next block.
    ;;(c++-ts-mode-hook . eglot-ensure)
-   ;;(php-ts-mode-hook . eglot-ensure)
+   (php-ts-mode-hook . eglot-ensure)      ; formatter is php-cs-fixer with apheleia
    (python-ts-mode-hook     . eglot-ensure)
    (typescript-ts-mode-hook . eglot-ensure)
    (tsx-ts-mode-hook  . eglot-ensure)
@@ -724,11 +724,12 @@
             (message "[  EGLOT-format-buffer  ] [ 'clangd-format' applied !! ]")))
 
 ;;  PHP Langage Server needs 'php-cs-fixer' and 'php-cs-fixer.dist'  in Symfony.
-(add-hook 'php-ts-mode-hook
-          (lambda ()
-            (eglot-ensure)
-            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-            (message "[---EGLOT-format-buffer---] [ -- php-cs-fixer with php-cs-fixer.dist executed !! -- ]")))
+;;  apeleia を使用するためにComment Out !
+;;(add-hook 'php-ts-mode-hook
+;;          (lambda ()
+;;            (eglot-ensure)
+;;            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+;;            (message "[---EGLOT-format-buffer---] [-- php-cs-fixer with php-cs-fixer.dist executed ! --]")))
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -745,8 +746,14 @@
   (with-eval-after-load `apheleia
     (setf (alist-get 'typescript-ts-mode apheleia-mode-alist) 'prettier)
     (setf (alist-get 'json-ts-mode apheleia-mode-alist) 'prettier)
-    (setf (alist-get 'python-ts-mode apheleia-mode-alist) '(ruff-isort ruff)))
+    (setf (alist-get 'python-ts-mode apheleia-mode-alist) '(ruff-isort ruff))
+    ;; php-cs-fixer の振る舞いを設定かつ apheleia-formattersとして定義
+    (setf (alist-get 'php-cs-fixer apheleia-formatters)
+          '("php-cs-fixer" "fix" "--quiet" "--no-interaction" "--using-cache=no" "-"))
+    (setf (alist-get 'php-mode apheleia-mode-alist) 'php-cs-fixer) ; 
+    )
   )
+
 
 
 
