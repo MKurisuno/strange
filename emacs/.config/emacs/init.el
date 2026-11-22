@@ -749,7 +749,7 @@
     (setf (alist-get 'python-ts-mode apheleia-mode-alist) '(ruff-isort ruff))
     ;; php-cs-fixer の振る舞いを設定かつ apheleia-formattersとして定義
     (setf (alist-get 'php-cs-fixer apheleia-formatters)
-          '("php-cs-fixer" "fix" "--quiet" "--no-interaction" "--using-cache=no" "-"))
+          '("php-cs-fixer" "fix" "--quiet" "--no-interaction" "--using-cache=no" file))
     (setf (alist-get 'php-mode apheleia-mode-alist) 'php-cs-fixer) ; 
     )
   )
