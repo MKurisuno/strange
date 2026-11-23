@@ -764,8 +764,8 @@
     ;; formatter がLocalにインストールされている場合にはdirenv,envrc, project-root/.envrc が必要
     ;; --- (A) ---
     ;; php-cs-fixer の振る舞いを設定 かつ apheleia-formattersとして定義
-    ;;(setf (alist-get 'php-cs-fixer apheleia-formatters)
-    ;;      '("php-cs-fixer" "fix" "--quiet" "--no-interaction" "--using-cache=no" file))
+    (setf (alist-get 'php-cs-fixer apheleia-formatters)
+          '("php-cs-fixer" "fix" "--quiet" "--no-interaction" "--using-cache=no" file))
     (setf (alist-get 'php-ts-mode apheleia-mode-alist) 'php-cs-fixer) ;
     ;; --- end (A) ---
     )
