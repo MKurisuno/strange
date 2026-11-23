@@ -1,18 +1,17 @@
-# This file is sourced only for login shells
-#  bash_profile is sourced as Login Shell at login.
+# System-wide .bashrc file for interactive bash(1) shells.
+# This file is bash_profile which sourced only for login shells.
 #
-
 
 if [ -d "$HOME/bin" ] ; then
     export PATH="$HOME/bin:$PATH"
 fi
 
 if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
+    export PATH="$HOME/.local/bin:$PATH"
 fi
 
 
 if [ -d "$HOME/.Aprilis/bin" ] ; then
-    PATH="$HOME/.Aprilis/bin:$PATH"
+    export PATH="$HOME/.Aprilis/bin:$PATH"
 fi
 
