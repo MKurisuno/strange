@@ -67,10 +67,6 @@
     :config
     (leaf-keywords-init)))
 
-(leaf leaf-convert
-  :doc "Convert many format to leaf format"
-  :ensure t)
-
 (leaf cus-edit
   :doc "tools for customizing Emacs and Lisp packages"
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
@@ -250,7 +246,6 @@
 (leaf autorevert
   :doc "Revert buffers automatically when underlying files change"
   :tag "builtin"
-  ;;  :require t
   :custom
   (auto-revert-check-vc-info . t)
   (global-auto-revert-non-file-buffers . t)
@@ -294,9 +289,9 @@
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; macrostep paren delimiter highlight-indent-guides
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-(leaf macrostep
-  :ensure t
-  :bind (("C-c e" . macrostep-expand)))
+;;(leaf macrostep
+;;  :ensure t
+;;  :bind (("C-c e" . macrostep-expand)))
 
 (leaf rainbow-delimiters
   :ensure t
@@ -334,7 +329,6 @@
   (smooth-scroll-mode . t)
   )
 
-
 (leaf puni
   :doc "Parentheses Universalistic"
   :ensure t
@@ -369,12 +363,12 @@
     :doc "Automatic parenthesis pairing"
     :global-minor-mode electric-pair-mode))
 
-
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  Syntax and Spell checher
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf flymake
   :doc "A universal on-the-fly syntax checker"
+  :ensure t
   :hook (emacs-lisp-mode-hook . flymake-mode)
   :bind ((prog-mode-map
           ("M-n" . flymake-goto-next-error)
@@ -554,7 +548,7 @@
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
-;;  git
+;;    git
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
 (leaf  magit
   :ensure t
@@ -570,7 +564,7 @@
    (git-gutter:modified-sign . "=")))
 
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
-;; Editorconfig and Formatter.
+;;    Editorconfig and Formatter.
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
 (leaf editorconfig
   :doc "a file format for defining coding styles and a collection"
@@ -584,7 +578,7 @@
 ;;  :hook (prog-mode . format-all-mode))
 
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
-;; tree-sitter and Language-server setting
+;;    tree-sitter and Language-server setting
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
 (leaf *treesit
   :custom ((treesit-font-lock-level . 4))
@@ -611,9 +605,24 @@
   (add-to-list 'auto-mode-alist '("\\.c\\+\\+\\'"  . c++-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.hpp\\'"  . c++-ts-mode))
 
-  (add-to-list 'auto-mode-alist '("\\.clang\\(?:d\\|-tidy\\|-format\\)\\'" . yaml-ts-mode)) ;;Clangd の設定file
+  (add-to-list 'auto-mode-alist '("\\.clang\\(?:d\\|-tidy\\|-format\\)\\'" . yaml-ts-mode)) ;Clangdの設定file
   )
 
+
+(leaf treesit-fold
+  :vc (:url "https://github.com/emacs-tree-sitter/treesit-fold")
+  :init
+  (unless (package-installed-p 'treesit-fold)
+    (package-vc-install "https://github.com/emacs-tree-sitter/treesit-fold"))
+  :hook (prog-mode . treesit-fold-mode)
+  ;;  :hook ((c++-ts-mode-hook php-ts-mode-hook python-ts-mode-hook typescript-ts-mode-hook)
+  ;;       . treesit-fold-mode)
+  :bind ((:treesit-fold-mode-map
+	  ("C-c f t" . treesit-fold-toggle)
+	  ("C-c f c" . treesit-fold-close)
+	  ("C-c f o" . treesit-fold-open)
+	  ("C-c f a" . treesit-fold-close-all)
+	  ("C-c f A" . treesit-fold-open-all))))
 
 ;; --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- -- --- --
 ;;       Eglot + eldoc + eldocbox.
