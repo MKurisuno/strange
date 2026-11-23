@@ -286,6 +286,9 @@
     (exec-path-from-shell-initialize))
   )
 
+(leaf envrc
+  :ensure t
+  :hook (after-init-hook . envrc-global-mode))
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -656,8 +659,8 @@
   ;; 
   (add-to-list 'eglot-server-programs '((c++-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '((c-ts-mode) "clangd"))
-  ;;(add-to-list 'eglot-server-programs '((php-ts-mode) . ("intelephense" "--stdio")))
-  (add-to-list 'eglot-server-programs '((php-ts-mode) . ("phpactor" "language-server")))
+  (add-to-list 'eglot-server-programs '((php-ts-mode) . ("intelephense" "--stdio")))
+  ;;(add-to-list 'eglot-server-programs '((php-ts-mode) . ("phpactor" "language-server")))
   (add-to-list 'eglot-server-programs '((python-ts-mode) . ("pyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs '((typescript-ts-mode) . ("typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((js-ts-mode tsx-ts-mode) . ("typescript-language-server" "--stdio")))
@@ -681,7 +684,7 @@
   :hook
   (;;(c-ts-mode-hook   . eglot-ensure)    Written with formatter setting in next block.
    ;;(c++-ts-mode-hook . eglot-ensure)
-   (php-ts-mode-hook . eglot-ensure)      ; formatter is php-cs-fixer with apheleia
+   (php-ts-mode-hook . eglot-ensure)      ; (A) Activate / (B) Coment out
    (python-ts-mode-hook     . eglot-ensure)
    (typescript-ts-mode-hook . eglot-ensure)
    (tsx-ts-mode-hook  . eglot-ensure)
@@ -702,9 +705,10 @@
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;    Setting for Formatters with Language Servers.
-;;     clangd and phpactor.       他のサーバーでも出来なくはない
-;; clangdはformatterとしてclang-formatを内包しているので、eglot-format-bufferが(clangd(clang-format))をcallするため,
-;; eglotに記述無しでもclang-formatによってsave前にformatされる。symfonyにおけるphpactorとphp-cs-fixerも同様。   
+;;     clangd and phpactor ともにFormat機能あり.
+;; clangdはformatterとしてclang-formatを内包しているので、eglot-format-bufferが
+;; (clangd(clang-format))をcallするため,eglotに記述無しでもclang-formatによって
+;; save前にformatされる。symfonyにおけるphpactorとphp-cs-fixerも同様。
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 (eval-when-compile  (require 'eglot))
@@ -724,33 +728,37 @@
             (message "[  EGLOT-format-buffer  ] [ 'clangd-format' applied !! ]")))
 
 ;;  PHP Langage Server needs 'php-cs-fixer' and 'php-cs-fixer.dist'  in Symfony.
-;;  apeleia を使用するためにComment Out !
+;; ---(B)---
 ;;(add-hook 'php-ts-mode-hook
 ;;          (lambda ()
 ;;            (eglot-ensure)
 ;;            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
 ;;            (message "[---EGLOT-format-buffer---] [-- php-cs-fixer with php-cs-fixer.dist executed ! --]")))
-
+;; --- end (B) ---
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;    Formatter Apheleia
-;;  eglot-format-bufferを使わずにsave時に自動formatする設定。それぞれにformatterが必要。 
+;;  eglot-format-bufferを使わずにsave時に自動formatする設定。それぞれにformatterが必要。
 ;;  eglot程頻回では無いが、smoothにformatするので、smartにcoding出来る。
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-(defvar apheleia-mode-alist)
 (leaf apheleia
   :ensure t
+  :defvar (apheleia-mode-alist)
+  :defvar (apheleia-formatters)
   :global-minor-mode apheleia-global-mode
   :config
-  ;; Prettier がインストールされているプロジェクト/パスを確認して自動適用されます
+  ;; globalにinstallされていればPrettier が 自動的にプロジェクト/パスを確認して自動適用されます
   (with-eval-after-load `apheleia
     (setf (alist-get 'typescript-ts-mode apheleia-mode-alist) 'prettier)
     (setf (alist-get 'json-ts-mode apheleia-mode-alist) 'prettier)
     (setf (alist-get 'python-ts-mode apheleia-mode-alist) '(ruff-isort ruff))
-    ;; php-cs-fixer の振る舞いを設定かつ apheleia-formattersとして定義
-    (setf (alist-get 'php-cs-fixer apheleia-formatters)
-          '("php-cs-fixer" "fix" "--quiet" "--no-interaction" "--using-cache=no" file))
-    (setf (alist-get 'php-mode apheleia-mode-alist) 'php-cs-fixer) ; 
+    ;; formatter がLocalにインストールされている場合にはdirenv,envrc, project-root/.envrc が必要
+    ;; --- (A) ---
+    ;; php-cs-fixer の振る舞いを設定 かつ apheleia-formattersとして定義
+    ;;(setf (alist-get 'php-cs-fixer apheleia-formatters)
+    ;;      '("php-cs-fixer" "fix" "--quiet" "--no-interaction" "--using-cache=no" file))
+    (setf (alist-get 'php-ts-mode apheleia-mode-alist) 'php-cs-fixer) ;
+    ;; --- end (A) ---
     )
   )
 
