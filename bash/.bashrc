@@ -1,6 +1,12 @@
 #
-#  MSYS2 .bashrc 
+# bashrc Ubuntu26.04
+#   since 2026.11.20 
 #
+
+#if [ -z ${SSH_AUTH_SOCK}]; then
+#    source $HOME/.zprofile
+#fi
+
 
 # 履歴を便利に
 export HISTSIZE=10000
