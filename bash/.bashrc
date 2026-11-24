@@ -3,10 +3,8 @@
 #   since 2026.11.20 
 #
 
-#if [ -z ${SSH_AUTH_SOCK}]; then
-#    source $HOME/.zprofile
-#fi
-
+# ssh-agent : ~/.ssh/config  ssh-add ~/.ssh/id_ed25519
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/openssh_agent"
 
 # 履歴を便利に
 export HISTSIZE=10000

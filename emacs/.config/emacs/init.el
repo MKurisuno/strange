@@ -92,7 +92,8 @@
   (doom-themes-org-config)
   (doom-themes-treemacs-config)
   ;; コメントのカラーを明るめに変更
-  (set-face-attribute 'font-lock-comment-face nil :foreground "#9aa8c7"))
+  (set-face-attribute 'font-lock-comment-face nil :foreground "#9aa8c7")
+  )
 
 (leaf doom-modeline
   :ensure t
