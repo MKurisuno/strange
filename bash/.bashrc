@@ -94,7 +94,7 @@ git_prompt() {
   fi
 }
 PROMPT_COMMAND=git_prompt
-PS1="${green}\D{%y/%m/%d %H:%M}${reset} ${PURPLE}\w${reset}${CYAN}\${GIT_INFO}${reset}\n${orange}[${MSYSTEM:-Bash}]${reset} ${green}${ARROW_ICON}${reset} "
+PS1="${green}\D{%Y/%m/%d %H:%M}${reset} ${PURPLE}\w${reset}${CYAN}\${GIT_INFO}${reset}\n${orange}[${MSYSTEM:-Bash}]${reset} ${green}${ARROW_ICON}${reset} "
 
 
 
