@@ -19,3 +19,6 @@ if [ -d "$HOME/.Aprilis/bin" ] ; then
     PATH="$HOME/.Aprilis/bin:$PATH"
 fi
 
+
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/openssh_agent"
+

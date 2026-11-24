@@ -276,7 +276,7 @@
     :ensure t
     :defun (exec-path-from-shell-initialize)
     :custom ((exec-path-from-shell-check-startup-files)
-             (exec-path-from-shell-variables . '("PATH" "GOPATH" "JAVA_HOME")))
+             (exec-path-from-shell-variables . '("PATH" "GOPATH" "JAVA_HOME" "SSH_AUTH_SOCK")))
     :config
     (exec-path-from-shell-initialize))
   )
@@ -542,9 +542,9 @@
   :doc "Consult integration for Embark"
   :ensure t
   :bind ((minibuffer-mode-map
-          :package emacs
-          ("M-." . embark-dwim)
-          ("C-." . embark-act))))
+	  :package emacs
+	  ("M-." . embark-dwim)
+	  ("C-." . embark-act))))
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
@@ -657,7 +657,7 @@
   (with-eval-after-load 'eldoc-box
     (setq eldoc-box-max-pixel-width 600 eldoc-box-max-pixel-height 120)
     (setf (alist-get 'min-width eldoc-box-frame-parameters) 40
-          (alist-get 'min-height eldoc-box-frame-parameters) 5) ))
+	  (alist-get 'min-height eldoc-box-frame-parameters) 5) ))
 
 (leaf eglot
   :doc "The Emacs Client for LSP servers"
@@ -680,8 +680,8 @@
   (with-eval-after-load 'xref
     (set-face-attribute 'xref-match nil :foreground "#FFFFFF" :background "#44475a" :weight 'bold))
   :bind (("C-c i" . completion-at-point)
-         ("C-c r" . eglot-rename)
-         ("C-c o" . eglot-code-action-organize-imports))
+	 ("C-c r" . eglot-rename)
+	 ("C-c o" . eglot-code-action-organize-imports))
   ;;; --- --- Eglot key bind --- ---
   ;; M-.   : xref-find-definitions
   ;; M-,   : xref-go-back
@@ -725,16 +725,16 @@
 
 ;;  Clangd for fotmat needs '.clang-format' in ProjectRoot.
 (add-hook 'c++-ts-mode-hook
-          (lambda ()
-            (eglot-ensure)
-            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-            (message "[  EGLOT-format-buffer  ] [ 'clangd-format' applied !! ]")))
+	  (lambda ()
+	    (eglot-ensure)
+	    (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+	    (message "[  EGLOT-format-buffer  ] [ 'clangd-format' applied !! ]")))
 
 (add-hook 'cc-ts-mode-hook
-          (lambda ()
-            (eglot-ensure)
-            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-            (message "[  EGLOT-format-buffer  ] [ 'clangd-format' applied !! ]")))
+	  (lambda ()
+	    (eglot-ensure)
+	    (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+	    (message "[  EGLOT-format-buffer  ] [ 'clangd-format' applied !! ]")))
 
 ;;  PHP Langage Server needs 'php-cs-fixer' and 'php-cs-fixer.dist'  in Symfony.
 ;; ---(B)---
@@ -765,7 +765,7 @@
     ;; --- (A) ---
     ;; php-cs-fixer の振る舞いを設定 かつ apheleia-formattersとして定義
     (setf (alist-get 'php-cs-fixer apheleia-formatters)
-          '("php-cs-fixer" "fix" "--quiet" "--no-interaction" "--using-cache=no" file))
+	  '("php-cs-fixer" "fix" "--quiet" "--no-interaction" "--using-cache=no" file))
     (setf (alist-get 'php-ts-mode apheleia-mode-alist) 'php-cs-fixer) ;
     ;; --- end (A) ---
     )
@@ -872,7 +872,7 @@
 	 ;;(treemacs-fringe-indicator-mode . 'only-when-focused)
 	 ;;(treemacs-git-mode . 'deferred)
 	 (treemacs-git-mode . 'simple)
-         )
+	 )
   
   :hook
   (treemacs-mode-hook . (lambda ()
@@ -917,13 +917,13 @@
   :config
   ;; 画面下部に高さを抑えてポップアップ表示させる設定
   (add-to-list 'display-buffer-alist
-               '("\\*vterm\\*"
-                 (display-buffer-reuse-window display-buffer-in-side-window)
-                 (side . bottom)
-                 (slot . 0)
-                 ;;(window-height . 0.25)  ;; window ratio
-                 (window-hight . 12)       ;; means 15columns.
-                 (dedicated . t))))
+	       '("\\*vterm\\*"
+		 (display-buffer-reuse-window display-buffer-in-side-window)
+		 (side . bottom)
+		 (slot . 0)
+		 ;;(window-height . 0.25)  ;; window ratio
+		 (window-hight . 12)       ;; means 15columns.
+		 (dedicated . t))))
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -934,18 +934,18 @@
   :ensure t
   :config
   (ligature-set-ligatures 'prog-mode '("--" "---" "==" "===" "!=" "!==" "=!="
-                                       "=:=" "=/=" "<=" ">=" "&&" "&&&" "&=" "++" "+++" "***" ";;" "!!"
-                                       "??" "???" "?:" "?." "?=" "<:" ":<" ":>" ">:" "<:<" "<>" "<<<" ">>>"
-                                       "<<" ">>" "||" "-|" "_|_" "|-" "||-" "|=" "||=" "##" "###" "####"
-                                       "#{" "#[" "]#" "#(" "#?" "#_" "#_(" "#:" "#!" "#=" "^=" "<$>" "<$"
-                                       "$>" "<+>" "<+" "+>" "<*>" "<*" "*>" "</" "</>" "/>" "<!--" "<#--"
-                                       "-->" "->" "->>" "<<-" "<-" "<=<" "=<<" "<<=" "<==" "<=>" "<==>"
-                                       "==>" "=>" "=>>" ">=>" ">>=" ">>-" ">-" "-<" "-<<" ">->" "<-<" "<-|"
-                                       "<=|" "|=>" "|->" "<->" "<~~" "<~" "<~>" "~~" "~~>" "~>" "~-" "-~"
-                                       "~@" "[||]" "|]" "[|" "|}" "{|" "[<" ">]" "|>" "<|" "||>" "<||"
-                                       "|||>" "<|||" "<|>" "..." ".." ".=" "..<" ".?" "::" ":::" ":=" "::="
-                                       ":?" ":?>" "//" "///" "/*" "*/" "/=" "//=" "/==" "@_" "__" "???"
-                                       "<:<" ";;;"))
+				       "=:=" "=/=" "<=" ">=" "&&" "&&&" "&=" "++" "+++" "***" ";;" "!!"
+				       "??" "???" "?:" "?." "?=" "<:" ":<" ":>" ">:" "<:<" "<>" "<<<" ">>>"
+				       "<<" ">>" "||" "-|" "_|_" "|-" "||-" "|=" "||=" "##" "###" "####"
+				       "#{" "#[" "]#" "#(" "#?" "#_" "#_(" "#:" "#!" "#=" "^=" "<$>" "<$"
+				       "$>" "<+>" "<+" "+>" "<*>" "<*" "*>" "</" "</>" "/>" "<!--" "<#--"
+				       "-->" "->" "->>" "<<-" "<-" "<=<" "=<<" "<<=" "<==" "<=>" "<==>"
+				       "==>" "=>" "=>>" ">=>" ">>=" ">>-" ">-" "-<" "-<<" ">->" "<-<" "<-|"
+				       "<=|" "|=>" "|->" "<->" "<~~" "<~" "<~>" "~~" "~~>" "~>" "~-" "-~"
+				       "~@" "[||]" "|]" "[|" "|}" "{|" "[<" ">]" "|>" "<|" "||>" "<||"
+				       "|||>" "<|||" "<|>" "..." ".." ".=" "..<" ".?" "::" ":::" ":=" "::="
+				       ":?" ":?>" "//" "///" "/*" "*/" "/=" "//=" "/==" "@_" "__" "???"
+				       "<:<" ";;;"))
   (global-ligature-mode t))
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
