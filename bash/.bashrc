@@ -9,7 +9,7 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/openssh_agent"
 # 履歴を便利に
 export HISTSIZE=10000
 export HISTFILESIZE=20000
-export HISTCONTROL=ignoreboth              #空白を履歴に追記しない、重複履歴を保存しない
+export HISTCONTROL=ignoredups              #重複履歴を保存しない
 export HISTIGNORE="fg*:bg*:history*:cd*"   #よく使うコマンドは履歴保存対象から外す。
 HISTTIMEFORMAT='%Y%m%d %T';
 export HISTTIMEFORMAT                      #historyに時刻を入れる
