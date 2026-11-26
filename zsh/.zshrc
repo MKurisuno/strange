@@ -6,6 +6,11 @@
 
 # PATH   load .zprofile 
 
+# .zshenv
+#export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/openssh_agent"
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
+
+
 # MANPAGER
 export MANPAGER='/usr/bin/batcat -l man -p'
 # EDITOR
