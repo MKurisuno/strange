@@ -3,10 +3,6 @@
 # zshrc Nuc6i5  since 20241116
 #               last update 20261120
 
-#if [ -z ${SSH_AUTH_SOCK}]; then
-#    source $HOME/.zprofile
-#fi
-
 
 # PATH   load .zprofile 
 
