@@ -5,7 +5,7 @@
 
 # ssh-agent : ~/.ssh/config  ssh-add ~/.ssh/id_ed25519
 #export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/openssh_agent"
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh"
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
 
 # 履歴を便利に
 export HISTSIZE=10000
