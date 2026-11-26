@@ -277,7 +277,7 @@
     :ensure t
     :defun (exec-path-from-shell-initialize)
     :custom ((exec-path-from-shell-check-startup-files)
-             (exec-path-from-shell-variables . '("PATH" "GOPATH" "JAVA_HOME" "SSH_AUTH_SOCK")))
+             (exec-path-from-shell-variables . '("PATH" "MANPATH" "GOPATH" "JAVA_HOME" )))
     :config
     (exec-path-from-shell-initialize))
   )
