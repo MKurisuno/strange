@@ -35,8 +35,6 @@
 ;; 1 画面スクロール時にカーソルの画面上の位置をなるべく変えない
 (setq scroll-preserve-screen-position t)
 
-
-
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;   Font Setting.
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -67,10 +65,15 @@
     :config
     (leaf-keywords-init)))
 
+;; Benckmark用
+;;(require 'benchmark-init)
+;;(add-hook 'after-init-hook #'benchmark-init/deactivate)
+;; M-x benchmark-init/show-duration-tree
+;; M-x benchmark-init/show-durations-tabulated
+
 (leaf cus-edit
   :doc "tools for customizing Emacs and Lisp packages"
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
-
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;  Introduce doom-themes not doom-emacs.
@@ -291,6 +294,7 @@
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; macrostep paren delimiter highlight-indent-guides
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+
 ;;(leaf macrostep
 ;;  :ensure t
 ;;  :bind (("C-c e" . macrostep-expand)))
@@ -301,7 +305,7 @@
   (prog-mode-hook . rainbow-delimiters-mode))
 
 (leaf paren
-  :ensure t
+  :ensure nil
   :hook
   (after-init-hook . show-paren-mode)
   :custom-face
@@ -370,7 +374,7 @@
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf flymake
   :doc "A universal on-the-fly syntax checker"
-  :ensure t
+  :ensure nil
   :hook (emacs-lisp-mode-hook . flymake-mode)
   :bind ((prog-mode-map
           ("M-n" . flymake-goto-next-error)
@@ -498,12 +502,6 @@
            (corfu-quit-no-match . 'separator))
   :bind ((corfu-map
           ("C-s" . corfu-insert-separator)))
-  ;;  :init   ;; 各種補完ソースを Capf に追加するフック
-  ;;  (add-hook 'prog-mode-hook
-  ;;            (lambda ()
-  ;;              (add-to-list 'completion-at-point-functions #'cape-file)
-  ;;  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  ;;  (add-to-list 'completion-at-point-functions #'yasnippet-capf 'append)))
   :hook
   (prog-mode-hook . (lambda ()
 		      (add-to-list 'completion-at-point-functions #'cape-file)
@@ -668,14 +666,15 @@
 
 (leaf eglot
   :doc "The Emacs Client for LSP servers"
-  :ensure t
+  :ensure nil
   :config
   (defvar eglot-server-programs)
   (defvar eglot-ignored-server-capabilities)
   (declare-function eglot-format-buffer "eglot")
+  (defun my-eglot-fmt-buf () )
   ;; 
-  (add-to-list 'eglot-server-programs '((c++-ts-mode) "clangd"))
-  (add-to-list 'eglot-server-programs '((c-ts-mode) "clangd"))
+  (add-to-list 'eglot-server-programs '((c++-ts-mode) . "clangd"))
+  (add-to-list 'eglot-server-programs '((c-ts-mode)   . "clangd"))
   (add-to-list 'eglot-server-programs '((php-ts-mode) . ("intelephense" "--stdio")))
   ;;(add-to-list 'eglot-server-programs '((php-ts-mode) . ("phpactor" "language-server")))
   (add-to-list 'eglot-server-programs '((python-ts-mode) . ("pyright-langserver" "--stdio")))
@@ -692,8 +691,7 @@
     "Eglot-save-buffer-hook and Eglot-format-buffer."
     (eglot-ensure)
     (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-    (message "[--- -- EGLOT-format-buffer -- ---  ] [--- %s ---]" (or comment ""))
-    )
+    (message "[--- -- EGLOT-format-buffer -- ---  ] [--- %s ---]" (or comment "")))
   (defun my-eglot-fmt-buf-cpp () (my-eglot-fmt-buf "C++"))
   (defun my-eglot-fmt-buf-c () (my-eglot-fmt-buf "C"))
   
@@ -759,19 +757,14 @@
     )
   )
 
-
-
-
-
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;; Treemacs and Projectile
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf projectile
   :ensure t
-  :init
-  (projectile-mode +1)
-  ;; Recommended keymap prefix on Windows/Linux
-  :bind-keymap (("C-c p" . 'projectile-command-map)) )
+  :bind (("C-c p" . projectile-command-map))
+  :commands (projectile-mode projectile-find-file projectile-switch-project)
+  :config (projectile-mode 1))
 
 (leaf ag
   :doc "The Silver Searcher"
