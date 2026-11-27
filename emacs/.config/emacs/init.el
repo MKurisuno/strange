@@ -280,7 +280,7 @@
     :ensure t
     :defun (exec-path-from-shell-initialize)
     :custom ((exec-path-from-shell-check-startup-files)
-	     (exec-path-from-shell-variables . '("PATH" "MANPATH" "SSH_AUTH_SOCK" ))
+	     (exec-path-from-shell-variables . '("PATH" "MANPATH" "SSH_AUTH_SOCK" )) ; gcr-ssh-/ssh-agent
 	     )
     :config
     (exec-path-from-shell-initialize))
