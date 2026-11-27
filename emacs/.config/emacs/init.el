@@ -741,7 +741,7 @@
   :defvar (apheleia-formatters)
   :global-minor-mode apheleia-global-mode
   :custom ((apheleia-log-only-errors . nil)
-           (apheleia-hide-log-buffers . nil)) ; t: hide-buffer 先頭にSpace *aphe で表示される。
+           (apheleia-hide-log-buffers . nil)) ; t:hide-buffer C-x b <Space>*apheleia* で表示。
   :config
   ;; globalにinstallされていればPrettier が 自動的にプロジェクト/パスを確認して自動適用されます
   (with-eval-after-load `apheleia
