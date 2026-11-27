@@ -179,7 +179,7 @@
 　　　　(setf (alist-get 'python-ts-mode apheleia-mode-alist) '(ruff-isort ruff))    
 
 ### -PHP- 
-　　1)　Install php-cs-fixer   
+　　1) Install php-cs-fixer   
 　　　　$cd Project-Root  
 　　　　$composer require --dev friendsofphp/php-cs-fixer  
 　　2) Insert next at Apheleia block   
