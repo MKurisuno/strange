@@ -510,9 +510,9 @@
 		      (add-to-list 'completion-at-point-functions #'yasnippet-capf 'append)))
   )
 
-;;(leaf svg-lib
-;;  :doc "Emacs SVG library that allows to create and display various SVG objects."
-;;  :ensure t)
+(leaf svg-lib
+  :doc "Emacs SVG library that allows to create and display various SVG objects."
+  :ensure t)
 
 (defvar corfu-margin-formatters nil)
 (leaf nerd-icons-corfu
@@ -570,7 +570,7 @@
    (git-gutter:modified-sign . "=")))
 
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
-;;    Editorconfig and Formatter.
+;;    Editorconfig.
 ;;--- --- --- --- --- --- --- --- --- --- --- ---
 (leaf editorconfig
   :doc "a file format for defining coding styles and a collection"
