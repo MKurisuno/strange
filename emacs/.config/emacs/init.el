@@ -495,9 +495,9 @@
   :require t
   :global-minor-mode (global-corfu-mode corfu-popupinfo-mode)
   :custom ((corfu-auto . t)
-           (corfu-auto-delay . 0.1)         ; お好みで 0.1 ~ 0.2 にしても快適です
+           (corfu-auto-delay . 0.1)
            (corfu-auto-prefix . 1)
-           (corfu-popupinfo-delay . nil)   ; 自動ポップアップを抑制する場合
+           (corfu-popupinfo-delay . nil)
            (corfu-cycle . t)
            (corfu-quit-no-match . 'separator))
   :bind ((corfu-map
@@ -958,6 +958,7 @@
 
 
 
+(put 'yaml-indent-offset 'safe-local-variable #'integerp)
 
 
 (provide 'init)

@@ -179,20 +179,20 @@
 　　　　(setf (alist-get 'python-ts-mode apheleia-mode-alist) '(ruff-isort ruff))    
 
 ### -PHP- 
-　　1) Install php-cs-fixer   
+　　1) Install php-cs-fixer  
 　　　　$cd Project-Root  
 　　　　$composer require --dev friendsofphp/php-cs-fixer  
 　　2) Insert next at Apheleia block   
 　　　　php-cs-fixerは標準関数では無いので、apheleia-formattersに登録が必要。ついでにオプションを追加。  
 　　　　(setf (alist-get 'php-cs-fixer apheleia-formatters)  
 　　　　　　'("php-cs-fixer" "fix" "--quiet" "--no-interaction" "--using-cache=no" file))  
-　　　　(setf (alist-get 'php-ts-mode apheleia-mode-alist) 'php-cs-fixer    
+　　　　(setf (alist-get 'php-ts-mode apheleia-mode-alist) 'php-cs-fixer)  
 	
 ### -Typescript- -Java-Script- ...
-　　1) Install Prettir    
-　　　　$sudo  npm i -g prettier    　
-　　2) Inset next at Apheleia block in init.el.    
-　　　　(setf (alist-get 'typescript-ts-mode aphele ia-mode-alist) 'prettier)　　
-　　　　(setf (alist-get 'json-ts-mode apheleia-mode-alist) 'prettier)　　
+　　1) Install Prettir  
+　　　　$sudo  npm i -g prettier  
+　　2) Inset next at Apheleia block in init.el.  
+　　　　(setf (alist-get 'typescript-ts-mode aphele ia-mode-alist) 'prettier)  
+　　　　(setf (alist-get 'json-ts-mode apheleia-mode-alist) 'prettier)  
 
 

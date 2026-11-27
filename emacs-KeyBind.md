@@ -55,14 +55,17 @@
 ### tab-bar-mode
  C-x t P  : Group tabs with [Project name] in project directory.  
  C-x t g  : Switch Groups.  
- --- default tab-bar key-bind. ---  
+ S-<backspace> : tab-bar-switch-to-prev-tab.  
+ C-<tab>       : tab-bar-switch-to-next-tab.  
+--- default tab-bar key-bind. ---  
  C-x t 2  : New tab.  
  C-x t 0  : delete current tab.  
  C-x t o  : Move next tab.   
  C-x t r  : Rename Tab-name.  
  C-x t G  : Make group new tab (require Group name).  
  C-x t n  : Duplicate.  
- 
+
+
 ### Markdown-mode
  C-c C-c p : Preview in browser.
  
