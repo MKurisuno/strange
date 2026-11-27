@@ -277,7 +277,8 @@
     :ensure t
     :defun (exec-path-from-shell-initialize)
     :custom ((exec-path-from-shell-check-startup-files)
-             (exec-path-from-shell-variables . '("PATH" "MANPATH" "SSH_AUTH_SOCK" )))
+	     (exec-path-from-shell-variables . '("PATH" "MANPATH" "SSH_AUTH_SOCK" ))
+	     )
     :config
     (exec-path-from-shell-initialize))
   )
@@ -497,12 +498,17 @@
            (corfu-quit-no-match . 'separator))
   :bind ((corfu-map
           ("C-s" . corfu-insert-separator)))
-  :init   ;; 各種補完ソースを Capf に追加するフック
-  (add-hook 'prog-mode-hook
-            (lambda ()
-              (add-to-list 'completion-at-point-functions #'cape-file)
-              (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-              (add-to-list 'completion-at-point-functions #'yasnippet-capf 'append)))
+  ;;  :init   ;; 各種補完ソースを Capf に追加するフック
+  ;;  (add-hook 'prog-mode-hook
+  ;;            (lambda ()
+  ;;              (add-to-list 'completion-at-point-functions #'cape-file)
+  ;;  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  ;;  (add-to-list 'completion-at-point-functions #'yasnippet-capf 'append)))
+  :hook
+  (prog-mode-hook . (lambda ()
+		      (add-to-list 'completion-at-point-functions #'cape-file)
+		      (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+		      (add-to-list 'completion-at-point-functions #'yasnippet-capf 'append)))
   )
 
 ;;(leaf svg-lib
@@ -666,6 +672,7 @@
   :config
   (defvar eglot-server-programs)
   (defvar eglot-ignored-server-capabilities)
+  (declare-function eglot-format-buffer "eglot")
   ;; 
   (add-to-list 'eglot-server-programs '((c++-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '((c-ts-mode) "clangd"))
@@ -676,10 +683,20 @@
   (add-to-list 'eglot-server-programs '((js-ts-mode tsx-ts-mode) . ("typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((web-mode) . ("vscode-html-language-server" "--stdio")))
 
-
   ;;--- xref-find-reference の時の強調背景が明るすぎるため ---
   (with-eval-after-load 'xref
     (set-face-attribute 'xref-match nil :foreground "#FFFFFF" :background "#44475a" :weight 'bold))
+  ;; LSPのフォーマット機能によってformatterにフォーマットさせるマクロ
+  :preface
+  (defun my-eglot-fmt-buf (&optional comment)
+    "Eglot-save-buffer-hook and Eglot-format-buffer."
+    (eglot-ensure)
+    (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+    (message "[--- -- EGLOT-format-buffer -- ---  ] [--- %s ---]" (or comment ""))
+    )
+  (defun my-eglot-fmt-buf-cpp () (my-eglot-fmt-buf "C++"))
+  (defun my-eglot-fmt-buf-c () (my-eglot-fmt-buf "C"))
+  
   :bind (("C-c i" . completion-at-point)
 	 ("C-c r" . eglot-rename)
 	 ("C-c o" . eglot-code-action-organize-imports))
@@ -692,9 +709,10 @@
   ;; C-c i : Completion at point
   ;; C-c a : Rename
   :hook
-  (;;(c-ts-mode-hook   . eglot-ensure)    Written with formatter setting in next block.
-   ;;(c++-ts-mode-hook . eglot-ensure)
-   (php-ts-mode-hook . eglot-ensure)      ; (A) Activate / (B) Coment out
+  (
+   (c++-ts-mode-hook . my-eglot-fmt-buf-cpp) ; Eglot+LSP+formatter
+   (c-ts-mode-hook   . my-eglot-fmt-buf-c)   ; Eglot-LSP-formatter
+   (php-ts-mode-hook . eglot-ensure)
    (python-ts-mode-hook     . eglot-ensure)
    (typescript-ts-mode-hook . eglot-ensure)
    (tsx-ts-mode-hook  . eglot-ensure)
@@ -714,39 +732,6 @@
   :global-minor-mode t)
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-;;    Setting for Formatters with Language Servers.
-;;     clangd and phpactor ともにFormat機能あり.
-;; clangdはformatterとしてclang-formatを内包しているので、eglot-format-bufferが
-;; (clangd(clang-format))をcallするため,eglotに記述無しでもclang-formatによって
-;; save前にformatされる。symfonyにおけるphpactorとphp-cs-fixerも同様。
-;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-
-(eval-when-compile  (require 'eglot))
-(declare-function eglot-format-buffer "eglot")
-
-;;  Clangd for fotmat needs '.clang-format' in ProjectRoot.
-(add-hook 'c++-ts-mode-hook
-	  (lambda ()
-	    (eglot-ensure)
-	    (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-	    (message "[  EGLOT-format-buffer  ] [ 'clangd-format' applied !! ]")))
-
-(add-hook 'cc-ts-mode-hook
-	  (lambda ()
-	    (eglot-ensure)
-	    (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-	    (message "[  EGLOT-format-buffer  ] [ 'clangd-format' applied !! ]")))
-
-;;  PHP Langage Server needs 'php-cs-fixer' and 'php-cs-fixer.dist'  in Symfony.
-;; ---(B)---
-;;(add-hook 'php-ts-mode-hook
-;;          (lambda ()
-;;            (eglot-ensure)
-;;            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-;;            (message "[---EGLOT-format-buffer---] [-- php-cs-fixer with php-cs-fixer.dist executed ! --]")))
-;; --- end (B) ---
-
-;;--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 ;;    Formatter Apheleia
 ;;  eglot-format-bufferを使わずにsave時に自動formatする設定。それぞれにformatterが必要。
 ;;  eglot程頻回では無いが、smoothにformatするので、smartにcoding出来る。
@@ -756,6 +741,8 @@
   :defvar (apheleia-mode-alist)
   :defvar (apheleia-formatters)
   :global-minor-mode apheleia-global-mode
+  :custom ((apheleia-log-only-errors . nil)
+           (apheleia-hide-log-buffers . nil)) ; t: hide-buffer 先頭にSpace *aphe で表示される。
   :config
   ;; globalにinstallされていればPrettier が 自動的にプロジェクト/パスを確認して自動適用されます
   (with-eval-after-load `apheleia
@@ -950,22 +937,8 @@
   (global-ligature-mode t))
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;; Markdown-Mode
+;;   Markdown-Mode
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
-;;(leaf markdown-mode
-;;  :ensure t
-;;  :mode ("\\.md\\'" . gfm-mode)
-;;  :hook (gfm-mode . visual-line-mode)
-;;  :custom
-;;  ((markdown-command . "pandoc -f markdown+header_attributes-raw_html -t html5")
-;;   (markdown-enable-math . t)
-;;   (markdown-list-indent-width . 2)
-;;   (markdown-fontify-code-blocks-natively . nil))
-;;  :bind
-;;  (:markdown-mode-map
-;;   ("C-c C-t" . markdown-toc-generate-toc)
-;;   ("C-c C-p" . markdown-preview)))
-
 (leaf markdown-mode
   :ensure t
   :mode ("\\.md\\'" . gfm-mode)
@@ -973,8 +946,16 @@
   (markdown-fontify-code-blocks-natively . nil) ;コードブロックのネイティブ着色が重い
   :hook
   ((gfm-mode-hook . visual-line-mode)
-   (markdown-mode-hook . (lambda () (setq-local jit-lock-defer-time 0.05)))))
+   (markdown-mode-hook . (lambda () (setq-local jit-lock-defer-time 0.05))))
+  ;;:bind
+  ;; (:markdown-mode-map
+  ;; ("C-c C-c P" . markdown-preview))
+  )
 
+
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
+;;   Mermaid-Mode
+;;--- --- --- --- --- --- --- --- --- --- --- --- ---
 (leaf mermaid-mode
   :ensure t
   :custom
