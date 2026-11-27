@@ -33,8 +33,8 @@
 　　　　$ nvidia-smi  
 
 
-## for firewall
-#### 　　　gufw for ufw  
+## Firewall
+#### 　gufw for ufw  
 　　　　$ sudo apt install -y gufw  
 
 
