@@ -287,6 +287,7 @@
   )
 
 (leaf envrc
+  :doc "apt install direnv, project-root/.envrc, PATH_add vender/bin "
   :ensure t
   :hook (after-init-hook . envrc-global-mode))
 
