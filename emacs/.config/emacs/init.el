@@ -958,7 +958,7 @@
 (leaf edit-indirect :ensure t)
 
 
-
+;; custom setting 
 (put 'yaml-indent-offset 'safe-local-variable #'integerp)
 
 
