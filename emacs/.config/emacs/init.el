@@ -171,7 +171,7 @@
     "Call `tab-group' with the current project(project.el) name as the group."
     (interactive)
     (when-let* ((proj (project-current))
-                (name (file-name-nondirectory
+		(name (file-name-nondirectory
                        (directory-file-name (project-root proj)))))
       (tab-group (format "[%s]" name))))
   (defun emacs-solo/tab-switch-to-group ()
@@ -184,11 +184,11 @@
            (group (completing-read "Switch to group: " groups nil t))
            (i 1) found)
       (dolist (tab tabs)
-        (when (and (not found)
+	(when (and (not found)
                    (string= (funcall tab-bar-tab-group-function tab) group))
           (setq found t)
           (tab-bar-select-tab i))
-        (setq i (1+ i)))))
+	(setq i (1+ i)))))
   :config
   (with-eval-after-load 'tab-bar
     (setq tab-bar-close-button-show t
@@ -206,13 +206,15 @@
                    (text (propertize (format " (%d) %s" i name) 'face face)))
               (concat text
                       (when (and tab-bar-close-button-show
-                                 (or (not (eq tab-bar-close-button-show 'non-selected))
+				 (or (not (eq tab-bar-close-button-show 'non-selected))
                                      (not (eq (car tab) 'current-tab))))
-                        (propertize tab-bar-close-button 'face face))))))
+			(propertize tab-bar-close-button 'face face))))))
     (set-face-attribute 'tab-bar-tab nil
-                        :foreground "#F8F8F2" :background "#282A36")
+			:foreground "#F8F8F2" :background "#282A36")
     (set-face-attribute 'tab-bar-tab-inactive nil
-                        :foreground "#484A56" :background "#1C1D27")))
+			:foreground "#484A56" :background "#1C1D27"))
+
+  )
 ;;--- --- --- end of tab-bar-mode --- --- ---
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -888,6 +890,27 @@
 
 (leaf vterm-toggle
   :ensure t
+  :preface
+  (defun my/display-vterm-bottom-right (buffer alist)
+    "フレーム下部1/4を左右に割り、右に BUFFER、左に *scratch* を出す。"
+    (let* ((bottom (split-window (frame-root-window)
+				 (round (* -0.20 (window-height (frame-root-window))))
+				 'below))
+           (right (split-window bottom nil 'right)))
+      (set-window-buffer bottom (get-buffer-create "*scratch*"))
+      (set-window-buffer right buffer)
+      (set-window-dedicated-p right t)
+      right))
+  (defun my/display-vterm-bottom-left (buffer alist)
+    "フレーム下部1/4を左右に割り、左に BUFFER、右に *scratch* を出す。"
+    (let* ((bottom (split-window (frame-root-window)
+				 (round (* -0.20 (window-height (frame-root-window))))
+				 'below))
+           (left (split-window bottom nil 'left)))
+      (set-window-buffer bottom (get-buffer-create "*scratch*"))
+      (set-window-buffer left buffer)
+      (set-window-dedicated-p left t)
+      left))
   :bind
   (("C-c v"   . vterm-toggle)
    ("C-c C-v" . vterm-toggle-cd)
@@ -899,13 +922,20 @@
   :config
   ;; 画面下部に高さを抑えてポップアップ表示させる設定
   (add-to-list 'display-buffer-alist
-	       '("\\*vterm\\*"
-		 (display-buffer-reuse-window display-buffer-in-side-window)
-		 (side . bottom)
-		 (slot . 0)
-		 ;;(window-height . 0.25)  ;; window ratio
-		 (window-hight . 12)       ;; means 15columns.
-		 (dedicated . t))))
+               '("\\*vterm\\*"
+		 (display-buffer-reuse-window my/display-vterm-bottom-left)
+		 (window-height . 0.20)))
+  )
+
+;;(add-to-list 'display-buffer-alist
+;;	     '("\\*vterm\\*"
+;;	       (display-buffer-reuse-window display-buffer-in-side-window)
+;;	       (side . bottom)
+;;	       (slot . 0)
+;;	       (window-height . 0.25)  ;; window ratio
+;;	       ;;(window-hight . 12)       ;; means 15columns.
+;;	       (dedicated . t)))
+
 
 
 ;;--- --- --- --- --- --- --- --- --- --- --- --- ---

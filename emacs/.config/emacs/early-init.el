@@ -74,7 +74,7 @@
 (setq initial-major-mode 'fundamental-mode)
 
 ;;背景の透過性を設定
-(add-to-list 'default-frame-alist '(alpha-background . 90))
+(add-to-list 'default-frame-alist '(alpha-background . 95))
 
 
 
